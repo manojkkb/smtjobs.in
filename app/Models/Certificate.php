@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Certificate extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'slug',
+        'label',
+        'issuing_authority',
+        'icon',
+        'sort_order',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+}
