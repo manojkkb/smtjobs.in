@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             
-            $table->bigIncrements('id');
-
+            $table->bigIncrements('id');            
             $table->string('name');
             $table->string('slug')->unique();
+            $table->string('logo')->nullable();
 
             $table->foreignId('industry_id')
                   ->nullable()
@@ -40,6 +40,8 @@ return new class extends Migration
 
             $table->boolean('is_verified')->default(false);
             $table->boolean('is_active')->default(true);
+
+            $table->unsignedBigInteger('created_by')->unique()->nullable();
 
             $table->timestamps();
             $table->softDeletes();

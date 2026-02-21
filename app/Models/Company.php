@@ -10,12 +10,14 @@ class Company extends Model
     protected $fillable = [
         'name',
         'slug',
+        'logo',
         'industry_id',
         'company_type_id',
         'company_size_id',
         'city_id',
         'is_verified',
         'is_active',
+        'created_by',
     ];
 
     protected $casts = [
@@ -41,5 +43,10 @@ class Company extends Model
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

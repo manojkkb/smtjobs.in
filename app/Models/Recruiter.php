@@ -15,7 +15,8 @@ class Recruiter extends Model
     protected $fillable = [
         'user_id',
         'company_id',
-        'role',
+        'designation',
+        'photo',
         'is_active',
         'is_verified',
         'last_active_at',

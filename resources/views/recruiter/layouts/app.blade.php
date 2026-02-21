@@ -20,7 +20,7 @@
 
         @include('recruiter.layouts.sidebar')
 
-        <div class="flex flex-1 flex-col lg:pl-0">
+        <div id="mainContent" class="flex flex-1 flex-col transition-all duration-300">
             @include('recruiter.layouts.header')
 
             <main class="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
@@ -33,8 +33,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             const sidebar = document.getElementById('adminSidebar');
             const backdrop = document.getElementById('sidebarBackdrop');
+            const mainContent = document.getElementById('mainContent');
             const openBtn = document.getElementById('sidebarToggle');
             const closeBtn = document.getElementById('sidebarClose');
+            
+            let isDesktopCollapsed = false;
 
             const hideBackdrop = () => {
                 if (!backdrop) return;
@@ -52,27 +55,66 @@
                 backdrop.classList.add('pointer-events-auto');
             };
 
+            const updateMainContentPadding = () => {
+                if (window.innerWidth >= 1024) {
+                    const isHidden = sidebar?.classList.contains('-translate-x-full');
+                    if (isHidden) {
+                        mainContent?.classList.remove('lg:pl-64');
+                    } else {
+                        mainContent?.classList.add('lg:pl-64');
+                    }
+                } else {
+                    mainContent?.classList.remove('lg:pl-64');
+                }
+            };
+
             const openSidebar = () => {
                 sidebar?.classList.remove('-translate-x-full');
-                showBackdrop();
+                if (window.innerWidth < 1024) {
+                    showBackdrop();
+                }
+                updateMainContentPadding();
             };
 
             const closeSidebar = () => {
                 sidebar?.classList.add('-translate-x-full');
                 hideBackdrop();
+                updateMainContentPadding();
             };
 
-            openBtn?.addEventListener('click', openSidebar);
+            const toggleSidebar = () => {
+                const isHidden = sidebar?.classList.contains('-translate-x-full');
+                if (window.innerWidth >= 1024) {
+                    isDesktopCollapsed = !isDesktopCollapsed;
+                    if (isDesktopCollapsed) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                } else {
+                    if (isHidden) {
+                        openSidebar();
+                    } else {
+                        closeSidebar();
+                    }
+                }
+            };
+
+            openBtn?.addEventListener('click', toggleSidebar);
             closeBtn?.addEventListener('click', closeSidebar);
             backdrop?.addEventListener('click', closeSidebar);
 
             const syncSidebar = () => {
                 if (window.innerWidth >= 1024) {
                     hideBackdrop();
-                    sidebar?.classList.remove('-translate-x-full');
+                    if (!isDesktopCollapsed) {
+                        sidebar?.classList.remove('-translate-x-full');
+                    }
                 } else {
                     sidebar?.classList.add('-translate-x-full');
+                    isDesktopCollapsed = false;
                 }
+                updateMainContentPadding();
             };
 
             window.addEventListener('resize', syncSidebar);

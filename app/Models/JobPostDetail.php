@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\JobPost;
 
-class JobPostProfile extends Model
+class JobPostDetail extends Model
 {
     protected $fillable = [
-        'job_post_id',
-        'title',
+        'job_post_id',        
         'description',
         'requirements',
         'responsibilities',

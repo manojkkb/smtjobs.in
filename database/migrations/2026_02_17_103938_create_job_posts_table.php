@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('job_posts', function (Blueprint $table) {
-             $table->bigIncrements('id');
-
+            $table->bigIncrements('id');
+            $table->string('title')->nullable();
             $table->foreignId('company_id')
                   ->constrained()
                   ->cascadeOnDelete();

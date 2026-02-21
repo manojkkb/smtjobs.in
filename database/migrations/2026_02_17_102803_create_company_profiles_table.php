@@ -20,14 +20,10 @@ return new class extends Migration
 
             $table->text('description')->nullable();
             $table->string('website')->nullable();
-            $table->string('logo')->nullable();
             $table->string('cover_image')->nullable();
-
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
-
             $table->integer('founded_year')->nullable();
-
             $table->timestamps();
 
             $table->unique('company_id');

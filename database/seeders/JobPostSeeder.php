@@ -8,6 +8,7 @@ use App\Models\EmploymentType;
 use App\Models\ExperienceRange;
 use App\Models\Industry;
 use App\Models\JobPost;
+use App\Models\JobPostDetail;
 use App\Models\JobPostProfile;
 use App\Models\Recruiter;
 use Illuminate\Database\Seeder;
@@ -50,6 +51,7 @@ class JobPostSeeder extends Seeder
             $maxSalary = $minSalary + $faker->numberBetween(50000, 200000);
 
             $jobPost = JobPost::create([
+                'title' => $faker->jobTitle,
                 'company_id' => $companyId,
                 'recruiter_id' => $recruiter->id,
                 'industry_id' => Arr::random($industries),
@@ -66,10 +68,9 @@ class JobPostSeeder extends Seeder
                 'expires_at' => $expiresAt,
             ]);
 
-            JobPostProfile::updateOrCreate(
+            JobPostDetail::updateOrCreate(
                 ['job_post_id' => $jobPost->id],
                 [
-                    'title' => $faker->jobTitle,
                     'description' => $faker->paragraphs(4, true),
                     'requirements' => collect(range(1, 4))
                         ->map(fn () => '- ' . $faker->sentence())

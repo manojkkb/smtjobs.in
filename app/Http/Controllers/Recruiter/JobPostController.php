@@ -12,6 +12,7 @@ use App\Models\JobPost;
 use App\Models\Recruiter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class JobPostController extends Controller
 {
@@ -90,7 +91,13 @@ class JobPostController extends Controller
 
     protected function currentRecruiter(): Recruiter
     {
-        return Recruiter::where('user_id', auth()->id())->firstOrFail();
+        $recruiter = Recruiter::where('user_id', Auth::id())->first();
+        
+        if (!$recruiter) {
+            abort(403, 'You need to complete your recruiter profile first.');
+        }
+        
+        return $recruiter;
     }
 
     protected function authorizeOwnership(JobPost $jobPost): Recruiter
@@ -112,6 +119,7 @@ class JobPostController extends Controller
     protected function jobPostRules(): array
     {
         return [
+            'title' => 'required|string|max:255',
             'industry_id' => 'nullable|exists:industries,id',
             'category_id' => 'nullable|exists:categories,id',
             'city_id' => 'nullable|exists:cities,id',
@@ -130,7 +138,6 @@ class JobPostController extends Controller
     protected function profileRules(): array
     {
         return [
-            'title' => 'required|string|max:255',
             'description' => 'required|string',
             'requirements' => 'nullable|string',
             'responsibilities' => 'nullable|string',
@@ -151,11 +158,11 @@ class JobPostController extends Controller
     protected function formOptions(): array
     {
         return [
-            'industries' => Industry::orderBy('name')->get(['id', 'name']),
-            'categories' => Category::orderBy('name')->get(['id', 'name']),
+            'industries' => Industry::orderBy('label')->get(['id', 'label as name']),
+            'categories' => Category::orderBy('label')->get(['id', 'label as name']),
             'cities' => City::orderBy('name')->get(['id', 'name']),
-            'employmentTypes' => EmploymentType::orderBy('name')->get(['id', 'name']),
-            'experienceRanges' => ExperienceRange::orderBy('name')->get(['id', 'name']),
+            'employmentTypes' => EmploymentType::orderBy('label')->get(['id', 'label as name']),
+            'experienceRanges' => ExperienceRange::orderBy('label')->get(['id', 'label as name']),
         ];
     }
 }

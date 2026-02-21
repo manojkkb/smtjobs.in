@@ -11,7 +11,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.24",
         "laravel/tinker": "^2.10.1",
-        "typesense/typesense-php": "*"
+        "typesense/typesense-php": "^6.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

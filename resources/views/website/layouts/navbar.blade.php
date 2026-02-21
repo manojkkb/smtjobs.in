@@ -1,10 +1,10 @@
 <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 shadow-sm backdrop-blur">
 	<div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-0">
 		<a href="/" class="flex items-center gap-2 text-lg font-semibold tracking-tight text-slate-900">
-			<span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-lime-500 text-slate-900">S</span>
 			<div>
-				<p class="text-sm font-semibold">SMTJobs</p>
-				<p class="text-xs text-slate-400">Careers in tech</p>
+			<! logo image can be placed here if needed, currently using text "S" as a placeholder for the logo.>
+				<img src="{{ asset('logos/logo.png') }}" alt="Site Logo" class="h-8 w-auto">
+				<span class="sr-only">Site Name</span>
 			</div>
 		</a>
 		<nav class="hidden items-center gap-4 text-sm font-medium text-slate-600 md:flex">

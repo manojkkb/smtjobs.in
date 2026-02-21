@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Company;
 use App\Models\Recruiter;
-use App\Models\RecruiterProfile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
@@ -42,25 +41,15 @@ class RecruiterSeeder extends Seeder
             $recruiter = Recruiter::updateOrCreate(
                 ['user_id' => $user->id, 'company_id' => $companyId],
                 [
-                    'role' => Arr::random(['owner', 'hr', 'interviewer']),
+                    'designation' => Arr::random(['owner', 'hr', 'interviewer']),
+                    'photo' => null,
                     'is_active' => true,
                     'is_verified' => $faker->boolean(50),
                     'last_active_at' => now()->subDays($faker->numberBetween(1, 15)),
                 ]
             );
 
-            RecruiterProfile::updateOrCreate(
-                ['recruiter_id' => $recruiter->id],
-                [
-                    'first_name' => $faker->firstName,
-                    'last_name' => $faker->lastName,
-                    'designation' => $faker->jobTitle,
-                    'department' => Str::title($faker->word),
-                    'phone' => $faker->phoneNumber,
-                    'bio' => $faker->paragraphs(2, true),
-                    'profile_photo' => "recruiters/{$recruiter->id}.jpg",
-                ]
-            );
+           
         }
     }
 }

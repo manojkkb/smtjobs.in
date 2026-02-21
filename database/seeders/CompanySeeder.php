@@ -58,7 +58,6 @@ class CompanySeeder extends MasterSeeder
                 [
                     'description' => $faker->paragraphs(3, true),
                     'website' => "https://" . Str::slug($company->name) . ".example.com",
-                    'logo' => "logos/{$company->slug}.png",
                     'cover_image' => "covers/{$company->slug}.jpg",
                     'email' => $faker->companyEmail,
                     'phone' => $faker->e164PhoneNumber,

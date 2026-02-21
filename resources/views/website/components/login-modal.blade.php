@@ -17,7 +17,7 @@
                     id="otpIdentifier"
                     autocomplete="username"
                     class="w-full rounded-2xl border border-slate-200 bg-[#e7e7e7] px-4 py-3 text-base font-semibold text-slate-900 focus:border-slate-400 focus:outline-none"
-                    placeholder="e.g. +94 77 123 4567 or you@email.com"
+                    placeholder="+91 XXXXXXXXXX or you@email.com"
                     required
                 />
             </label>

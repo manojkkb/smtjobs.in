@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\OtpToken;
 use Illuminate\Support\Facades\Log;
-
+use App\Services\SmsService;
 class OtpService
 {
     const MAX_ATTEMPTS = 5;
@@ -36,7 +36,10 @@ class OtpService
             // Mail::to($identifier)->send(new OtpMail($otp));
             Log::info('OTP queued for email delivery', ['identifier' => $identifier]);
         } else {
-            // SmsService::send($identifier, "Your OTP is $otp");
+                $name="SMTJobs";
+            // $text = "$otp is verification otp for SMT. OTPs are SECRET. DO NOT disclose it to anyone. SMT Labs Private Limited";
+              $text = "$otp is verification otp for " . $name . ". OTPs are SECRET. DO NOT disclose it to anyone. SMT Labs Private Limited";
+             SmsService::send($identifier, $text);
             Log::info('OTP queued for SMS delivery', ['identifier' => $identifier]);
         }
 

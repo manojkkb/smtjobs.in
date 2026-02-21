@@ -94,10 +94,13 @@ class UserAuth extends Controller
 
         Auth::login($user);
 
+        $target= $request->input('target', 'candidate');
+        $route = $target === 'recruiter' ? 'recruiter.dashboard' : 'candidate.profile';
+
         return response()->json([
             'status' => true,
             'message' => 'Login successful',
-            'redirect' => route('dashboard')
+            'redirect' => route($route)
         ]);
     }
 

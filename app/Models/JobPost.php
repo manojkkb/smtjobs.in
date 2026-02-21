@@ -23,6 +23,7 @@ class JobPost extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        "title",
         'company_id',
         'recruiter_id',
         'industry_id',
@@ -84,8 +85,13 @@ class JobPost extends Model
         return $this->belongsTo(ExperienceRange::class);
     }
 
+    public function detail(): HasOne
+    {
+        return $this->hasOne(JobPostDetail::class);
+    }
+
     public function profile(): HasOne
     {
-        return $this->hasOne(JobPostProfile::class);
+        return $this->hasOne(JobPostDetail::class);
     }
 }

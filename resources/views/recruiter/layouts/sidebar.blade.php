@@ -1,6 +1,6 @@
 <aside
     id="adminSidebar"
-    class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full transform overflow-y-auto border border-slate-200 bg-white px-5 py-7 shadow-lg transition duration-300 lg:static lg:translate-x-0 lg:shadow-none"
+    class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full transform overflow-y-auto border border-slate-200 bg-white px-5 py-7 shadow-lg transition duration-300 lg:shadow-none"
 >
     <div class="flex items-center justify-between">
         <div>

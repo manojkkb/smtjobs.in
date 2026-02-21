@@ -16,6 +16,7 @@ class User extends Authenticatable
         'phone',
         'email',
         'password',
+        'gender',
     ];
 
     protected $hidden = [
@@ -27,4 +28,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function recruiter()
+    {
+        return $this->hasOne(Recruiter::class, 'user_id');
+    }
+    public function candidate()
+    {
+        return $this->hasMany(JobApplication::class, 'user_id');
+    }
 }

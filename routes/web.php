@@ -38,7 +38,9 @@ use App\Http\Controllers\Recruiter\JobApplicationController;
 use App\Http\Controllers\Recruiter\JobPostController;
 use App\Http\Controllers\Recruiter\ProfileController;
 use App\Http\Controllers\UserAuth;
-use App\Models\CandidateProfile;
+use App\Http\Middleware\RecruiterMiddleware;
+use App\Http\Middleware\CandidateMiddleware;
+Use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -60,8 +62,7 @@ Route::post('/verify-otp', [UserAuth::class, 'verifyOtp'])
 
 Route::get('candidate-register', UserAuth::class . '@showRegistrationForm')->name('candidate.register');
 Route::post('candidate-register', UserAuth::class . '@registerCandidate')->name('candidate.register.submit');
-Route::get('recruiter-register', UserAuth::class . '@showRecruiterRegistrationForm')->name('recruiter.register');
-Route::post('recruiter-register', UserAuth::class . '@registerRecruiter')->name('recruiter.register.submit');   
+
 
 Route::post('/logout', [UserAuth::class, 'logout'])->name('logout')->middleware('auth');
 
@@ -180,11 +181,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 Route::prefix('recruiter')->name('recruiter.')->middleware(['auth'])->group(function () {
-    // Recruiter dashboard and routes will go here
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::get('/dashboard',[RecruiterDashboardController::class,'index'])->name('dashboard');
-    Route::resource('job-posts', JobPostController::class);
-    Route::get('/job-applications', [JobApplicationController::class, 'index'])->name('job-applications');
+
+    Route::get('complete-profile', [ProfileController::class, 'completeProfile'])->name('complete.profile');
+    Route::post('complete-profile/personal', [ProfileController::class, 'submitPersonalInfo'])->name('complete.profile.personal');
+    Route::post('complete-profile/details', [ProfileController::class, 'submitRecruiterDetails'])->name('complete.profile.details');
+        
+    //  check recuriter profile completion in middleware and redirect to profile completion if not completed
+    Route::middleware([RecruiterMiddleware::class])->group(function () {
+    
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+        Route::get('/dashboard',[RecruiterDashboardController::class,'index'])->name('dashboard');
+        Route::resource('job-posts', JobPostController::class);
+        Route::get('/job-applications', [JobApplicationController::class, 'index'])->name('job-applications');
+
+    });
+
+    
 
 }); 
 
