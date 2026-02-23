@@ -16,7 +16,7 @@
                     id="title"
                     name="title"
                     type="text"
-                    value="{{ old('title', optional($profile)->title) }}"
+                    value="{{ old('title', $jobPost->title) }}"
                     class="mt-1 w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm transition focus:border-cyan-500 focus:outline-none"
                     placeholder="e.g., Senior Product Manager"
                 />

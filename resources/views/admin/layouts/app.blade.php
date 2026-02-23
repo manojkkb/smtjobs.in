@@ -9,9 +9,9 @@
     {{-- Vite CSS + JS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased bg-slate-50 text-slate-900">
+<body class="font-sans antialiased bg-[#e7e7e7] text-slate-900">
 
-    <div class="relative flex h-screen overflow-hidden bg-slate-50">
+    <div class="relative flex h-screen overflow-hidden bg-[#e7e7e7]">
         <div
             id="sidebarBackdrop"
             class="pointer-events-none fixed inset-0 z-30 hidden bg-slate-900/40 transition-opacity duration-300 lg:hidden"

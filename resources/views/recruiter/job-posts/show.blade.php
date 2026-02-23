@@ -1,13 +1,13 @@
 @extends('recruiter.layouts.app')
 
-@section('title', optional($jobPost->profile)->title ?? 'Job details')
+@section('title', $jobPost->title ?? 'Job details')
 
 @section('content')
     <div class="space-y-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Details</p>
-                <h1 class="text-2xl font-semibold text-slate-900">{{ optional($jobPost->profile)->title ?? 'Job post' }}</h1>
+                <h1 class="text-2xl font-semibold text-slate-900">{{ $jobPost->title ?? 'Job post' }}</h1>
                 <p class="text-sm text-slate-500">{{ optional($jobPost->category)->name ?? 'General' }} • {{ optional($jobPost->city)->name ?? 'Location pending' }}</p>
             </div>
             <div class="flex gap-2">

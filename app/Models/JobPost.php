@@ -94,4 +94,9 @@ class JobPost extends Model
     {
         return $this->hasOne(JobPostDetail::class);
     }
+
+    public function applications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
 }

@@ -8,7 +8,7 @@ use App\Models\EmploymentType;
 use App\Models\ExperienceRange;
 use App\Models\Industry;
 use App\Models\JobPost;
-use App\Models\JobPostProfile;
+use App\Models\JobPostDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
@@ -23,7 +23,7 @@ class JobController extends Controller
 
         $query = JobPost::with([
             'company',
-            'profile',
+            'detail',
             'city',
             'category',
             'industry',
@@ -34,10 +34,9 @@ class JobController extends Controller
             ->when($keyword !== '', function ($q) use ($keyword) {
                 $pattern = '%' . Str::lower($keyword) . '%';
                 return $q->where(function ($sub) use ($pattern) {
-                    $sub->whereHas('profile', function ($profileQuery) use ($pattern) {
-                        $profileQuery
-                            ->whereRaw('LOWER(title) LIKE ?', [$pattern])
-                            ->orWhereRaw('LOWER(description) LIKE ?', [$pattern]);
+                    $sub->whereRaw('LOWER(title) LIKE ?', [$pattern])
+                    ->orWhereHas('detail', function ($detailQuery) use ($pattern) {
+                        $detailQuery->whereRaw('LOWER(description) LIKE ?', [$pattern]);
                     })
                     ->orWhereHas('company', function ($companyQuery) use ($pattern) {
                         $companyQuery->whereRaw('LOWER(name) LIKE ?', [$pattern]);
@@ -89,7 +88,7 @@ class JobController extends Controller
             'experienceRanges' => \App\Models\ExperienceRange::orderBy('label')->get(),
         ];
 
-        $keywordOptions = JobPostProfile::query()
+        $keywordOptions = JobPost::query()
             ->whereNotNull('title')
             ->where('title', '<>', '')
             ->select('title')
@@ -135,7 +134,7 @@ class JobController extends Controller
         $results = [];
 
         if ($type === 'keyword') {
-            $query = JobPostProfile::query()
+            $query = JobPost::query()
                 ->whereNotNull('title')
                 ->where('title', '<>', '');
 

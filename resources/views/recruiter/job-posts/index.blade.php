@@ -53,7 +53,7 @@
                     @forelse ($jobPosts as $jobPost)
                         <tr class="hover:bg-slate-50">
                             <td class="px-6 py-4">
-                                <div class="text-sm font-semibold text-slate-900">{{ optional($jobPost->profile)->title ?? 'Untitled role' }}</div>
+                                <div class="text-sm font-semibold text-slate-900">{{ $jobPost->title ?? 'Untitled role' }}</div>
                                 <p class="text-xs uppercase tracking-[0.3em] text-slate-400">{{ optional($jobPost->category)->name ?? 'General' }}</p>
                             </td>
                             <td class="px-6 py-4">
