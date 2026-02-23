@@ -10,10 +10,13 @@ class SalaryRange extends Model
     use HasFactory;
 
     protected $fillable = [
+       
+        'slug',
+        'label',
         'min_salary',
         'max_salary',
-        'label',
         'is_active',
+        'sort_order',
     ];
 
     protected $casts = [

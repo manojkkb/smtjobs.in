@@ -14,10 +14,12 @@ return new class extends Migration
     {
         Schema::create('salary_ranges', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('min_salary');
-            $table->bigInteger('max_salary');
+            $table->string('slug')->unique();
             $table->string('label')->nullable();
+            $table->bigInteger('min_salary');
+            $table->bigInteger('max_salary');            
             $table->boolean('is_active')->default(true);
+            $table->smallInteger('sort_order')->default(0);
             $table->timestamps();
 
             $table->index(['min_salary', 'max_salary']);

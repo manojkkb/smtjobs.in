@@ -15,7 +15,9 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
-            $table->string('label');    
+            $table->string('label');   
+            $table->string('bg_color')->nullable();
+            $table->string('text_color')->nullable(); 
             $table->smallInteger('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
 

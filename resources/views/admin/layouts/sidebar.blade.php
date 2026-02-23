@@ -34,7 +34,6 @@
         $activeRecruiters = request()->routeIs(array_column($recruiterMenu, 'pattern'));
         $activeMaster = request()->routeIs([
             'admin.industries.*',
-            'admin.departments.*',
             'admin.categories.*',
             'admin.certificates.*',
             'admin.shift-types.*',
@@ -60,7 +59,6 @@
         ]);
         $masterMenu = [
             ['label' => 'Industries', 'route' => 'admin.industries.index', 'pattern' => 'admin.industries.*'],
-            ['label' => 'Departments', 'route' => 'admin.departments.index', 'pattern' => 'admin.departments.*'],
             ['label' => 'Categories', 'route' => 'admin.categories.index', 'pattern' => 'admin.categories.*'],
             ['label' => 'Certificates', 'route' => 'admin.certificates.index', 'pattern' => 'admin.certificates.*'],
             ['label' => 'Shift Types', 'route' => 'admin.shift-types.index', 'pattern' => 'admin.shift-types.*'],

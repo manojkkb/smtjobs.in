@@ -22,17 +22,21 @@ class TagController extends MasterResourceController
         ['label' => 'ID', 'field' => 'id', 'sortable' => true],
         ['label' => 'Label', 'field' => 'label', 'sortable' => true],
         ['label' => 'Slug', 'field' => 'slug', 'sortable' => true],
+        ['label' => 'BG Color', 'field' => 'bg_color', 'type' => 'color', 'sortable' => true],
+        ['label' => 'Text Color', 'field' => 'text_color', 'type' => 'color', 'sortable' => true],
         ['label' => 'Sort order', 'field' => 'sort_order', 'sortable' => true],
         ['label' => 'Active', 'field' => 'is_active', 'type' => 'boolean', 'sortable' => true],
     ];
     protected array $formFields = [
         ['name' => 'label', 'label' => 'Label', 'type' => 'text', 'required' => true],
         ['name' => 'slug', 'label' => 'Slug', 'type' => 'text', 'required' => true],
+        ['name' => 'bg_color', 'label' => 'Background Color', 'type' => 'color', 'attributes' => ['placeholder' => '#3b82f6']],
+        ['name' => 'text_color', 'label' => 'Text Color', 'type' => 'color', 'attributes' => ['placeholder' => '#ffffff']],
         ['name' => 'sort_order', 'label' => 'Sort order', 'type' => 'number', 'attributes' => ['step' => 1]],
         ['name' => 'is_active', 'label' => 'Active', 'type' => 'checkbox', 'default' => true],
     ];
     protected array $searchColumns = ['label', 'slug'];
-    protected array $sortable = ['id', 'label', 'slug', 'sort_order', 'is_active'];
+    protected array $sortable = ['id', 'label', 'slug', 'bg_color', 'text_color', 'sort_order', 'is_active'];
     protected array $bulkActions = [
         'sample' => [
             'label' => 'Download sample CSV',
@@ -62,6 +66,8 @@ class TagController extends MasterResourceController
         return [
             'label' => ['required', 'string', 'max:191'],
             'slug' => ['required', 'alpha_dash', 'max:191', $slugRule],
+            'bg_color' => ['nullable', 'string', 'max:7', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'text_color' => ['nullable', 'string', 'max:7', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'sort_order' => ['nullable', 'integer'],
             'is_active' => ['nullable', 'boolean'],
         ];
@@ -97,6 +103,8 @@ class TagController extends MasterResourceController
             $payload = [
                 'label' => $rowData['label'] ?? Str::of($slug)->replace('-', ' ')->title()->toString(),
                 'slug' => $slug,
+                'bg_color' => $rowData['bg_color'] ?? null,
+                'text_color' => $rowData['text_color'] ?? null,
                 'sort_order' => $rowData['sort_order'] ?: null,
                 'is_active' => filter_var($rowData['is_active'] ?? '1', FILTER_VALIDATE_BOOLEAN),
             ];
@@ -110,7 +118,7 @@ class TagController extends MasterResourceController
 
     public function export(Request $request)
     {
-        $columns = ['slug', 'label', 'sort_order', 'is_active'];
+        $columns = ['slug', 'label', 'bg_color', 'text_color', 'sort_order', 'is_active'];
         $filename = 'tags-' . Carbon::now()->format('Y-m-d') . '.csv';
 
         $callback = function () use ($columns, $request) {
@@ -138,14 +146,14 @@ class TagController extends MasterResourceController
 
     public function sample(): StreamedResponse
     {
-        $columns = ['slug', 'label', 'sort_order', 'is_active'];
+        $columns = ['slug', 'label', 'bg_color', 'text_color', 'sort_order', 'is_active'];
         $filename = 'tags-sample.csv';
 
         $callback = function () use ($columns) {
             $handle = fopen('php://output', 'w');
             fputcsv($handle, $columns);
-            fputcsv($handle, ['urgent', 'Urgent', 1, 1]);
-            fputcsv($handle, ['remote', 'Remote', 2, 1]);
+            fputcsv($handle, ['urgent', 'Urgent', '#ef4444', '#ffffff', 1, 1]);
+            fputcsv($handle, ['remote', 'Remote', '#3b82f6', '#ffffff', 2, 1]);
             fclose($handle);
         };
 

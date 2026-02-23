@@ -12,17 +12,38 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('candidate_education', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('candidate_id')->constrained()->cascadeOnDelete();
+            $table->bigIncrements('id');
 
-            $table->string('degree');
-            $table->string('institution');
-            $table->integer('passing_year')->nullable();
+            $table->unsignedBigInteger('candidate_id');
+
+            $table->unsignedBigInteger('education_level_id');
+            $table->unsignedBigInteger('education_degree_id')->nullable();
+            $table->unsignedBigInteger('education_specialization_id')->nullable();
+
+            $table->string('institute_name', 150)->nullable();
+            $table->string('board_university', 150)->nullable();
+
+            $table->unsignedSmallInteger('passing_year')->nullable();
+
             $table->decimal('percentage', 5, 2)->nullable();
+            $table->decimal('cgpa', 4, 2)->nullable();
+            $table->decimal('cgpa_scale', 3, 1)->nullable();
+
+            $table->boolean('is_current')->default(false);
 
             $table->timestamps();
 
             $table->index('candidate_id');
+            $table->index('education_level_id');
+            $table->index('education_degree_id');
+            $table->index('education_specialization_id');
+
+            // Composite index for fast filtering
+            $table->index([
+                'education_level_id',
+                'education_degree_id',
+                'education_specialization_id'
+            ], 'education_filter_index');
         });
     }
 

@@ -186,7 +186,7 @@ Route::prefix('recruiter')->name('recruiter.')->middleware(['auth'])->group(func
     Route::post('complete-profile/personal', [ProfileController::class, 'submitPersonalInfo'])->name('complete.profile.personal');
     Route::post('complete-profile/details', [ProfileController::class, 'submitRecruiterDetails'])->name('complete.profile.details');
         
-    //  check recuriter profile completion in middleware and redirect to profile completion if not completed
+    //  check recruiter profile completion in middleware and redirect to profile completion if not completed
     Route::middleware([RecruiterMiddleware::class])->group(function () {
     
         Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
@@ -202,8 +202,53 @@ Route::prefix('recruiter')->name('recruiter.')->middleware(['auth'])->group(func
 
 Route::prefix('candidate')->name('candidate.')->middleware(['auth'])->group(function () {
 
+     Route::get('complete-profile', [CandidateProfileController::class, 'completeProfile'])->name('complete.profile');
+     Route::post('complete-profile/basic', [CandidateProfileController::class, 'storeBasicDetails'])->name('complete.profile.basic');
+     Route::post('complete-profile/location', [CandidateProfileController::class, 'storeLocation'])->name('complete.profile.location');
+     Route::post('complete-profile/experience', [CandidateProfileController::class, 'storeExperience'])->name('complete.profile.experience');
+     Route::post('complete-profile/education', [CandidateProfileController::class, 'storeEducation'])->name('complete.profile.education');
+     Route::post('complete-profile/resume', [CandidateProfileController::class, 'storeResume'])->name('complete.profile.resume');
+     Route::post('complete-profile/submit', [CandidateProfileController::class, 'completeProfileSubmit'])->name('complete.profile.submit');
+     
+      Route::middleware([CandidateMiddleware::class])->group(function () {
+            
+            Route::get('/profile', [CandidateProfileController::class, 'show'])->name('profile');
+            
+            // Education CRUD
+            Route::post('/education', [CandidateProfileController::class, 'storeEducationItem'])->name('education.store');
+            Route::post('/education/{id}', [CandidateProfileController::class, 'updateEducationItem'])->name('education.update');
+            Route::delete('/education/{id}', [CandidateProfileController::class, 'deleteEducationItem'])->name('education.delete');
+            
+            // Education cascading dropdowns
+            Route::get('/education-degrees/{levelId}', [CandidateProfileController::class, 'getEducationDegrees'])->name('education.degrees');
+            Route::get('/education-specializations/{degreeId}', [CandidateProfileController::class, 'getEducationSpecializations'])->name('education.specializations');
+            
+            // Experience CRUD
+            Route::post('/experience', [CandidateProfileController::class, 'storeExperienceItem'])->name('experience.store');
+            Route::post('/experience/{id}', [CandidateProfileController::class, 'updateExperienceItem'])->name('experience.update');
+            Route::delete('/experience/{id}', [CandidateProfileController::class, 'deleteExperienceItem'])->name('experience.delete');
+            
+            // Skill CRUD
+            Route::post('/skill', [CandidateProfileController::class, 'storeSkillItem'])->name('skill.store');
+            Route::post('/skill/{id}', [CandidateProfileController::class, 'updateSkillItem'])->name('skill.update');
+            Route::delete('/skill/{id}', [CandidateProfileController::class, 'deleteSkillItem'])->name('skill.delete');
+            
+            // Language CRUD
+            Route::post('/language', [CandidateProfileController::class, 'storeLanguageItem'])->name('language.store');
+            Route::post('/language/{id}', [CandidateProfileController::class, 'updateLanguageItem'])->name('language.update');
+            Route::delete('/language/{id}', [CandidateProfileController::class, 'deleteLanguageItem'])->name('language.delete');
+            
+            // Certification CRUD
+            Route::post('/certification', [CandidateProfileController::class, 'storeCertificationItem'])->name('certification.store');
+            Route::post('/certification/{id}', [CandidateProfileController::class, 'updateCertificationItem'])->name('certification.update');
+            Route::delete('/certification/{id}', [CandidateProfileController::class, 'deleteCertificationItem'])->name('certification.delete');
+            
+            // Profile Update
+            Route::post('/profile/update', [CandidateProfileController::class, 'updateBasicProfile'])->name('profile.update');
+            Route::post('/profile/upload-photo', [CandidateProfileController::class, 'uploadProfilePhoto'])->name('profile.upload-photo');
+            
+      });
     
-    Route::get('/profile', [CandidateProfileController::class, 'show'])->name('profile');
 });
 
 

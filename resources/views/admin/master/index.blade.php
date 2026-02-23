@@ -117,6 +117,15 @@
                                         <span class="rounded-full px-3 py-1 text-[11px] font-semibold {{ $value ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }}">
                                             {{ $value ? 'Active' : 'Inactive' }}
                                         </span>
+                                    @elseif (($column['type'] ?? null) === 'color')
+                                        <div class="flex items-center gap-2">
+                                            @if ($value)
+                                                <span class="inline-block h-6 w-6 rounded border-2 border-slate-200" style="background-color: {{ $value }}"></span>
+                                                <span class="text-xs text-slate-600">{{ $value }}</span>
+                                            @else
+                                                <span class="text-slate-400">—</span>
+                                            @endif
+                                        </div>
                                     @else
                                         {{ $value ?? '—' }}
                                     @endif

@@ -19,6 +19,8 @@ return new class extends Migration
 
             $table->string('label');
             // Health Insurance, PF, Work From Home
+            $table->string('category');
+            // e.g., "Financial", "Wellness", "Work-Life Balance"
 
             $table->string('icon')->nullable();
             // optional icon class or image reference

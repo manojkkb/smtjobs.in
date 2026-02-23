@@ -48,6 +48,11 @@ return new class extends Migration
                   ->constrained('experience_ranges')
                   ->nullOnDelete();
 
+            $table->foreignId('job_status_id')
+                  ->nullable()
+                  ->constrained('job_statuses')
+                  ->nullOnDelete();
+
             $table->bigInteger('min_salary')->nullable();
             $table->bigInteger('max_salary')->nullable();
 

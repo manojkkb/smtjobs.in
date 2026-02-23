@@ -36,6 +36,8 @@ class MasterTablesSeeder extends Seeder
         'employment_types' => EmploymentTypeSeeder::class,
         'work_modes' => WorkModeSeeder::class,
         'education_levels' => EducationLevelSeeder::class,
+        'education_degrees' => EducationDegreeSeeder::class,
+        'education_specializations' => EducationSpecializationSeeder::class,
         'salary_ranges' => SalaryRangeSeeder::class,
         'notice_periods' => NoticePeriodSeeder::class,
         'benefits' => BenefitSeeder::class,

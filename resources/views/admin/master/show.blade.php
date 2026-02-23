@@ -25,7 +25,14 @@
             @foreach ($detailRows as $row)
                 <div class="space-y-2 rounded-2xl border border-slate-100 bg-slate-50 p-4">
                     <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $row['label'] }}</p>
-                    <p class="text-sm font-semibold text-slate-900">{{ $row['value'] }}</p>
+                    @if (($row['type'] ?? null) === 'color' && $row['raw_value'])
+                        <div class="flex items-center gap-2">
+                            <span class="inline-block h-8 w-8 rounded border-2 border-slate-200" style="background-color: {{ $row['raw_value'] }}"></span>
+                            <span class="text-sm font-semibold text-slate-900">{{ $row['raw_value'] }}</span>
+                        </div>
+                    @else
+                        <p class="text-sm font-semibold text-slate-900">{{ $row['value'] }}</p>
+                    @endif
                 </div>
             @endforeach
         </div>

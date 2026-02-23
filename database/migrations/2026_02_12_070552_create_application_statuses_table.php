@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('application_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
+            $table->string('label');
             $table->smallInteger('sort_order')->default(0);
             $table->boolean('is_active')->default(true);    
             $table->timestamps();

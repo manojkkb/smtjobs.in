@@ -12,6 +12,7 @@ class Certificate extends Model
     protected $fillable = [
         'slug',
         'label',
+        'category',
         'issuing_authority',
         'icon',
         'sort_order',

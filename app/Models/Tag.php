@@ -12,6 +12,8 @@ class Tag extends Model
     protected $fillable = [
         'slug',
         'label',
+        'bg_color',
+        'text_color',
         'sort_order',
         'is_active',
     ];

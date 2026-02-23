@@ -233,6 +233,8 @@ abstract class MasterResourceController extends Controller
         return array_map(fn ($column) => [
             'label' => $column['label'],
             'value' => $this->formatDetailValue($record, $column),
+            'type' => $column['type'] ?? null,
+            'raw_value' => data_get($record, $column['field'] ?? ''),
         ], $columns);
     }
 

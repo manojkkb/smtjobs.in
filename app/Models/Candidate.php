@@ -46,4 +46,34 @@ class Candidate extends Model
     {
         return $this->belongsTo(NoticePeriod::class);
     }
+
+    public function profile()
+    {
+        return $this->hasOne(CandidateProfile::class);
+    }
+
+    public function education()
+    {
+        return $this->hasMany(CandidateEducation::class);
+    }
+
+    public function experiences()
+    {
+        return $this->hasMany(CandidateExperience::class);
+    }
+
+    public function skills()
+    {
+        return $this->hasMany(CandidateSkill::class);
+    }
+
+    public function languages()
+    {
+        return $this->hasMany(CandidateLanguage::class);
+    }
+
+    public function certifications()
+    {
+        return $this->hasMany(CandidateCertification::class);
+    }
 }

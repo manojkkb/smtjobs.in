@@ -12,6 +12,7 @@ class Benefit extends Model
     protected $fillable = [
         'slug',
         'label',
+        'category',
         'icon',
         'sort_order',
         'is_active',

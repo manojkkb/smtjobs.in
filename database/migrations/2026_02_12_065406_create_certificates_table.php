@@ -19,6 +19,7 @@ return new class extends Migration
 
             $table->string('label');
             // AWS Certified Solutions Architect
+            $table->string('category');
 
             $table->string('issuing_authority')->nullable();
             // Amazon, PMI, Cisco

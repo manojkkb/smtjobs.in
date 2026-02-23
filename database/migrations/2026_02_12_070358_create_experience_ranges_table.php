@@ -14,16 +14,16 @@ return new class extends Migration
     {
         Schema::create('experience_ranges', function (Blueprint $table) {
             $table->id();
-            $table->integer('min_years');
-            $table->integer('max_years')->nullable();
+            
             // nullable for "10+ years"
-
+            $table->string('slug')->unique();
             $table->string('label');
             // 0-1 Years, 2-5 Years, 10+ Years
-
-            $table->smallInteger('priority')->default(0);
+            $table->integer('min_years');
+            $table->integer('max_years')->nullable();
 
             $table->boolean('is_active')->default(true);
+            $table->smallInteger('sort_order')->default(0);
 
             $table->timestamps();
 
@@ -34,7 +34,7 @@ return new class extends Migration
          // Partial index for active ranges
         DB::statement("
             CREATE INDEX experience_ranges_active_idx
-            ON experience_ranges (priority)
+            ON experience_ranges (sort_order)
             WHERE is_active = true
         ");
     }

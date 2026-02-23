@@ -11,6 +11,7 @@ class UserStatus extends Model
 
     protected $fillable = [
         'slug',
+        'label',
         'sort_order',
         'is_active',
     ];

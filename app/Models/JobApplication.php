@@ -32,6 +32,6 @@ class JobApplication extends Model
 
     public function applicationStatus(): BelongsTo
     {
-        return $this->belongsTo(ApplicationStatus::class);
+        return $this->belongsTo(ApplicationStatus::class, 'application_status_id');
     }
 }

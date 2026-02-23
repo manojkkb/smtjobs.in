@@ -10,7 +10,8 @@ class JobStatus extends Model
     use HasFactory;
 
     protected $fillable = [
-        'slug',
+        'slug',        
+        'label',
         'sort_order',
         'is_active',
     ];

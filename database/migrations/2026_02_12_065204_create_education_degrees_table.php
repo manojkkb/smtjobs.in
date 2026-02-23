@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -12,19 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('job_statuses', function (Blueprint $table) {
+        Schema::create('education_degrees', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('education_level_id')->constrained()->cascadeOnDelete();
             $table->string('slug')->unique();
             $table->string('label');
-            $table->smallInteger('sort_order')->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
+
+            $table->index('education_level_id');
         });
-        DB::statement("
-            CREATE INDEX job_statuses_active_idx
-            ON job_statuses (sort_order)
-            WHERE is_active = true
-        ");
     }
 
     /**
@@ -32,7 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("DROP INDEX IF EXISTS job_statuses_active_idx");
-        Schema::dropIfExists('job_statuses');
+        Schema::dropIfExists('education_degrees');
     }
 };
