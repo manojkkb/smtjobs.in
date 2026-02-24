@@ -14,27 +14,36 @@ return new class extends Migration
         Schema::create('locations', function (Blueprint $table) {
             
 
-            $table->bigIncrements('id');
-            $table->string('slug')->unique();
-            $table->string('label');
-            $table->json('meta')->nullable(); // state_id, city_id, area_id etc.
-            // Optional but useful
-            $table->string('pincode', 20)->nullable();
-            // For radius search (important for future)
-            $table->decimal('latitude', 10, 7)->nullable();
-            $table->decimal('longitude', 10, 7)->nullable();
+        $table->bigIncrements('id');
 
-            // Metro boost logic
-            $table->boolean('is_metro')->default(false);
+        // Country (future expansion ke liye)
+        $table->string('country', 100)->default('India');
 
-           
+        // India specific hierarchy
+        $table->string('state', 100);
+        $table->string('district', 100)->nullable();
+        $table->string('city', 100);
 
-            $table->timestamps();
+        // Optional but useful
+        $table->string('pincode', 20)->nullable();
 
-            // 🔥 Important Indexes (10M+ Ready)
-            $table->index('label');
-            $table->index('meta');
-            $table->index(['latitude', 'longitude']);
+        // For radius search (important for future)
+        $table->decimal('latitude', 10, 7)->nullable();
+        $table->decimal('longitude', 10, 7)->nullable();
+
+        // Metro boost logic
+        $table->boolean('is_metro')->default(false);
+
+        // Slug for SEO pages (jobs-in-mumbai)
+        $table->string('slug')->unique();
+
+        $table->timestamps();
+
+        // 🔥 Important Indexes (10M+ Ready)
+        $table->index('state');
+        $table->index('city');
+        $table->index(['state', 'city']);
+        $table->index(['latitude', 'longitude']);
 
           
         });
