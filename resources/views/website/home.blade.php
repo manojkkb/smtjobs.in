@@ -4,70 +4,14 @@
 
 @section('content')
     <div class="mx-auto w-full max-w-6xl space-y-10 px-0 sm:px-6 lg:px-0">
-        <section class="rounded-3xl border border-slate-200 bg-white/80 p-6">
+        <section class="rounded-3xl border border-slate-200  p-6">
             <div class="space-y-2">
-                <p class="text-xs uppercase tracking-[0.5em] text-slate-500">Search</p>
-                <h2 class="text-2xl font-semibold text-slate-900">Find the job that matches your ambition</h2>
-                <p class="text-sm text-slate-500">Filter by keywords, companies, and skills with a precise location.</p>
+                <p class="text-xs uppercase tracking-[0.5em] text-slate-500">🇮🇳 India-Focused</p>
+                <h2 class="text-2xl font-semibold text-slate-900">Explore Opportunities That Match Your Skills</h2>
+                <p class="text-sm text-slate-500">Smart filters. Precise location. Better matches.</p>
             </div>
 
-            <form action="{{ route('jobs') }}" method="GET" class="mt-6">
-                <div class="grid gap-6 md:grid-cols-3 items-end">
-                    <div class="relative" data-suggestion-wrapper>
-                        <label class="space-y-2 text-sm text-slate-600">
-                            <span class="text-[0.65rem] uppercase tracking-[0.4em] text-slate-400">Keyword</span>
-                            <input
-                                type="text"
-                                name="keyword"
-                                id="keywordInput"
-                                class="w-full rounded-2xl border border-slate-200 bg-[#e7e7e7] px-4 py-3 text-base font-semibold text-slate-900 focus:border-slate-400 focus:outline-none"
-                                placeholder="Role · Company · Skill"
-                                value="{{ request('keyword') }}"
-                                autocomplete="off"
-                                data-suggestion-input="keyword"
-                            />
-                        </label>
-                        <div class="pointer-events-none invisible absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" data-suggestion-menu="keyword">
-                            <div class="max-h-60 overflow-y-auto"></div>
-                        </div>
-                    </div>
-                    <div class="relative" data-suggestion-wrapper>
-                        <label class="space-y-2 text-sm text-slate-600">
-                            <span class="text-[0.65rem] uppercase tracking-[0.4em] text-slate-400">Location</span>
-                            <input
-                                type="text"
-                                name="location"
-                                class="w-full rounded-2xl border border-slate-200 bg-[#e7e7e7] px-4 py-3 text-base font-semibold text-slate-900 focus:border-slate-400 focus:outline-none"
-                                placeholder="City · State · Country"
-                                value="{{ request('location') }}"
-                                autocomplete="off"
-                                data-suggestion-input="location"
-                            />
-                        </label>
-                        <div class="pointer-events-none invisible absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" data-suggestion-menu="location">
-                            <div class="max-h-60 overflow-y-auto"></div>
-                        </div>
-                    </div>
-                    <button
-                        type="submit"
-                        class="w-full rounded-2xl border border-slate-900 bg-transparent px-6 py-3 text-sm font-semibold text-slate-900 shadow-none transition hover:bg-slate-900 hover:text-white"
-                    >
-                        Search jobs
-                    </button>
-                </div>
-            </form>
-
-            <div class="mt-4 flex flex-wrap gap-3 text-xs text-slate-500">
-                @foreach($quickFilters as $filter)
-                    <a href="{{ route('jobs', ['filter' => $filter['value']]) }}"
-                       class="rounded-full border border-slate-200 px-3 py-1 hover:border-slate-400 hover:bg-slate-50 transition">
-                        {{ $filter['label'] }}
-                        @if($filter['count'] > 0)
-                            <span class="text-slate-400">({{ $filter['count'] }})</span>
-                        @endif
-                    </a>
-                @endforeach
-            </div>
+            @include('website.components.search')
         </section>
 
         <section class="rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-6 lg:p-10">
@@ -271,94 +215,4 @@
             </div>
         </section>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const suggestionUrl = '{{ route('jobs.suggestions') }}';
-            const cache = {};
-            const containers = document.querySelectorAll('[data-suggestion-wrapper]');
-
-            const fetchSuggestions = async (type, query) => {
-                const key = `${type}:${query}`;
-                if (cache[key]) {
-                    return cache[key];
-                }
-
-                const params = new URLSearchParams({ type, q: query });
-                const response = await fetch(`${suggestionUrl}?${params}`);
-                if (!response.ok) {
-                    return [];
-                }
-
-                const payload = await response.json();
-                cache[key] = payload.suggestions ?? [];
-                return cache[key];
-            };
-
-            const closeMenu = (menu) => {
-                menu.classList.add('pointer-events-none', 'invisible');
-            };
-
-            const openMenu = (menu) => {
-                menu.classList.remove('pointer-events-none', 'invisible');
-            };
-
-            containers.forEach((wrapper) => {
-                const input = wrapper.querySelector('[data-suggestion-input]');
-                const type = input ? input.dataset.suggestionInput : null;
-                if (!type) {
-                    return;
-                }
-
-                const menu = wrapper.querySelector(`[data-suggestion-menu="${type}"]`);
-                const list = menu?.querySelector('div');
-
-                const render = async (query) => {
-                    if (!menu || !list) {
-                        return;
-                    }
-
-                    const trimmed = query.trim();
-                    const matches = await fetchSuggestions(type, trimmed);
-
-                    if (!matches.length) {
-                        list.innerHTML = '<p class="px-4 py-2 text-xs text-slate-400">No matches</p>';
-                        closeMenu(menu);
-                        return;
-                    }
-
-                    list.innerHTML = matches
-                        .map(item => `<button type="button" class="w-full text-left px-4 py-2 hover:bg-slate-100" data-suggestion-item="${type}" data-value="${item}">${item}</button>`)
-                        .join('');
-
-                    openMenu(menu);
-                };
-
-                input.addEventListener('focus', () => render(input.value));
-                input.addEventListener('input', () => render(input.value));
-
-                input.addEventListener('keydown', (event) => {
-                    if (event.key === 'Escape') {
-                        closeMenu(menu);
-                    }
-                });
-
-                menu.addEventListener('click', (event) => {
-                    const button = event.target.closest('[data-suggestion-item]');
-                    if (!button) {
-                        return;
-                    }
-
-                    input.value = button.dataset.value;
-                    closeMenu(menu);
-                    input.focus();
-                });
-
-                document.addEventListener('click', (event) => {
-                    if (!wrapper.contains(event.target)) {
-                        closeMenu(menu);
-                    }
-                });
-            });
-        });
-    </script>
 @endsection

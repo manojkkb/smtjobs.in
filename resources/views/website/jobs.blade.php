@@ -4,76 +4,9 @@
 
 @section('content')
     <div class="mx-auto max-w-6xl space-y-10 px-4 pb-16 sm:px-6 lg:px-0">
-        <section class="rounded-3xl border border-slate-200 bg-white/60 p-6 lg:p-8">
+        <section class="rounded-3xl border border-slate-200  p-6 lg:p-8">
            
-            <form method="GET" action="{{ route('jobs') }}" class="mt-6">
-                <div class="grid gap-6 md:grid-cols-3 items-end">
-                    <div class="relative" data-suggestion-wrapper>
-                        <label class="space-y-2 text-sm text-slate-600">
-                            <span class="text-[0.65rem] uppercase tracking-[0.4em] text-slate-400">Keyword</span>
-                            <input
-                                type="text"
-                                name="keyword"
-                                class="w-full rounded-2xl border border-slate-200 bg-[#e7e7e7] px-4 py-3 text-base font-semibold text-slate-900 focus:border-slate-400 focus:outline-none"
-                                placeholder="Role · Company · Skill"
-                                value="{{ request('keyword') }}"
-                                autocomplete="off"
-                                data-suggestion-input="keyword"
-                            />
-                        </label>
-                        <div class="pointer-events-none invisible absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" data-suggestion-menu="keyword">
-                            <div class="max-h-60 overflow-y-auto"></div>
-                        </div>
-                    </div>
-                    <div class="relative" data-suggestion-wrapper>
-                        <label class="space-y-2 text-sm text-slate-600">
-                            <span class="text-[0.65rem] uppercase tracking-[0.4em] text-slate-400">Location</span>
-                            <input
-                                type="text"
-                                name="location"
-                                class="w-full rounded-2xl border border-slate-200 bg-[#e7e7e7] px-4 py-3 text-base font-semibold text-slate-900 focus:border-slate-400 focus:outline-none"
-                                placeholder="City · State · Country"
-                                value="{{ request('location') }}"
-                                autocomplete="off"
-                                data-suggestion-input="location"
-                            />
-                        </label>
-                        <div class="pointer-events-none invisible absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" data-suggestion-menu="location">
-                            <div class="max-h-60 overflow-y-auto"></div>
-                        </div>
-                    </div>
-                    <button
-                        type="submit"
-                        class="w-full rounded-2xl border border-slate-900 bg-transparent px-6 py-3 text-sm font-semibold text-slate-900 shadow-none transition hover:bg-slate-900 hover:text-white"
-                    >
-                        Search jobs
-                    </button>
-                </div>
-                @php
-                    $searchPreserve = request()->except(['keyword', 'location', 'page', 'filter']);
-                @endphp
-                @foreach ($searchPreserve as $param => $value)
-                    @if (is_array($value))
-                        @foreach ($value as $entry)
-                            <input type="hidden" name="{{ $param }}[]" value="{{ $entry }}" />
-                        @endforeach
-                    @else
-                        <input type="hidden" name="{{ $param }}" value="{{ $value }}" />
-                    @endif
-                @endforeach
-            </form>
-
-            <div class="mt-4 flex flex-wrap gap-3 text-xs text-slate-500">
-                @foreach($quickFilters as $filter)
-                    <a href="{{ route('jobs', ['filter' => $filter['value']]) }}" 
-                       class="rounded-full border border-slate-200 px-3 py-1 hover:border-slate-400 hover:bg-slate-50 transition {{ request('filter') == $filter['value'] ? 'bg-slate-900 text-white border-slate-900' : '' }}">
-                        {{ $filter['label'] }}
-                        @if($filter['count'] > 0)
-                            <span class="{{ request('filter') == $filter['value'] ? 'text-slate-300' : 'text-slate-400' }}">({{ $filter['count'] }})</span>
-                        @endif
-                    </a>
-                @endforeach
-            </div>
+            @include('website.components.search')
 
             <div class="mt-6 lg:hidden">
                 <details class="rounded-3xl border border-slate-200 bg-slate-50/80 p-4">

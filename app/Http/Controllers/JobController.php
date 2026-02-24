@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\EmploymentType;
 use App\Models\ExperienceRange;
 use App\Models\Industry;
@@ -110,14 +111,6 @@ class JobController extends Controller
             ->take(50)
             ->get(['id', 'label', 'slug']);
 
-        // Quick filters with counts
-        $quickFilters = [
-            ['label' => 'Remote-first', 'value' => 'remote', 'count' => JobPost::where('is_remote', true)->where('is_active', true)->where('job_status_id', 1)->count()],
-            ['label' => 'Full-time', 'value' => 'fulltime', 'count' => JobPost::whereHas('employmentType', fn($q) => $q->where('label', 'Full Time'))->where('is_active', true)->where('job_status_id', 1)->count()],
-            ['label' => 'Part-time', 'value' => 'parttime', 'count' => JobPost::whereHas('employmentType', fn($q) => $q->where('label', 'Part Time'))->where('is_active', true)->where('job_status_id', 1)->count()],
-            ['label' => 'Flexible hours', 'value' => 'flexible', 'count' => JobPost::whereHas('employmentType', fn($q) => $q->where('label', 'Flexible Shift'))->where('is_active', true)->where('job_status_id', 1)->count()],
-        ];
-
         $filterOptions = [
             'industries' => Industry::orderBy('label')->get(),
             'categories' => Category::orderBy('label')->get(),
@@ -126,7 +119,7 @@ class JobController extends Controller
         ];
 
         return view('website.jobs', array_merge(
-            compact('jobPosts', 'cities', 'skills', 'jobRoles', 'quickFilters'),
+            compact('jobPosts', 'cities', 'skills', 'jobRoles'),
             $filterOptions
         ));
     }
@@ -154,35 +147,87 @@ class JobController extends Controller
         $results = [];
 
         if ($type === 'keyword') {
-            $query = JobPost::query()
+            $pattern = '%' . Str::lower($term) . '%';
+            $limit = 10;
+            
+            // Get job titles
+            $jobTitles = JobPost::query()
                 ->whereNotNull('title')
                 ->where('title', '<>', '');
-
+            
             if ($term !== '') {
-                $pattern = '%' . Str::lower($term) . '%';
-                $query->whereRaw('LOWER(title) LIKE ?', [$pattern]);
+                $jobTitles->whereRaw('LOWER(title) LIKE ?', [$pattern]);
             }
-
-            $results = $query
-                ->select('title')
+            
+            $jobTitles = $jobTitles
+                ->select('title as name')
                 ->distinct()
-                ->orderBy('title')
-                ->limit(10)
-                ->pluck('title')
-                ->toArray();
-        } elseif ($type === 'location') {
-            $query = City::query();
-
-            if ($term !== '') {
-                $pattern = '%' . Str::lower($term) . '%';
-                $query->whereRaw('LOWER(name) LIKE ?', [$pattern]);
-            }
-
-            $results = $query
-                ->orderBy('name')
-                ->limit(10)
+                ->limit($limit)
                 ->pluck('name')
                 ->toArray();
+            
+            // Get skills
+            $skills = [];
+            if ($term !== '') {
+                $skills = Skill::where('is_active', true)
+                    ->whereRaw('LOWER(label) LIKE ?', [$pattern])
+                    ->orderBy('sort_order')
+                    ->limit($limit)
+                    ->pluck('label')
+                    ->toArray();
+            }
+            
+            // Get job roles
+            $jobRoles = [];
+            if ($term !== '') {
+                $jobRoles = JobRole::where('is_active', true)
+                    ->whereRaw('LOWER(label) LIKE ?', [$pattern])
+                    ->orderBy('sort_order')
+                    ->limit($limit)
+                    ->pluck('label')
+                    ->toArray();
+            }
+            
+            // Get company names
+            $companies = [];
+            if ($term !== '') {
+                $companies = Company::where('is_active', true)
+                    ->whereRaw('LOWER(name) LIKE ?', [$pattern])
+                    ->limit($limit)
+                    ->pluck('name')
+                    ->toArray();
+            }
+            
+            // Merge all results
+            $allResults = array_merge($jobTitles, $skills, $jobRoles, $companies);
+            
+            // Remove duplicates and limit
+            $results = array_values(array_unique($allResults));
+            $results = array_slice($results, 0, $limit);
+            
+        } elseif ($type === 'location') {
+            $pattern = '%' . Str::lower($term) . '%';
+            
+            // Get cities with job counts - prioritize cities with jobs
+            $citiesWithJobs = City::where('is_active', true)
+                ->when($term !== '', function($query) use ($pattern) {
+                    $query->whereRaw('LOWER(name) LIKE ?', [$pattern]);
+                })
+                ->withCount(['jobPosts' => function($query) {
+                    $query->where('is_active', true)
+                        ->where('job_status_id', 1);
+                }])               
+                ->orderBy('job_posts_count', 'desc')
+                ->limit(10)
+                ->get(['id', 'name', 'job_posts_count']);
+            
+            // Format results with job counts
+            $results = $citiesWithJobs->map(function($city) {
+                if ($city->job_posts_count > 0) {
+                    return $city->name . ' (' . $city->job_posts_count . ' jobs)';
+                }
+                return $city->name;
+            })->toArray();
         }
 
         return Response::json(['suggestions' => $results]);

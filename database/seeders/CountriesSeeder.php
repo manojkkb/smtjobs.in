@@ -3,15 +3,27 @@
 namespace Database\Seeders;
 
 use App\Models\Country;
+use Illuminate\Support\Str;
 
 class CountriesSeeder extends MasterSeeder
 {
     public function run(): void
     {
-        $this->upsertRecords(Country::class, [
-            ['slug' => 'usa', 'name' => 'United States', 'iso_code' => 'US', 'phone_code' => '+1', 'latitude' => 37.09024, 'longitude' => -95.71289],
-            ['slug' => 'canada', 'name' => 'Canada', 'iso_code' => 'CA', 'phone_code' => '+1', 'latitude' => 56.13037, 'longitude' => -106.34677],
-            ['slug' => 'uk', 'name' => 'United Kingdom', 'iso_code' => 'GB', 'phone_code' => '+44', 'latitude' => 55.3781, 'longitude' => -3.4360],
-        ]);
+        $countries = [
+            ['name' => 'India', 'iso2' => 'IN', 'iso3' => 'IND', 'phone_code' => '+91', 'latitude' => 20.593684, 'longitude' => 78.962880],
+        ];
+
+        foreach ($countries as &$country) {
+            $country['slug'] = Str::slug($country['name']);
+            $country['is_active'] = true;
+            $country['created_at'] = now();
+            $country['updated_at'] = now();
+        }
+
+        Country::upsert(
+            $countries,
+            ['iso2'], // unique key
+            ['name', 'iso3', 'phone_code', 'latitude', 'longitude', 'slug', 'is_active', 'updated_at']
+        );
     }
 }

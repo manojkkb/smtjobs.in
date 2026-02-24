@@ -12,6 +12,11 @@
     
     {{-- Alpine.js for dropdown functionality --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    {{-- Alpine.js cloak style --}}
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 <body class="font-['Space_Grotesk'] bg-[#e7e7e7] text-slate-900 antialiased">
     <div class="min-h-screen bg-[#e7e7e7]">

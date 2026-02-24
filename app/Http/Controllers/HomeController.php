@@ -8,6 +8,7 @@ use App\Models\Skill;
 use App\Models\JobRole;
 use App\Models\JobPost;
 use App\Models\Company;
+use App\Models\ExperienceRange;
 
 class HomeController extends Controller
 {
@@ -84,13 +85,10 @@ class HomeController extends Controller
             ->take(4)
             ->get(['id', 'name', 'slug']);
 
-        // Quick filters
-        $quickFilters = [
-            ['label' => 'Remote-first', 'value' => 'remote', 'count' => JobPost::where('is_remote', true)->where('is_active', true)->where('job_status_id', 1)->count()],
-            ['label' => 'Full-time', 'value' => 'fulltime', 'count' => JobPost::whereHas('employmentType', fn($q) => $q->where('label', 'Full Time'))->where('is_active', true)->where('job_status_id', 1)->count()],
-            ['label' => 'Part-time', 'value' => 'parttime', 'count' => JobPost::whereHas('employmentType', fn($q) => $q->where('label', 'Part Time'))->where('is_active', true)->where('job_status_id', 1)->count()],
-            ['label' => 'Flexible hours', 'value' => 'flexible', 'count' => JobPost::whereHas('employmentType', fn($q) => $q->where('label', 'Flexible Shift'))->where('is_active', true)->where('job_status_id', 1)->count()],
-        ];
+        // Get experience ranges for search filter
+        $experienceRanges = ExperienceRange::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get(['id', 'label']);
 
         return view('website.home', compact(
             'cities',
@@ -99,7 +97,7 @@ class HomeController extends Controller
             'stats',
             'trendingJobs',
             'topCities',
-            'quickFilters'
+            'experienceRanges'
         ));
     }
 }
