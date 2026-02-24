@@ -13,8 +13,6 @@ class CountriesSeeder extends MasterSeeder
             ['slug' => 'india', 'name' => 'India',  'iso_code' => 'IND','phone_code' => '+91', 'latitude' => 20.593684, 'longitude' => 78.962880],
         ];
 
-        Country::upsert(
-            $countries
-        );
+        $this->upsertRecords(Country::class, $countries);
     }
 }
