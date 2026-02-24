@@ -3,53 +3,6 @@
 @section('title', 'Find your next tech role | SMTJobs')
 
 @section('content')
-    @php
-        $trendingJobs = [
-            [
-                'title' => 'Senior Laravel Engineer',
-                'company' => 'Horizon Fintech',
-                'location' => 'Colombo, Sri Lanka',
-                'salary' => 'LKR 450k - 520k',
-                'type' => 'Full-time · Remote friendly',
-                'tags' => ['Laravel', 'API', 'PostgreSQL'],
-                'badge' => 'Hiring fast',
-            ],
-            [
-                'title' => 'Lead UI/UX Designer',
-                'company' => 'Ceylon Creative',
-                'location' => 'Kandy',
-                'salary' => 'LKR 320k - 400k',
-                'type' => 'Hybrid',
-                'tags' => ['Figma', 'Research', 'Team Lead'],
-                'badge' => 'Interviewing this week',
-            ],
-            [
-                'title' => 'Cloud DevOps Specialist',
-                'company' => 'Respira Labs',
-                'location' => 'Gampaha',
-                'salary' => 'LKR 410k - 480k',
-                'type' => 'Full-time',
-                'tags' => ['AWS', 'Terraform', 'CI/CD'],
-                'badge' => 'SSO ready team',
-            ],
-            [
-                'title' => 'Product Data Analyst',
-                'company' => 'Slate Academy',
-                'location' => 'Jaffna (Remote)',
-                'salary' => 'LKR 280k - 360k',
-                'type' => 'Contract',
-                'tags' => ['SQL', 'Looker', 'Storytelling'],
-                'badge' => 'Urgent',
-            ],
-        ];
-
-        $topCities = [
-            ['city' => 'Colombo', 'count' => '2,180 roles', 'growth' => '+14% vs last quarter'],
-            ['city' => 'Kandy', 'count' => '640 roles', 'growth' => '+9%'],
-            ['city' => 'Galle', 'count' => '410 roles', 'growth' => '+6%'],
-            ['city' => 'Jaffna', 'count' => '320 roles', 'growth' => '+8%'],
-        ];
-    @endphp
     <div class="mx-auto w-full max-w-6xl space-y-10 px-0 sm:px-6 lg:px-0">
         <section class="rounded-3xl border border-slate-200 bg-white/80 p-6">
             <div class="space-y-2">
@@ -58,24 +11,45 @@
                 <p class="text-sm text-slate-500">Filter by keywords, companies, and skills with a precise location.</p>
             </div>
 
-            <form class="mt-6">
+            <form action="{{ route('jobs') }}" method="GET" class="mt-6">
                 <div class="grid gap-6 md:grid-cols-3 items-end">
-                    <label class="space-y-2 text-sm text-slate-600">
-                        <span class="text-[0.65rem] uppercase tracking-[0.4em] text-slate-400">Keyword</span>
-                        <input
-                            class="w-full rounded-2xl border border-slate-200 bg-[#e7e7e7] px-4 py-3 text-base font-semibold text-slate-900 focus:border-slate-400 focus:outline-none"
-                            placeholder="Role · Company · Skill"
-                        />
-                    </label>
-                    <label class="space-y-2 text-sm text-slate-600">
-                        <span class="text-[0.65rem] uppercase tracking-[0.4em] text-slate-400">Location</span>
-                        <input
-                            class="w-full rounded-2xl border border-slate-200 bg-[#e7e7e7] px-4 py-3 text-base font-semibold text-slate-900 focus:border-slate-400 focus:outline-none"
-                            placeholder="City · Area · Pincode"
-                        />
-                    </label>
+                    <div class="relative" data-suggestion-wrapper>
+                        <label class="space-y-2 text-sm text-slate-600">
+                            <span class="text-[0.65rem] uppercase tracking-[0.4em] text-slate-400">Keyword</span>
+                            <input
+                                type="text"
+                                name="keyword"
+                                id="keywordInput"
+                                class="w-full rounded-2xl border border-slate-200 bg-[#e7e7e7] px-4 py-3 text-base font-semibold text-slate-900 focus:border-slate-400 focus:outline-none"
+                                placeholder="Role · Company · Skill"
+                                value="{{ request('keyword') }}"
+                                autocomplete="off"
+                                data-suggestion-input="keyword"
+                            />
+                        </label>
+                        <div class="pointer-events-none invisible absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" data-suggestion-menu="keyword">
+                            <div class="max-h-60 overflow-y-auto"></div>
+                        </div>
+                    </div>
+                    <div class="relative" data-suggestion-wrapper>
+                        <label class="space-y-2 text-sm text-slate-600">
+                            <span class="text-[0.65rem] uppercase tracking-[0.4em] text-slate-400">Location</span>
+                            <input
+                                type="text"
+                                name="location"
+                                class="w-full rounded-2xl border border-slate-200 bg-[#e7e7e7] px-4 py-3 text-base font-semibold text-slate-900 focus:border-slate-400 focus:outline-none"
+                                placeholder="City · State · Country"
+                                value="{{ request('location') }}"
+                                autocomplete="off"
+                                data-suggestion-input="location"
+                            />
+                        </label>
+                        <div class="pointer-events-none invisible absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" data-suggestion-menu="location">
+                            <div class="max-h-60 overflow-y-auto"></div>
+                        </div>
+                    </div>
                     <button
-                        type="button"
+                        type="submit"
                         class="w-full rounded-2xl border border-slate-900 bg-transparent px-6 py-3 text-sm font-semibold text-slate-900 shadow-none transition hover:bg-slate-900 hover:text-white"
                     >
                         Search jobs
@@ -84,10 +58,80 @@
             </form>
 
             <div class="mt-4 flex flex-wrap gap-3 text-xs text-slate-500">
-                <span class="rounded-full border border-slate-200 px-3 py-1">Remote-first</span>
-                <span class="rounded-full border border-slate-200 px-3 py-1">Startup ready</span>
-                <span class="rounded-full border border-slate-200 px-3 py-1">Senior roles</span>
-                <span class="rounded-full border border-slate-200 px-3 py-1">Flexible hours</span>
+                @foreach($quickFilters as $filter)
+                    <a href="{{ route('jobs', ['filter' => $filter['value']]) }}"
+                       class="rounded-full border border-slate-200 px-3 py-1 hover:border-slate-400 hover:bg-slate-50 transition">
+                        {{ $filter['label'] }}
+                        @if($filter['count'] > 0)
+                            <span class="text-slate-400">({{ $filter['count'] }})</span>
+                        @endif
+                    </a>
+                @endforeach
+            </div>
+        </section>
+
+        <section class="rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-6 lg:p-10">
+            <div class="grid gap-8 lg:grid-cols-2 items-center">
+                <div class="space-y-4">
+                    <p class="text-xs uppercase tracking-[0.4em] text-blue-600">For employers</p>
+                    <h2 class="text-3xl font-semibold text-slate-900 md:text-4xl">Post a job and find your next great hire</h2>
+                    <p class="text-lg text-slate-600">Connect with skilled professionals actively seeking opportunities. Get quality applications from candidates who match your requirements.</p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <a
+                            href="{{ route('recruiter.job-posts.create') }}"
+                            class="inline-flex items-center rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
+                        >
+                            Post a Job
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </a>
+                        <a
+                            href="{{ route('recruiter.dashboard') }}"
+                            class="inline-flex items-center rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-400 hover:bg-slate-50"
+                        >
+                            Employer Dashboard
+                        </a>
+                    </div>
+                </div>
+                <div class="grid gap-6 sm:grid-cols-2">
+                    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+                        <div class="mb-3 inline-flex rounded-full bg-blue-100 p-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-slate-900">Quality Candidates</h3>
+                        <p class="mt-2 text-sm text-slate-600">Access a pool of verified and skilled professionals</p>
+                    </div>
+                    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+                        <div class="mb-3 inline-flex rounded-full bg-green-100 p-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-slate-900">Fast Hiring</h3>
+                        <p class="mt-2 text-sm text-slate-600">Post jobs in minutes and start receiving applications instantly</p>
+                    </div>
+                    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+                        <div class="mb-3 inline-flex rounded-full bg-purple-100 p-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-slate-900">Analytics</h3>
+                        <p class="mt-2 text-sm text-slate-600">Track your job performance with detailed insights</p>
+                    </div>
+                    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+                        <div class="mb-3 inline-flex rounded-full bg-orange-100 p-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-slate-900">Cost Effective</h3>
+                        <p class="mt-2 text-sm text-slate-600">Competitive pricing with flexible plans for all company sizes</p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -114,16 +158,16 @@
                 </div>
                 <div class="grid gap-6 sm:grid-cols-3">
                     <div>
-                        <p class="text-3xl font-bold text-slate-900">14K+</p>
+                        <p class="text-3xl font-bold text-slate-900">{{ number_format($stats['total_jobs']) }}+</p>
                         <p class="text-sm uppercase tracking-[0.4em] text-slate-400">roles listed</p>
                     </div>
                     <div>
-                        <p class="text-3xl font-bold text-slate-900">3.5K</p>
+                        <p class="text-3xl font-bold text-slate-900">{{ number_format($stats['total_companies']) }}</p>
                         <p class="text-sm uppercase tracking-[0.4em] text-slate-400">verified companies</p>
                     </div>
                     <div>
-                        <p class="text-3xl font-bold text-slate-900">97%</p>
-                        <p class="text-sm uppercase tracking-[0.4em] text-slate-400">hired this year</p>
+                        <p class="text-3xl font-bold text-slate-900">{{ $stats['total_cities'] }}</p>
+                        <p class="text-sm uppercase tracking-[0.4em] text-slate-400">cities hiring</p>
                     </div>
                 </div>
             </div>
@@ -135,31 +179,51 @@
                     <p class="text-sm uppercase tracking-[0.3em] text-slate-500">Trending now</p>
                     <h2 class="text-3xl font-semibold text-slate-900">Roles companies are racing to fill</h2>
                 </div>
-                <a href="#resume" class="text-sm font-semibold text-slate-900 transition hover:text-slate-600">See all curated roles →</a>
+                <a href="{{ route('jobs') }}" class="text-sm font-semibold text-slate-900 transition hover:text-slate-600">See all curated roles →</a>
             </div>
             <div class="grid gap-6 md:grid-cols-2">
-                @foreach ($trendingJobs as $job)
+                @forelse ($trendingJobs as $job)
                     <article class="flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1">
                         <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-slate-400">
-                            <span class="rounded-full border border-dashed border-slate-200 px-3 py-1 text-[0.6rem]">{{ $job['badge'] }}</span>
-                            <span class="text-[0.7rem] font-semibold text-slate-600">{{ $job['type'] }}</span>
+                            <span class="rounded-full border border-dashed border-slate-200 px-3 py-1 text-[0.6rem]">
+                                @if($job->is_featured)
+                                    Featured
+                                @elseif($job->published_at && $job->published_at->isToday())
+                                    New Today
+                                @elseif($job->published_at && $job->published_at->diffInDays(now()) <= 3)
+                                    Hiring Fast
+                                @else
+                                    Open
+                                @endif
+                            </span>
+                            <span class="text-[0.7rem] font-semibold text-slate-600">
+                                {{ optional($job->employmentType)->label ?? 'Full-time' }}
+                                @if($job->is_remote) · Remote friendly @endif
+                            </span>
                         </div>
                         <div class="space-y-2">
-                            <h3 class="text-xl font-semibold text-slate-900">{{ $job['title'] }}</h3>
-                            <p class="text-sm text-slate-500">{{ $job['company'] }}</p>
+                            <h3 class="text-xl font-semibold text-slate-900">{{ $job->title }}</h3>
+                            <p class="text-sm text-slate-500">{{ optional($job->company)->name ?? 'Company' }}</p>
                         </div>
-                        <p class="text-sm leading-relaxed text-slate-600">{{ $job['location'] }} · {{ $job['salary'] }}</p>
-                        <div class="flex flex-wrap gap-2 text-[0.6rem] uppercase tracking-[0.4em] text-slate-400">
-                            @foreach ($job['tags'] as $tag)
-                                <span class="rounded-full border border-slate-200 px-3 py-1">{{ $tag }}</span>
-                            @endforeach
-                        </div>
+                        <p class="text-sm leading-relaxed text-slate-600">
+                            {{ optional($job->city)->name ?? 'Location' }}
+                            @if($job->min_salary && $job->max_salary)
+                                · ₹{{ number_format($job->min_salary / 1000) }}k - ₹{{ number_format($job->max_salary / 1000) }}k
+                            @endif
+                        </p>
+                        @if($job->detail && $job->detail->description)
+                            <p class="text-sm text-slate-600 line-clamp-2">{{ Str::limit(strip_tags($job->detail->description), 100) }}</p>
+                        @endif
                         <div class="flex items-center justify-between text-sm font-semibold text-slate-900">
-                            <span>Apply now</span>
-                            <span class="text-xs text-slate-400">Posted 2 days ago</span>
+                            <a href="{{ route('job.show', $job->id) }}" class="hover:text-slate-600 transition">Apply now</a>
+                            <span class="text-xs text-slate-400">Posted {{ $job->published_at ? $job->published_at->diffForHumans() : 'recently' }}</span>
                         </div>
                     </article>
-                @endforeach
+                @empty
+                    <div class="col-span-2 text-center py-12">
+                        <p class="text-slate-500">No jobs available at the moment. Check back soon!</p>
+                    </div>
+                @endforelse
             </div>
         </section>
 
@@ -193,16 +257,108 @@
                 <span class="text-xs uppercase tracking-[0.4em] text-slate-400">2024 outlook</span>
             </div>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                @foreach ($topCities as $city)
+                @forelse ($topCities as $city)
                     <article class="rounded-2xl border border-slate-200 bg-white p-6">
-                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400">{{ $city['city'] }}</p>
-                        <p class="text-2xl font-semibold text-slate-900">{{ $city['count'] }}</p>
-                        <p class="text-xs text-slate-500">{{ $city['growth'] }}</p>
+                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400">{{ $city->name }}</p>
+                        <p class="text-2xl font-semibold text-slate-900">{{ number_format($city->job_posts_count) }} roles</p>
+                        <p class="text-xs text-slate-500">Actively hiring</p>
                     </article>
-                @endforeach
+                @empty
+                    <div class="col-span-4 text-center py-8">
+                        <p class="text-slate-500">No cities data available.</p>
+                    </div>
+                @endforelse
             </div>
         </section>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const suggestionUrl = '{{ route('jobs.suggestions') }}';
+            const cache = {};
+            const containers = document.querySelectorAll('[data-suggestion-wrapper]');
 
-   
+            const fetchSuggestions = async (type, query) => {
+                const key = `${type}:${query}`;
+                if (cache[key]) {
+                    return cache[key];
+                }
+
+                const params = new URLSearchParams({ type, q: query });
+                const response = await fetch(`${suggestionUrl}?${params}`);
+                if (!response.ok) {
+                    return [];
+                }
+
+                const payload = await response.json();
+                cache[key] = payload.suggestions ?? [];
+                return cache[key];
+            };
+
+            const closeMenu = (menu) => {
+                menu.classList.add('pointer-events-none', 'invisible');
+            };
+
+            const openMenu = (menu) => {
+                menu.classList.remove('pointer-events-none', 'invisible');
+            };
+
+            containers.forEach((wrapper) => {
+                const input = wrapper.querySelector('[data-suggestion-input]');
+                const type = input ? input.dataset.suggestionInput : null;
+                if (!type) {
+                    return;
+                }
+
+                const menu = wrapper.querySelector(`[data-suggestion-menu="${type}"]`);
+                const list = menu?.querySelector('div');
+
+                const render = async (query) => {
+                    if (!menu || !list) {
+                        return;
+                    }
+
+                    const trimmed = query.trim();
+                    const matches = await fetchSuggestions(type, trimmed);
+
+                    if (!matches.length) {
+                        list.innerHTML = '<p class="px-4 py-2 text-xs text-slate-400">No matches</p>';
+                        closeMenu(menu);
+                        return;
+                    }
+
+                    list.innerHTML = matches
+                        .map(item => `<button type="button" class="w-full text-left px-4 py-2 hover:bg-slate-100" data-suggestion-item="${type}" data-value="${item}">${item}</button>`)
+                        .join('');
+
+                    openMenu(menu);
+                };
+
+                input.addEventListener('focus', () => render(input.value));
+                input.addEventListener('input', () => render(input.value));
+
+                input.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') {
+                        closeMenu(menu);
+                    }
+                });
+
+                menu.addEventListener('click', (event) => {
+                    const button = event.target.closest('[data-suggestion-item]');
+                    if (!button) {
+                        return;
+                    }
+
+                    input.value = button.dataset.value;
+                    closeMenu(menu);
+                    input.focus();
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!wrapper.contains(event.target)) {
+                        closeMenu(menu);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

@@ -11,7 +11,7 @@ class JobRole extends Model
 
     protected $fillable = [
         'category_id',
-        'name',
+        'label',
         'slug',
         'description',
         'icon',

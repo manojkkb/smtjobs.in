@@ -31,4 +31,12 @@ class City extends Model
     {
         return $this->hasMany(Area::class);
     }
+    public function candidates()
+    {
+        return $this->hasMany(Candidate::class);
+    }
+    public function jobPosts()
+    {
+        return $this->hasMany(JobPost::class);
+    }
 }

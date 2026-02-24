@@ -13,6 +13,7 @@
 <form method="GET" action="{{ route('jobs') }}" class="{{ $formClass }}">
     <input type="hidden" name="keyword" value="{{ request('keyword') }}" />
     <input type="hidden" name="location" value="{{ request('location') }}" />
+    <input type="hidden" name="filter" value="{{ request('filter') }}" />
 
     @foreach ($filterGroups as $namespace => $group)
         @php
