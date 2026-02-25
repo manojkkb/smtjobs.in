@@ -1,17 +1,50 @@
 @extends('website.layouts.app')
 
-@section('title', 'SMTJobs – Latest Jobs in India | IT & Corporate Careers')
+@section('title', 'SMTJobs - Find & Apply for Jobs in India | IT & Corporate Hiring')
 
-@section('meta_description', 'Search latest jobs in India on SMTJobs. Apply online today.')
+@section('meta_description', 'Find latest IT, Finance & Corporate jobs in India. Browse 50000+ job openings from verified companies. Apply online today with SMTJobs.')
 
 @section('meta_keywords', 'latest jobs in India, IT jobs India, corporate jobs India')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "SMTJobs",
+  "url": "{{ url('/') }}",
+  "logo": "{{ asset('logos/logo.png') }}",
+  "description": "India's leading job portal connecting talented professionals with top companies",
+  "sameAs": [],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Service",
+    "availableLanguage": "English"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "SMTJobs",
+  "url": "{{ url('/') }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ url('/jobs') }}?keyword={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+@endpush
 
 @section('content')
     <div class="mx-auto w-full max-w-6xl space-y-10 px-0 sm:px-6 lg:px-0">
         <section class="rounded-3xl border border-slate-200  p-6">
             <div class="space-y-2">
                 <p class="text-xs uppercase tracking-[0.5em] text-slate-500">🇮🇳 India-Focused</p>
-                <h2 class="text-2xl font-semibold text-slate-900">Explore Opportunities That Match Your Skills</h2>
+                <h1 class="text-2xl font-semibold text-slate-900">Find & Apply for Latest Jobs in India | IT & Corporate Careers</h1>
                 <p class="text-sm text-slate-500">Smart filters. Precise location. Better matches.</p>
             </div>
 
@@ -30,7 +63,7 @@
                             class="inline-flex items-center rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
                         >
                             Post a Job
-                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                             </svg>
                         </a>
@@ -45,7 +78,7 @@
                 <div class="grid gap-6 sm:grid-cols-2">
                     <div class="rounded-2xl border border-slate-200 bg-white p-6">
                         <div class="mb-3 inline-flex rounded-full bg-blue-100 p-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
                         </div>
@@ -54,7 +87,7 @@
                     </div>
                     <div class="rounded-2xl border border-slate-200 bg-white p-6">
                         <div class="mb-3 inline-flex rounded-full bg-green-100 p-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
                         </div>
@@ -63,7 +96,7 @@
                     </div>
                     <div class="rounded-2xl border border-slate-200 bg-white p-6">
                         <div class="mb-3 inline-flex rounded-full bg-purple-100 p-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
                         </div>
@@ -72,7 +105,7 @@
                     </div>
                     <div class="rounded-2xl border border-slate-200 bg-white p-6">
                         <div class="mb-3 inline-flex rounded-full bg-orange-100 p-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
@@ -87,7 +120,7 @@
             <div class="grid gap-10 lg:grid-cols-[1.3fr]">
                 <div class="space-y-4">
                     <p class="text-xs uppercase tracking-[0.4em] text-slate-400">APN inspired · light design</p>
-                    <h1 class="text-4xl font-semibold leading-tight text-slate-900 md:text-5xl">Own the next chapter of your tech journey</h1>
+                    <h2 class="text-4xl font-semibold leading-tight text-slate-900 md:text-5xl">Own the next chapter of your tech journey</h2>
                     <p class="text-lg text-slate-500">Curated roles, transparent pay bands, and a resume builder all within one modern experience.</p>
                 </div>
                 <div class="flex flex-wrap gap-4">
@@ -131,7 +164,34 @@
             </div>
             <div class="grid gap-6 md:grid-cols-2">
                 @forelse ($trendingJobs as $job)
-                    <article class="flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1">
+                    <article class="flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1" itemscope itemtype="https://schema.org/JobPosting">
+                        <meta itemprop="datePosted" content="{{ optional($job->published_at)->toIso8601String() ?? now()->toIso8601String() }}">
+                        <meta itemprop="validThrough" content="{{ optional($job->expires_at)->toIso8601String() ?? now()->addMonths(3)->toIso8601String() }}">
+                        <meta itemprop="employmentType" content="{{ optional($job->employmentType)->label ?? 'FULL_TIME' }}">
+                        @if($job->company)
+                        <div itemprop="hiringOrganization" itemscope itemtype="https://schema.org/Organization" style="display:none;">
+                            <meta itemprop="name" content="{{ $job->company->name }}">
+                            <meta itemprop="url" content="{{ url('/') }}">
+                        </div>
+                        @endif
+                        @if($job->city)
+                        <div itemprop="jobLocation" itemscope itemtype="https://schema.org/Place" style="display:none;">
+                            <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                                <meta itemprop="addressLocality" content="{{ $job->city->name }}">
+                                <meta itemprop="addressCountry" content="IN">
+                            </div>
+                        </div>
+                        @endif
+                        @if($job->min_salary && $job->max_salary)
+                        <div itemprop="baseSalary" itemscope itemtype="https://schema.org/MonetaryAmount" style="display:none;">
+                            <meta itemprop="currency" content="INR">
+                            <div itemprop="value" itemscope itemtype="https://schema.org/QuantitativeValue">
+                                <meta itemprop="minValue" content="{{ $job->min_salary }}">
+                                <meta itemprop="maxValue" content="{{ $job->max_salary }}">
+                                <meta itemprop="unitText" content="YEAR">
+                            </div>
+                        </div>
+                        @endif
                         <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-slate-400">
                             <span class="rounded-full border border-dashed border-slate-200 px-3 py-1 text-[0.6rem]">
                                 @if($job->is_featured)
@@ -150,7 +210,7 @@
                             </span>
                         </div>
                         <div class="space-y-2">
-                            <h3 class="text-xl font-semibold text-slate-900">{{ $job->title }}</h3>
+                            <h3 class="text-xl font-semibold text-slate-900" itemprop="title">{{ $job->title }}</h3>
                             <p class="text-sm text-slate-500">{{ optional($job->company)->name ?? 'Company' }}</p>
                         </div>
                         <p class="text-sm leading-relaxed text-slate-600">
@@ -160,7 +220,7 @@
                             @endif
                         </p>
                         @if($job->detail && $job->detail->description)
-                            <p class="text-sm text-slate-600 line-clamp-2">{{ Str::limit(strip_tags($job->detail->description), 100) }}</p>
+                            <p class="text-sm text-slate-600 line-clamp-2" itemprop="description">{{ Str::limit(strip_tags($job->detail->description), 100) }}</p>
                         @endif
                         <div class="flex items-center justify-between text-sm font-semibold text-slate-900">
                             <a href="{{ route('job.show', $job->id) }}" class="hover:text-slate-600 transition">Apply now</a>

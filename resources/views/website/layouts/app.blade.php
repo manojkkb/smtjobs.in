@@ -4,22 +4,26 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="theme-color" content="#ffffff" />
 
     <meta name="google-site-verification" content="wlK6Hnf-df6ux6CKXc9Mmu4RA_ikwVSRggD-63_jWUY" />
 
-    <title>@yield('title', 'SMTJobs  Latest Jobs in India')</title>
+    <title>@yield('title', 'SMTJobs - Latest Jobs in India')</title>
 
     <meta name="description" content="@yield('meta_description', 'Search latest jobs in India on SMTJobs.')">
     <meta name="keywords" content="@yield('meta_keywords', 'latest jobs in India, IT jobs India, corporate jobs India')">
     <meta name="robots" content="@yield('meta_robots', 'index, follow')">
+    <meta name="author" content="SMTJobs">
 
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Open Graph -->
+    <meta property="og:type" content="website">
     <meta property="og:title" content="@yield('og_title', 'SMTJobs - Latest Jobs in India')">
     <meta property="og:description" content="@yield('og_description', 'Find IT, Finance & Corporate Jobs in India')">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:image" content="@yield('og_image', asset('logos/logo.png'))">
+    <meta property="og:site_name" content="SMTJobs">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
