@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+    <meta name="google-site-verification" content="wlK6Hnf-df6ux6CKXc9Mmu4RA_ikwVSRggD-63_jWUY" />
+
     <title>@yield('title', 'SMT Jobs · ' . config('app.name', 'Laravel'))</title>
 
     {{-- Vite CSS + JS --}}
