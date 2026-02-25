@@ -1,23 +1,23 @@
-@extends('website.layouts.app')
 
-@section('title', 'SMTJobs - Find & Apply for Jobs in India | IT & Corporate Hiring')
 
-@section('meta_description', 'Find latest IT, Finance & Corporate jobs in India. Browse 50000+ job openings from verified companies. Apply online today with SMTJobs.')
+<?php $__env->startSection('title', 'SMTJobs - Find & Apply for Jobs in India | IT & Corporate Hiring'); ?>
 
-@section('meta_keywords', 'latest jobs in India, IT jobs India, corporate jobs India')
+<?php $__env->startSection('meta_description', 'Find latest IT, Finance & Corporate jobs in India. Browse 50000+ job openings from verified companies. Apply online today with SMTJobs.'); ?>
 
-@push('schema')
+<?php $__env->startSection('meta_keywords', 'latest jobs in India, IT jobs India, corporate jobs India'); ?>
+
+<?php $__env->startPush('schema'); ?>
 <script type="application/ld+json">
 {
-  "@@context": "https://schema.org",
-  "@@type": "Organization",
+  "@context": "https://schema.org",
+  "@type": "Organization",
   "name": "SMTJobs",
-  "url": "{{ url('/') }}",
-  "logo": "{{ asset('logos/logo.png') }}",
+  "url": "<?php echo e(url('/')); ?>",
+  "logo": "<?php echo e(asset('logos/logo.png')); ?>",
   "description": "India's leading job portal connecting talented professionals with top companies",
   "sameAs": [],
   "contactPoint": {
-    "@@type": "ContactPoint",
+    "@type": "ContactPoint",
     "contactType": "Customer Service",
     "availableLanguage": "English"
   }
@@ -26,20 +26,20 @@
 
 <script type="application/ld+json">
 {
-  "@@context": "https://schema.org",
-  "@@type": "WebSite",
+  "@context": "https://schema.org",
+  "@type": "WebSite",
   "name": "SMTJobs",
-  "url": "{{ url('/') }}",
+  "url": "<?php echo e(url('/')); ?>",
   "potentialAction": {
-    "@@type": "SearchAction",
-    "target": "{{ url('/jobs') }}?keyword={search_term_string}",
+    "@type": "SearchAction",
+    "target": "<?php echo e(url('/jobs')); ?>?keyword={search_term_string}",
     "query-input": "required name=search_term_string"
   }
 }
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="mx-auto w-full max-w-6xl space-y-10 px-0 sm:px-6 lg:px-0">
         <section class="rounded-3xl border border-slate-200  p-6">
             <div class="space-y-2">
@@ -48,7 +48,7 @@
                 <p class="text-sm text-slate-500">Smart filters. Precise location. Better matches.</p>
             </div>
 
-            @include('website.components.search')
+            <?php echo $__env->make('website.components.search', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
         </section>
 
         <section class="rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-6 lg:p-10">
@@ -59,7 +59,7 @@
                     <p class="text-lg text-slate-600">Connect with skilled professionals actively seeking opportunities. Get quality applications from candidates who match your requirements.</p>
                     <div class="flex flex-wrap gap-4 pt-2">
                         <a
-                            href="{{ route('recruiter.job-posts.create') }}"
+                            href="<?php echo e(route('recruiter.job-posts.create')); ?>"
                             class="inline-flex items-center rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
                         >
                             Post a Job
@@ -68,7 +68,7 @@
                             </svg>
                         </a>
                         <a
-                            href="{{ route('recruiter.dashboard') }}"
+                            href="<?php echo e(route('recruiter.dashboard')); ?>"
                             class="inline-flex items-center rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-400 hover:bg-slate-50"
                         >
                             Employer Dashboard
@@ -139,15 +139,15 @@
                 </div>
                 <div class="grid gap-6 sm:grid-cols-3">
                     <div>
-                        <p class="text-3xl font-bold text-slate-900">{{ number_format($stats['total_jobs']) }}+</p>
+                        <p class="text-3xl font-bold text-slate-900"><?php echo e(number_format($stats['total_jobs'])); ?>+</p>
                         <p class="text-sm uppercase tracking-[0.4em] text-slate-400">roles listed</p>
                     </div>
                     <div>
-                        <p class="text-3xl font-bold text-slate-900">{{ number_format($stats['total_companies']) }}</p>
+                        <p class="text-3xl font-bold text-slate-900"><?php echo e(number_format($stats['total_companies'])); ?></p>
                         <p class="text-sm uppercase tracking-[0.4em] text-slate-400">verified companies</p>
                     </div>
                     <div>
-                        <p class="text-3xl font-bold text-slate-900">{{ $stats['total_cities'] }}</p>
+                        <p class="text-3xl font-bold text-slate-900"><?php echo e($stats['total_cities']); ?></p>
                         <p class="text-sm uppercase tracking-[0.4em] text-slate-400">cities hiring</p>
                     </div>
                 </div>
@@ -160,78 +160,80 @@
                     <p class="text-sm uppercase tracking-[0.3em] text-slate-500">Trending now</p>
                     <h2 class="text-3xl font-semibold text-slate-900">Roles companies are racing to fill</h2>
                 </div>
-                <a href="{{ route('jobs') }}" class="text-sm font-semibold text-slate-900 transition hover:text-slate-600">See all curated roles →</a>
+                <a href="<?php echo e(route('jobs')); ?>" class="text-sm font-semibold text-slate-900 transition hover:text-slate-600">See all curated roles →</a>
             </div>
             <div class="grid gap-6 md:grid-cols-2">
-                @forelse ($trendingJobs as $job)
+                <?php $__empty_1 = true; $__currentLoopData = $trendingJobs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <article class="flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1" itemscope itemtype="https://schema.org/JobPosting">
-                        <meta itemprop="datePosted" content="{{ optional($job->published_at)->toIso8601String() ?? now()->toIso8601String() }}">
-                        <meta itemprop="validThrough" content="{{ optional($job->expires_at)->toIso8601String() ?? now()->addMonths(3)->toIso8601String() }}">
-                        <meta itemprop="employmentType" content="{{ optional($job->employmentType)->label ?? 'FULL_TIME' }}">
-                        @if($job->company)
+                        <meta itemprop="datePosted" content="<?php echo e(optional($job->published_at)->toIso8601String() ?? now()->toIso8601String()); ?>">
+                        <meta itemprop="validThrough" content="<?php echo e(optional($job->expires_at)->toIso8601String() ?? now()->addMonths(3)->toIso8601String()); ?>">
+                        <meta itemprop="employmentType" content="<?php echo e(optional($job->employmentType)->label ?? 'FULL_TIME'); ?>">
+                        <?php if($job->company): ?>
                         <div itemprop="hiringOrganization" itemscope itemtype="https://schema.org/Organization" style="display:none;">
-                            <meta itemprop="name" content="{{ $job->company->name }}">
-                            <meta itemprop="url" content="{{ url('/') }}">
+                            <meta itemprop="name" content="<?php echo e($job->company->name); ?>">
+                            <meta itemprop="url" content="<?php echo e(url('/')); ?>">
                         </div>
-                        @endif
-                        @if($job->city)
+                        <?php endif; ?>
+                        <?php if($job->city): ?>
                         <div itemprop="jobLocation" itemscope itemtype="https://schema.org/Place" style="display:none;">
                             <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-                                <meta itemprop="addressLocality" content="{{ $job->city->name }}">
+                                <meta itemprop="addressLocality" content="<?php echo e($job->city->name); ?>">
                                 <meta itemprop="addressCountry" content="IN">
                             </div>
                         </div>
-                        @endif
-                        @if($job->min_salary && $job->max_salary)
+                        <?php endif; ?>
+                        <?php if($job->min_salary && $job->max_salary): ?>
                         <div itemprop="baseSalary" itemscope itemtype="https://schema.org/MonetaryAmount" style="display:none;">
                             <meta itemprop="currency" content="INR">
                             <div itemprop="value" itemscope itemtype="https://schema.org/QuantitativeValue">
-                                <meta itemprop="minValue" content="{{ $job->min_salary }}">
-                                <meta itemprop="maxValue" content="{{ $job->max_salary }}">
+                                <meta itemprop="minValue" content="<?php echo e($job->min_salary); ?>">
+                                <meta itemprop="maxValue" content="<?php echo e($job->max_salary); ?>">
                                 <meta itemprop="unitText" content="YEAR">
                             </div>
                         </div>
-                        @endif
+                        <?php endif; ?>
                         <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-slate-400">
                             <span class="rounded-full border border-dashed border-slate-200 px-3 py-1 text-[0.6rem]">
-                                @if($job->is_featured)
+                                <?php if($job->is_featured): ?>
                                     Featured
-                                @elseif($job->published_at && $job->published_at->isToday())
+                                <?php elseif($job->published_at && $job->published_at->isToday()): ?>
                                     New Today
-                                @elseif($job->published_at && $job->published_at->diffInDays(now()) <= 3)
+                                <?php elseif($job->published_at && $job->published_at->diffInDays(now()) <= 3): ?>
                                     Hiring Fast
-                                @else
+                                <?php else: ?>
                                     Open
-                                @endif
+                                <?php endif; ?>
                             </span>
                             <span class="text-[0.7rem] font-semibold text-slate-600">
-                                {{ optional($job->employmentType)->label ?? 'Full-time' }}
-                                @if($job->is_remote) · Remote friendly @endif
+                                <?php echo e(optional($job->employmentType)->label ?? 'Full-time'); ?>
+
+                                <?php if($job->is_remote): ?> · Remote friendly <?php endif; ?>
                             </span>
                         </div>
                         <div class="space-y-2">
-                            <h3 class="text-xl font-semibold text-slate-900" itemprop="title">{{ $job->title }}</h3>
-                            <p class="text-sm text-slate-500">{{ optional($job->company)->name ?? 'Company' }}</p>
+                            <h3 class="text-xl font-semibold text-slate-900" itemprop="title"><?php echo e($job->title); ?></h3>
+                            <p class="text-sm text-slate-500"><?php echo e(optional($job->company)->name ?? 'Company'); ?></p>
                         </div>
                         <p class="text-sm leading-relaxed text-slate-600">
-                            {{ optional($job->city)->name ?? 'Location' }}
-                            @if($job->min_salary && $job->max_salary)
-                                · ₹{{ number_format($job->min_salary / 1000) }}k - ₹{{ number_format($job->max_salary / 1000) }}k
-                            @endif
+                            <?php echo e(optional($job->city)->name ?? 'Location'); ?>
+
+                            <?php if($job->min_salary && $job->max_salary): ?>
+                                · ₹<?php echo e(number_format($job->min_salary / 1000)); ?>k - ₹<?php echo e(number_format($job->max_salary / 1000)); ?>k
+                            <?php endif; ?>
                         </p>
-                        @if($job->detail && $job->detail->description)
-                            <p class="text-sm text-slate-600 line-clamp-2" itemprop="description">{{ Str::limit(strip_tags($job->detail->description), 100) }}</p>
-                        @endif
+                        <?php if($job->detail && $job->detail->description): ?>
+                            <p class="text-sm text-slate-600 line-clamp-2" itemprop="description"><?php echo e(Str::limit(strip_tags($job->detail->description), 100)); ?></p>
+                        <?php endif; ?>
                         <div class="flex items-center justify-between text-sm font-semibold text-slate-900">
-                            <a href="{{ route('job.show', $job->id) }}" class="hover:text-slate-600 transition">Apply now</a>
-                            <span class="text-xs text-slate-400">Posted {{ $job->published_at ? $job->published_at->diffForHumans() : 'recently' }}</span>
+                            <a href="<?php echo e(route('job.show', $job->id)); ?>" class="hover:text-slate-600 transition">Apply now</a>
+                            <span class="text-xs text-slate-400">Posted <?php echo e($job->published_at ? $job->published_at->diffForHumans() : 'recently'); ?></span>
                         </div>
                     </article>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="col-span-2 text-center py-12">
                         <p class="text-slate-500">No jobs available at the moment. Check back soon!</p>
                     </div>
-                @endforelse
+                <?php endif; ?>
             </div>
         </section>
 
@@ -265,18 +267,19 @@
                 <span class="text-xs uppercase tracking-[0.4em] text-slate-400">2024 outlook</span>
             </div>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                @forelse ($topCities as $city)
+                <?php $__empty_1 = true; $__currentLoopData = $topCities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $city): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <article class="rounded-2xl border border-slate-200 bg-white p-6">
-                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400">{{ $city->name }}</p>
-                        <p class="text-2xl font-semibold text-slate-900">{{ number_format($city->job_posts_count) }} roles</p>
+                        <p class="text-xs uppercase tracking-[0.4em] text-slate-400"><?php echo e($city->name); ?></p>
+                        <p class="text-2xl font-semibold text-slate-900"><?php echo e(number_format($city->job_posts_count)); ?> roles</p>
                         <p class="text-xs text-slate-500">Actively hiring</p>
                     </article>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="col-span-4 text-center py-8">
                         <p class="text-slate-500">No cities data available.</p>
                     </div>
-                @endforelse
+                <?php endif; ?>
             </div>
         </section>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('website.layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\smtjobs\resources\views/website/home.blade.php ENDPATH**/ ?>
