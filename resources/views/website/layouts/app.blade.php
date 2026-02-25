@@ -7,8 +7,8 @@
 
     <meta name="google-site-verification" content="wlK6Hnf-df6ux6CKXc9Mmu4RA_ikwVSRggD-63_jWUY" />
 
-    <title>@yield('title', 'SMT Jobs · ' . config('app.name', 'Laravel'))</title>
-
+    <title>@yield('title', 'SMTJobs - Latest Jobs in India | IT, Finance, HR & Corporate Careers')</title>
+    @yield('metatags')
     {{-- Vite CSS + JS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     

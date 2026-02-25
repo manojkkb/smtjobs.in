@@ -1,7 +1,72 @@
 @extends('website.layouts.app')
 
-@section('title', 'Find your next tech role | SMTJobs')
+@section('title', 'SMTJobs - Latest Jobs in India | IT, Finance, HR & Corporate Careers')
+@section('metatags')
+    
+    <meta name="description" content="Search latest jobs in India on SMTJobs. Find IT jobs, finance jobs, HR jobs, marketing jobs and corporate job vacancies. Upload your resume and apply online today.">
+    <meta name="keywords" content="latest jobs in India, job search India, IT jobs India, private jobs in India, finance jobs India, HR jobs India, marketing jobs India, corporate jobs India, job vacancies India, online job portal India, remote jobs India, fresher jobs India, experienced jobs India, career opportunities India">
+    <meta name="author" content="SMT Jobs">
+    <meta name="robots" content="index, follow">
+    <meta name="revisit-after" content="2 days">
+    <meta name="language" content="English">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
 
+    <link rel="canonical" href="https://smtjobs.in">
+
+    <!-- Open Graph (Facebook / WhatsApp / LinkedIn) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://smtjobs.in">
+    <meta property="og:title" content="SMTJobs – Find Latest Jobs in India">
+    <meta property="og:description" content="Discover IT, Finance, HR and corporate jobs across India. Apply online and upload your resume on SMTJobs.">
+    <meta property="og:image" content="https://smtjobs.in/logos/logo.png">
+    <meta property="og:site_name" content="SMTJobs">
+    <meta property="og:locale" content="en_IN">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://smtjobs.in">
+    <meta name="twitter:title" content="SMTJobs – India Job Portal">
+    <meta name="twitter:description" content="Search IT, Finance, HR & Corporate Jobs in India. Apply Online Today.">
+    <meta name="twitter:image" content="https://smtjobs.in/logos/logo.png">
+
+    <!-- Theme Color (Mobile Browser) -->
+    <meta name="theme-color" content="#0d6efd">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://smtjobs.in/assets/favicon.png">
+
+    <!-- Apple Meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <!-- Schema.org Organization -->
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "SMTJobs",
+    "url": "https://smtjobs.in",
+    "logo": "https://smtjobs.in/logos/logo.png"
+    }
+    </script>
+
+    <!-- Website Schema -->
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SMTJobs",
+    "url": "https://smtjobs.in",
+    "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://smtjobs.in/jobs?keyword={search_term_string}",
+    "query-input": "required name=search_term_string"
+    }
+    }
+    </script>
+
+@endsection
 @section('content')
     <div class="mx-auto w-full max-w-6xl space-y-10 px-0 sm:px-6 lg:px-0">
         <section class="rounded-3xl border border-slate-200  p-6">
