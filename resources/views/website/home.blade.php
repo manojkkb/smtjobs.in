@@ -1,7 +1,7 @@
 @extends('website.layouts.app')
 
 @section('title', 'SMTJobs - Latest Jobs in India | IT, Finance, HR & Corporate Careers')
-@section('metatags')
+@section('metatags','
     
     <meta name="description" content="Search latest jobs in India on SMTJobs. Find IT jobs, finance jobs, HR jobs, marketing jobs and corporate job vacancies. Upload your resume and apply online today.">
     <meta name="keywords" content="latest jobs in India, job search India, IT jobs India, private jobs in India, finance jobs India, HR jobs India, marketing jobs India, corporate jobs India, job vacancies India, online job portal India, remote jobs India, fresher jobs India, experienced jobs India, career opportunities India">
@@ -65,8 +65,8 @@
     }
     }
     </script>
+    ')
 
-@endsection
 @section('content')
     <div class="mx-auto w-full max-w-6xl space-y-10 px-0 sm:px-6 lg:px-0">
         <section class="rounded-3xl border border-slate-200  p-6">
