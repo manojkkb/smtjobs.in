@@ -185,6 +185,7 @@ Route::prefix('recruiter')->name('recruiter.')->middleware(['auth'])->group(func
     Route::get('complete-profile', [ProfileController::class, 'completeProfile'])->name('complete.profile');
     Route::post('complete-profile/personal', [ProfileController::class, 'submitPersonalInfo'])->name('complete.profile.personal');
     Route::post('complete-profile/details', [ProfileController::class, 'submitRecruiterDetails'])->name('complete.profile.details');
+    Route::post('company-create', [ProfileController::class, 'companyCreate'])->name('company.create');  
         
     //  check recruiter profile completion in middleware and redirect to profile completion if not completed
     Route::middleware([RecruiterMiddleware::class])->group(function () {

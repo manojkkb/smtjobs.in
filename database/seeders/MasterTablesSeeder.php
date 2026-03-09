@@ -21,11 +21,10 @@ class MasterTablesSeeder extends Seeder
         }
     }
 
-    protected array $seeders = [
-        'countries' => CountriesSeeder::class,
-        'states' => StatesSeeder::class,
-        'cities' => CitiesSeeder::class,
-        'areas' => AreasSeeder::class,
+    protected array $seeders = [       
+        'states' => StateSeeder::class,
+        'districts' => DistrictSeeder::class,
+        'cities' => CitySeeder::class,     
         'languages' => LanguagesSeeder::class,
         'industries' => IndustrySeeder::class,
         'categories' => CategorySeeder::class,

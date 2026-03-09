@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\Category;
+use App\Models\Certificate;
 use App\Models\City;
 use App\Models\Company;
 use App\Models\EmploymentType;
@@ -17,6 +18,7 @@ use App\Models\Industry;
 use App\Models\JobPostProfile;
 use App\Models\JobStatus;
 use App\Models\Recruiter;
+use App\Models\Skill;
 use Illuminate\Support\Facades\DB;
 
 class JobPost extends Model
@@ -232,5 +234,18 @@ class JobPost extends Model
 
 
     }
-
+    
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'job_post_skills')
+                    ->withTimestamps()
+                    ->withPivot('experience_years');
+    }
+    
+    public function certifications()
+    {
+        return $this->belongsToMany(Certificate::class, 'job_post_certifications')
+                    ->withTimestamps()
+                    ->withPivot('is_mandatory');
+    }
 }

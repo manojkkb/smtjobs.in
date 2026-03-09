@@ -163,26 +163,26 @@
                 <a href="<?php echo e(route('jobs')); ?>" class="text-sm font-semibold text-slate-900 transition hover:text-slate-600">See all curated roles →</a>
             </div>
             <div class="grid gap-6 md:grid-cols-2">
-                <?php $__empty_1 = true; $__currentLoopData = $trendingJobs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $trendingJobs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $job): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
                     <article class="flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1" itemscope itemtype="https://schema.org/JobPosting">
                         <meta itemprop="datePosted" content="<?php echo e(optional($job->published_at)->toIso8601String() ?? now()->toIso8601String()); ?>">
                         <meta itemprop="validThrough" content="<?php echo e(optional($job->expires_at)->toIso8601String() ?? now()->addMonths(3)->toIso8601String()); ?>">
                         <meta itemprop="employmentType" content="<?php echo e(optional($job->employmentType)->label ?? 'FULL_TIME'); ?>">
-                        <?php if($job->company): ?>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($job->company): ?>
                         <div itemprop="hiringOrganization" itemscope itemtype="https://schema.org/Organization" style="display:none;">
                             <meta itemprop="name" content="<?php echo e($job->company->name); ?>">
                             <meta itemprop="url" content="<?php echo e(url('/')); ?>">
                         </div>
-                        <?php endif; ?>
-                        <?php if($job->city): ?>
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($job->city): ?>
                         <div itemprop="jobLocation" itemscope itemtype="https://schema.org/Place" style="display:none;">
                             <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
                                 <meta itemprop="addressLocality" content="<?php echo e($job->city->name); ?>">
                                 <meta itemprop="addressCountry" content="IN">
                             </div>
                         </div>
-                        <?php endif; ?>
-                        <?php if($job->min_salary && $job->max_salary): ?>
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($job->min_salary && $job->max_salary): ?>
                         <div itemprop="baseSalary" itemscope itemtype="https://schema.org/MonetaryAmount" style="display:none;">
                             <meta itemprop="currency" content="INR">
                             <div itemprop="value" itemscope itemtype="https://schema.org/QuantitativeValue">
@@ -191,10 +191,10 @@
                                 <meta itemprop="unitText" content="YEAR">
                             </div>
                         </div>
-                        <?php endif; ?>
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         <div class="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-slate-400">
                             <span class="rounded-full border border-dashed border-slate-200 px-3 py-1 text-[0.6rem]">
-                                <?php if($job->is_featured): ?>
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($job->is_featured): ?>
                                     Featured
                                 <?php elseif($job->published_at && $job->published_at->isToday()): ?>
                                     New Today
@@ -202,12 +202,12 @@
                                     Hiring Fast
                                 <?php else: ?>
                                     Open
-                                <?php endif; ?>
+                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             </span>
                             <span class="text-[0.7rem] font-semibold text-slate-600">
                                 <?php echo e(optional($job->employmentType)->label ?? 'Full-time'); ?>
 
-                                <?php if($job->is_remote): ?> · Remote friendly <?php endif; ?>
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($job->is_remote): ?> · Remote friendly <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             </span>
                         </div>
                         <div class="space-y-2">
@@ -217,23 +217,23 @@
                         <p class="text-sm leading-relaxed text-slate-600">
                             <?php echo e(optional($job->city)->name ?? 'Location'); ?>
 
-                            <?php if($job->min_salary && $job->max_salary): ?>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($job->min_salary && $job->max_salary): ?>
                                 · ₹<?php echo e(number_format($job->min_salary / 1000)); ?>k - ₹<?php echo e(number_format($job->max_salary / 1000)); ?>k
-                            <?php endif; ?>
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </p>
-                        <?php if($job->detail && $job->detail->description): ?>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($job->detail && $job->detail->description): ?>
                             <p class="text-sm text-slate-600 line-clamp-2" itemprop="description"><?php echo e(Str::limit(strip_tags($job->detail->description), 100)); ?></p>
-                        <?php endif; ?>
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         <div class="flex items-center justify-between text-sm font-semibold text-slate-900">
                             <a href="<?php echo e(route('job.show', $job->id)); ?>" class="hover:text-slate-600 transition">Apply now</a>
                             <span class="text-xs text-slate-400">Posted <?php echo e($job->published_at ? $job->published_at->diffForHumans() : 'recently'); ?></span>
                         </div>
                     </article>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     <div class="col-span-2 text-center py-12">
                         <p class="text-slate-500">No jobs available at the moment. Check back soon!</p>
                     </div>
-                <?php endif; ?>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </div>
         </section>
 
@@ -267,17 +267,17 @@
                 <span class="text-xs uppercase tracking-[0.4em] text-slate-400">2024 outlook</span>
             </div>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <?php $__empty_1 = true; $__currentLoopData = $topCities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $city): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $topCities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $city): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
                     <article class="rounded-2xl border border-slate-200 bg-white p-6">
                         <p class="text-xs uppercase tracking-[0.4em] text-slate-400"><?php echo e($city->name); ?></p>
                         <p class="text-2xl font-semibold text-slate-900"><?php echo e(number_format($city->job_posts_count)); ?> roles</p>
                         <p class="text-xs text-slate-500">Actively hiring</p>
                     </article>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     <div class="col-span-4 text-center py-8">
                         <p class="text-slate-500">No cities data available.</p>
                     </div>
-                <?php endif; ?>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </div>
         </section>
     </div>

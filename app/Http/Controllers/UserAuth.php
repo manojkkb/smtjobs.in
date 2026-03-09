@@ -89,7 +89,7 @@ class UserAuth extends Controller
         $user = User::firstOrCreate([
             $column => $identifier,
         ], [
-            'name' => $defaultName,
+            'password' => bcrypt(str()->random(16)),
         ]);
 
         Auth::login($user);

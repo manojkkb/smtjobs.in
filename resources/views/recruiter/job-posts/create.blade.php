@@ -1,14 +1,14 @@
 @extends('recruiter.layouts.app')
 
-@section('title', 'Publish job post')
+@section('title', 'Create New Job Post')
 
 @section('content')
     <div class="space-y-5">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <p class="text-xs uppercase tracking-[0.3em] text-slate-400">New listing</p>
-                <h1 class="text-2xl font-semibold text-slate-900">Publish a role</h1>
-                <p class="text-sm text-slate-500">Fill in the essentials and post the opportunity for qualified talent.</p>
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-400">New Listing</p>
+                <h1 class="text-2xl font-semibold text-slate-900">Create New Job Post</h1>
+                <p class="text-sm text-slate-500">Complete the step-by-step form to publish your job opportunity</p>
             </div>
             <a
                 href="{{ route('recruiter.job-posts.index') }}"
@@ -21,23 +21,6 @@
             </a>
         </div>
 
-        <form action="{{ route('recruiter.job-posts.store') }}" method="POST" class="space-y-6">
-            @csrf
-            @include('recruiter.job-posts.partials.form')
-            <div class="flex justify-end gap-3">
-                <a
-                    href="{{ route('recruiter.job-posts.index') }}"
-                    class="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
-                >
-                    Cancel
-                </a>
-                <button
-                    type="submit"
-                    class="inline-flex items-center gap-2 rounded-2xl border border-transparent bg-cyan-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-cyan-500"
-                >
-                    Publish job
-                </button>
-            </div>
-        </form>
+        <livewire:recruiter.create-job-post />
     </div>
 @endsection

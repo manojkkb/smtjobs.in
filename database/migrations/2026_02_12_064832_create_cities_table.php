@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,36 +11,34 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('states', function (Blueprint $table) {
+        Schema::create('cities', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('state_id');
+            $table->unsignedBigInteger('district_id')->nullable();
             $table->string('name');
             $table->string('slug')->nullable();
-
-            $table->string('code',10)->nullable();
-            $table->string('iso_code',10)->nullable();
-
-            $table->string('capital')->nullable();
-            $table->string('type')->nullable();
-
-
             $table->decimal('latitude',10,7)->nullable();
             $table->decimal('longitude',10,7)->nullable();
-
             $table->boolean('is_active')->default(true);
-
             $table->timestamps();
 
             // Indexes
-            $table->unique('slug');                // SEO lookup
-            $table->index('name');                 // search / dropdown
-            $table->index('code');                 // MP, UP lookup
-            $table->index('iso_code');             // IN-MP lookup
-            $table->index('is_active');            // active filter
+            $table->index('state_id');
+            $table->index('district_id');
+            $table->index('name');
+            $table->unique(['state_id','slug']);
+
+            // Foreign keys
+            $table->foreign('state_id')
+                ->references('id')
+                ->on('states')
+                ->cascadeOnDelete();
+
+            $table->foreign('district_id')
+                ->references('id')
+                ->on('districts')
+                ->nullOnDelete();
         });
-
-        
-
-      
     }
 
     /**
@@ -49,6 +46,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('states');
+        Schema::dropIfExists('cities');
     }
 };

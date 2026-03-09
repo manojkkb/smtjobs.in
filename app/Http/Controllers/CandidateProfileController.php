@@ -123,30 +123,43 @@ class CandidateProfileController extends Controller
         );
 
         // Get cities and states for location dropdown
-        $cities = \App\Models\City::where('is_active', true)->orderBy('name')->get();
+        $cities = City::where('is_active', true)->orderBy('name')->get();
         
         return view('candidate.complete-profile', compact('candidate', 'cities'));
     }
 
     public function storeBasicDetails(Request $request)
     {
+        $user = Auth::user();
         $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'nullable|string|max:255',
+            'full_name' => 'required|string|max:255',
             'date_of_birth' => 'required|date|before:today',
             'gender' => 'required|in:male,female,other',
-            'phone' => 'required|string|max:20',
-            'alternate_phone' => 'nullable|string|max:20',
-            'headline' => 'nullable|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
         ]);
 
-        $user = Auth::user();
+        
         $candidate = Candidate::where('user_id', $user->id)->firstOrFail();
 
+        // Split full name into first and last name
+        $nameParts = explode(' ', $validated['full_name'], 2);
+        $profileData = [
+            'first_name' => $nameParts[0],
+            'last_name' => isset($nameParts[1]) ? $nameParts[1] : null,
+            'date_of_birth' => $validated['date_of_birth'],
+            'gender' => $validated['gender'],
+        ];
+
+        // Update profile
         $candidate->profile()->updateOrCreate(
             ['candidate_id' => $candidate->id],
-            $validated
+            $profileData
         );
+
+        // Update email if changed
+        if ($user->email !== $validated['email']) {
+            $user->update(['email' => $validated['email']]);
+        }
 
         return response()->json(['success' => true, 'message' => 'Basic details saved successfully']);
     }

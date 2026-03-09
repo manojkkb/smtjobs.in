@@ -31,7 +31,7 @@
 
 		<!-- Right Side: Auth Buttons -->
 		<div class="flex items-center gap-2 sm:gap-3">
-			<?php if(auth()->guard()->guest()): ?>
+			<?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->guard()->guest()): ?>
 				<div class="relative" x-data="{ open: false }">
 					<button
 						@click="open = !open"
@@ -84,9 +84,9 @@
 						</div>
 					</div>
 				</div>
-			<?php endif; ?>
+			<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-			<?php if(auth()->guard()->check()): ?>
+			<?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->guard()->check()): ?>
 				<div class="relative" x-data="{ open: false }">
 					<button
 						@click="open = !open"
@@ -119,23 +119,23 @@
 						</div>
 						
 						<div class="py-2">
-							<?php if(auth()->user()->candidate): ?>
+							<?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->user()->candidate): ?>
 								<a href="<?php echo e(route('candidate.profile')); ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-blue-50 hover:text-blue-900">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
 									</svg>
 									Candidate Dashboard
 								</a>
-							<?php endif; ?>
+							<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-							<?php if(auth()->user()->recruiter): ?>
+							<?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->user()->recruiter): ?>
 								<a href="<?php echo e(route('recruiter.dashboard')); ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-blue-50 hover:text-blue-900">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 									</svg>
 									Recruiter Dashboard
 								</a>
-							<?php endif; ?>
+							<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
 							<form action="<?php echo e(route('logout')); ?>" method="POST" class="mt-2 border-t-2 border-slate-100 pt-2">
 								<?php echo csrf_field(); ?>
@@ -149,7 +149,7 @@
 						</div>
 					</div>
 				</div>
-			<?php endif; ?>
+			<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 		</div>
 	</div>
 
@@ -207,7 +207,7 @@
 
 				<!-- Auth Section -->
 				<div class="pt-4 border-t-2 border-slate-200 space-y-2">
-					<?php if(auth()->guard()->guest()): ?>
+					<?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->guard()->guest()): ?>
 						<button
 							type="button"
 							class="w-full rounded-lg border-2 border-slate-300 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-slate-500 hover:bg-slate-50"
@@ -222,31 +222,31 @@
 						>
 							Candidate Login
 						</button>
-					<?php endif; ?>
+					<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-					<?php if(auth()->guard()->check()): ?>
+					<?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->guard()->check()): ?>
 						<div class="rounded-lg border-2 border-slate-200 bg-slate-50 p-4">
 							<p class="text-base font-bold text-slate-900"><?php echo e(auth()->user()->name); ?></p>
 							<p class="text-sm text-slate-600"><?php echo e(auth()->user()->email ?? auth()->user()->phone); ?></p>
 						</div>
 
-						<?php if(auth()->user()->candidate): ?>
+						<?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->user()->candidate): ?>
 							<a href="<?php echo e(route('candidate.profile')); ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-blue-50 hover:text-blue-900 rounded-lg transition">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
 								</svg>
 								Candidate Dashboard
 							</a>
-						<?php endif; ?>
+						<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-						<?php if(auth()->user()->recruiter): ?>
+						<?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(auth()->user()->recruiter): ?>
 							<a href="<?php echo e(route('recruiter.dashboard')); ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-blue-50 hover:text-blue-900 rounded-lg transition">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 								</svg>
 								Recruiter Dashboard
 							</a>
-						<?php endif; ?>
+						<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
 						<form action="<?php echo e(route('logout')); ?>" method="POST" class="pt-2 border-t-2 border-slate-200">
 							<?php echo csrf_field(); ?>
@@ -257,7 +257,7 @@
 								Logout
 							</button>
 						</form>
-					<?php endif; ?>
+					<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 				</div>
 			</div>
 		</div>

@@ -12,6 +12,7 @@
         "laravel/scout": "^10.24",
         "laravel/tinker": "^2.10.1",
         "league/flysystem-aws-s3-v3": "3.0",
+        "livewire/livewire": "^4.2",
         "typesense/typesense-php": "^6.0"
     },
     "require-dev": {

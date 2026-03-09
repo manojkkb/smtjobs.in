@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class State extends Model
 {
+    //
     use HasFactory;
 
     protected $fillable = [
@@ -14,6 +15,9 @@ class State extends Model
         'slug',
         'name',
         'code',
+        'iso_code',
+        'capital',
+        'type',
         'latitude',
         'longitude',
         'is_active',
@@ -32,5 +36,4 @@ class State extends Model
     {
         return $this->hasMany(City::class);
     }
-
 }

@@ -1,6 +1,6 @@
 <aside
     id="adminSidebar"
-    class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full transform overflow-y-auto border border-slate-200 bg-white px-5 py-7 shadow-lg transition duration-300 lg:shadow-none"
+    class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full transform overflow-y-auto border border-slate-200 bg-white px-5 py-7 shadow-lg lg:translate-x-0 lg:shadow-none"
 >
     <div class="flex items-center justify-between">
         <div>
@@ -34,9 +34,9 @@
             ],
             [
                 'label' => 'Applications',
-                'route' => 'recruiter.job-applications',
-                'active' => ['recruiter.job-applications'],
-                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M8 14s1.5 2 4 2 4-2 4-2" /> <path stroke-linecap="round" stroke-linejoin="round" d="M12 12a4 4 0 100-8 4 4 0 000 8z" />',
+                'route' => 'recruiter.job-applications.index',
+                'active' => ['recruiter.job-applications.*'],
+                'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />',
             ],
             [
                 'label' => 'Interviews',

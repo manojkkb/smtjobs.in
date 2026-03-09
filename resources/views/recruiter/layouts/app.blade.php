@@ -8,6 +8,9 @@
 
     {{-- Vite CSS + JS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    {{-- Livewire Styles --}}
+    @livewireStyles
 </head>
 <body class="font-sans antialiased bg-[#e7e7e7] text-slate-900">
 
@@ -20,7 +23,7 @@
 
         @include('recruiter.layouts.sidebar')
 
-        <div id="mainContent" class="flex flex-1 flex-col transition-all duration-300">
+        <div id="mainContent" class="flex flex-1 flex-col">
             @include('recruiter.layouts.header')
 
             <main class="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
@@ -36,6 +39,12 @@
             const mainContent = document.getElementById('mainContent');
             const openBtn = document.getElementById('sidebarToggle');
             const closeBtn = document.getElementById('sidebarClose');
+            
+            // Enable transitions after initial positioning to prevent animation on page load
+            setTimeout(() => {
+                sidebar?.classList.add('transition', 'duration-300');
+                mainContent?.classList.add('transition-all', 'duration-300');
+            }, 50);
             
             let isDesktopCollapsed = false;
 
@@ -109,6 +118,8 @@
                     hideBackdrop();
                     if (!isDesktopCollapsed) {
                         sidebar?.classList.remove('-translate-x-full');
+                    } else {
+                        sidebar?.classList.add('-translate-x-full');
                     }
                 } else {
                     sidebar?.classList.add('-translate-x-full');
@@ -135,7 +146,27 @@
             submenuButtons.forEach((button) => {
                 button.addEventListener('click', () => toggleSubmenu(button));
             });
+
+            // Close sidebar on mobile when clicking navigation links
+            const sidebarLinks = sidebar?.querySelectorAll('a[href]:not([href="#"])');
+            sidebarLinks?.forEach((link) => {
+                link.addEventListener('click', (e) => {
+                    // Only close sidebar on mobile/tablet (< 1024px)
+                    if (window.innerWidth < 1024) {
+                        closeSidebar();
+                    }
+                    // Don't close or toggle sidebar on desktop - let navigation happen naturally
+                });
+            });
+
+            // Prevent clicks inside sidebar from bubbling to backdrop or other handlers
+            sidebar?.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
         });
     </script>
+    
+    {{-- Livewire Scripts --}}
+    @livewireScripts
 </body>
 </html>
