@@ -100,7 +100,7 @@ new class extends Component
                             type="text"
                             wire:model.live.debounce.300ms="search"
                             placeholder="Search by name or email..."
-                            class="block w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 py-2.5 text-sm placeholder:text-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-100 transition"
+                            class="block w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3 py-2.5 text-sm placeholder:text-slate-400 focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-100 transition"
                         />
                     </div>
                     
@@ -108,7 +108,7 @@ new class extends Component
                     <div class="relative">
                         <select 
                             wire:model.live="statusFilter"
-                            class="block w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-2.5 pr-10 text-sm focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-100 transition"
+                            class="block w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-2.5 pr-10 text-sm focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-100 transition"
                         >
                             <option value="">All Status</option>
                             @foreach($statuses as $status)
@@ -126,7 +126,7 @@ new class extends Component
                     <div class="relative">
                         <select 
                             wire:model.live="jobFilter"
-                            class="block w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-2.5 pr-10 text-sm focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-100 transition"
+                            class="block w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-2.5 pr-10 text-sm focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-100 transition"
                         >
                             <option value="">All Jobs</option>
                             @foreach($jobs as $job)
@@ -245,18 +245,11 @@ new class extends Component
                             <div class="flex items-start gap-4">
                                 {{-- Avatar with Status Indicator --}}
                                 <div class="flex-shrink-0 relative">
-                                    <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 text-white font-bold text-xl shadow-md">
+                                    <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-slate-800 to-black text-white font-bold text-xl shadow-md">
                                         {{ strtoupper(substr($application->candidate->user->name ?? 'U', 0, 1)) }}
                                     </div>
                                     {{-- Online/Active Indicator --}}
-                                    <div class="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-white
-                                        @if($application->applicationStatus->slug === 'pending') bg-yellow-400
-                                        @elseif($application->applicationStatus->slug === 'reviewing') bg-blue-400
-                                        @elseif($application->applicationStatus->slug === 'shortlisted') bg-emerald-400
-                                        @elseif($application->applicationStatus->slug === 'rejected') bg-red-400
-                                        @else bg-slate-400
-                                        @endif
-                                    "></div>
+                                    <div class="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-white bg-slate-400"></div>
                                 </div>
                                 
                                 {{-- Candidate Details --}}
@@ -273,22 +266,9 @@ new class extends Component
                                         >
                                             <button 
                                                 @click="open = !open"
-                                                class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold cursor-pointer transition-all duration-200 shadow-sm
-                                                    @if($application->applicationStatus->slug === 'pending') bg-yellow-100 text-yellow-800 ring-1 ring-yellow-200 hover:bg-yellow-200
-                                                    @elseif($application->applicationStatus->slug === 'reviewing') bg-blue-100 text-blue-800 ring-1 ring-blue-200 hover:bg-blue-200
-                                                    @elseif($application->applicationStatus->slug === 'shortlisted') bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200 hover:bg-emerald-200
-                                                    @elseif($application->applicationStatus->slug === 'rejected') bg-red-100 text-red-800 ring-1 ring-red-200 hover:bg-red-200
-                                                    @else bg-slate-100 text-slate-800 ring-1 ring-slate-200 hover:bg-slate-200
-                                                    @endif"
+                                                class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold cursor-pointer transition-all duration-200 shadow-sm bg-slate-100 text-slate-800 ring-1 ring-slate-200 hover:bg-slate-200"
                                             >
-                                                <span class="inline-block h-1.5 w-1.5 rounded-full
-                                                    @if($application->applicationStatus->slug === 'pending') bg-yellow-500
-                                                    @elseif($application->applicationStatus->slug === 'reviewing') bg-blue-500
-                                                    @elseif($application->applicationStatus->slug === 'shortlisted') bg-emerald-500 animate-pulse
-                                                    @elseif($application->applicationStatus->slug === 'rejected') bg-red-500
-                                                    @else bg-slate-500
-                                                    @endif
-                                                "></span>
+                                                <span class="inline-block h-1.5 w-1.5 rounded-full bg-slate-500"></span>
                                                 {{ ucfirst($application->applicationStatus->slug) }}
                                                 <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -303,10 +283,10 @@ new class extends Component
                                             >
                                                 <button 
                                                     wire:click="updateApplicationStatus({{ $application->id }}, 'reviewing')"
-                                                    class="w-full px-4 py-3 text-left text-sm flex items-center gap-3 hover:bg-blue-50 text-slate-700 transition-colors border-b border-slate-100"
+                                                    class="w-full px-4 py-3 text-left text-sm flex items-center gap-3 hover:bg-slate-100 text-slate-700 transition-colors border-b border-slate-100"
                                                     @click="open = false"
                                                 >
-                                                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
+                                                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-200 text-slate-900">
                                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                                         </svg>
@@ -315,10 +295,10 @@ new class extends Component
                                                 </button>
                                                 <button 
                                                     wire:click="updateApplicationStatus({{ $application->id }}, 'shortlisted')"
-                                                    class="w-full px-4 py-3 text-left text-sm flex items-center gap-3 hover:bg-emerald-50 text-slate-700 transition-colors border-b border-slate-100"
+                                                    class="w-full px-4 py-3 text-left text-sm flex items-center gap-3 hover:bg-slate-100 text-slate-700 transition-colors border-b border-slate-100"
                                                     @click="open = false"
                                                 >
-                                                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                                                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900 text-white">
                                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                                         </svg>
@@ -327,10 +307,10 @@ new class extends Component
                                                 </button>
                                                 <button 
                                                     wire:click="updateApplicationStatus({{ $application->id }}, 'rejected')"
-                                                    class="w-full px-4 py-3 text-left text-sm flex items-center gap-3 hover:bg-red-50 text-slate-700 transition-colors"
+                                                    class="w-full px-4 py-3 text-left text-sm flex items-center gap-3 hover:bg-slate-100 text-slate-700 transition-colors"
                                                     @click="open = false"
                                                 >
-                                                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600">
+                                                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-300 text-slate-900">
                                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                                         </svg>
@@ -388,7 +368,7 @@ new class extends Component
                         {{-- Action Buttons --}}
                         <div class="flex items-center gap-2 flex-shrink-0 lg:pt-1">
                             <button 
-                                class="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-cyan-50 text-cyan-600 hover:bg-cyan-100 transition-all duration-200 shadow-sm"
+                                class="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-lime-50 text-lime-600 hover:bg-lime-100 transition-all duration-200 shadow-sm"
                                 title="View Profile"
                             >
                                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

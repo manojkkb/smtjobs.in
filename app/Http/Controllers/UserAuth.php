@@ -115,6 +115,14 @@ class UserAuth extends Controller
     } 
     public function showLoginForm()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->isRecruiter()) {
+                return redirect()->route('recruiter.dashboard');
+            } elseif ($user->isCandidate()) {
+                return redirect()->route('candidate.profile');
+            }
+        }
         return view('auth.login');
     }
     public function showCandidateRegistrationForm()

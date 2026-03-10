@@ -15,6 +15,13 @@ use App\Models\Language;
 use App\Models\Certificate;
 use App\Models\City;
 use App\Models\CandidateProfile;
+use App\Models\JobApplication;
+use App\Models\SavedJob;
+use App\Models\ApplicationStatus;
+use App\Models\Conversation;
+use App\Models\Message;
+use App\Models\JobPost;
+use App\Models\Recruiter;
 
 class CandidateProfileController extends Controller
 {
@@ -117,15 +124,22 @@ class CandidateProfileController extends Controller
     public function completeProfile()
     {
         $user = Auth::user();
-        $candidate = Candidate::with(['profile', 'city'])->where('user_id', $user->id)->firstOrCreate(
-            ['user_id' => $user->id],
-            ['open_to_work' => true]
-        );
+        $candidate = Candidate::with(['profile', 'city', 'education.level', 'education.degree', 'education.specialization'])
+            ->where('user_id', $user->id)
+            ->firstOrCreate(
+                ['user_id' => $user->id],
+                ['open_to_work' => true]
+            );
 
         // Get cities and states for location dropdown
         $cities = City::where('is_active', true)->orderBy('name')->get();
         
-        return view('candidate.complete-profile', compact('candidate', 'cities'));
+        // Get education data for cascading dropdowns
+        $educationLevels = EducationLevel::where('is_active', true)->orderBy('sort_order')->orderBy('label')->get();
+        $educationDegrees = EducationDegree::with('educationLevel')->orderBy('sort_order')->orderBy('label')->get();
+        $educationSpecializations = EducationSpecialization::with('degree')->orderBy('sort_order')->orderBy('label')->get();
+        
+        return view('candidate.complete-profile', compact('candidate', 'cities', 'educationLevels', 'educationDegrees', 'educationSpecializations'));
     }
 
     public function storeBasicDetails(Request $request)
@@ -206,7 +220,9 @@ class CandidateProfileController extends Controller
     {
         $validated = $request->validate([
             'education' => 'required|array|min:1',
-            'education.*.degree' => 'required|string|max:255',
+            'education.*.level' => 'required|integer|exists:education_levels,id',
+            'education.*.degree' => 'required|integer|exists:education_degrees,id',
+            'education.*.specialization' => 'nullable|integer|exists:education_specializations,id',
             'education.*.institution' => 'required|string|max:255',
             'education.*.passing_year' => 'required|integer|min:1950|max:' . (date('Y') + 10),
             'education.*.percentage' => 'nullable|numeric|min:0|max:100',
@@ -220,7 +236,14 @@ class CandidateProfileController extends Controller
 
         // Create new education
         foreach ($validated['education'] as $edu) {
-            $candidate->education()->create($edu);
+            $candidate->education()->create([
+                'education_level_id' => $edu['level'],
+                'education_degree_id' => $edu['degree'],
+                'education_specialization_id' => $edu['specialization'] ?? null,
+                'institute_name' => $edu['institution'],
+                'passing_year' => $edu['passing_year'],
+                'percentage' => $edu['percentage'] ?? null,
+            ]);
         }
 
         return response()->json(['success' => true, 'message' => 'Education saved successfully']);
@@ -229,26 +252,31 @@ class CandidateProfileController extends Controller
     public function storeResume(Request $request)
     {
         $validated = $request->validate([
-            'resume' => 'required|file|mimes:pdf,doc,docx|max:5120', // 5MB max
+            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // 5MB max
         ]);
 
         $user = Auth::user();
         $candidate = Candidate::where('user_id', $user->id)->firstOrFail();
 
-        // Delete old resume if exists
-        if ($candidate->profile && $candidate->profile->resume_path) {
-            Storage::disk('public')->delete($candidate->profile->resume_path);
+        // Only process if a file was uploaded
+        if ($request->hasFile('resume')) {
+            // Delete old resume if exists
+            if ($candidate->profile && $candidate->profile->resume_path) {
+                Storage::disk('public')->delete($candidate->profile->resume_path);
+            }
+
+            // Store new resume
+            $path = $request->file('resume')->store('resumes', 'public');
+
+            $candidate->profile()->updateOrCreate(
+                ['candidate_id' => $candidate->id],
+                ['resume_path' => $path]
+            );
+
+            return response()->json(['success' => true, 'message' => 'Resume uploaded successfully']);
         }
 
-        // Store new resume
-        $path = $request->file('resume')->store('resumes', 'public');
-
-        $candidate->profile()->updateOrCreate(
-            ['candidate_id' => $candidate->id],
-            ['resume_path' => $path]
-        );
-
-        return response()->json(['success' => true, 'message' => 'Resume uploaded successfully']);
+        return response()->json(['success' => true, 'message' => 'Step completed']);
     }
 
     public function completeProfileSubmit(Request $request)
@@ -773,5 +801,537 @@ class CandidateProfileController extends Controller
                 'message' => 'An unexpected error occurred: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function applyToJob($id)
+    {
+        try {
+            $candidate = auth()->user()->candidate;
+            
+            if (!$candidate) {
+                return redirect()->back()->with('error', 'Candidate profile not found');
+            }
+
+            // Check if already applied
+            $existingApplication = JobApplication::where('candidate_id', $candidate->id)
+                ->where('job_post_id', $id)
+                ->first();
+
+            if ($existingApplication) {
+                return redirect()->back()->with('info', 'You have already applied to this job');
+            }
+
+            // Get the job post with recruiter
+            $jobPost = JobPost::with(['recruiter', 'company'])->findOrFail($id);
+
+            // Get pending status
+            $pendingStatus = ApplicationStatus::where('slug', 'pending')->first();
+
+            // Create application
+            $application = JobApplication::create([
+                'candidate_id' => $candidate->id,
+                'job_post_id' => $id,
+                'application_status_id' => $pendingStatus->id ?? 1,
+                'applied_at' => now(),
+            ]);
+
+            // Create conversation between candidate and recruiter
+            if ($jobPost->recruiter && $jobPost->recruiter->user_id) {
+                $candidateUserId = auth()->user()->id;
+                $recruiterUserId = $jobPost->recruiter->user_id;
+
+                // Ensure user_one_id is always the smaller ID for uniqueness
+                $userOneId = min($candidateUserId, $recruiterUserId);
+                $userTwoId = max($candidateUserId, $recruiterUserId);
+
+                // Check if conversation already exists
+                $conversation = Conversation::where('user_one_id', $userOneId)
+                    ->where('user_two_id', $userTwoId)
+                    ->first();
+
+                if (!$conversation) {
+                    $conversation = Conversation::create([
+                        'user_one_id' => $userOneId,
+                        'user_two_id' => $userTwoId,
+                        'job_application_id' => $application->id,
+                    ]);
+                }
+
+                // Send automatic message
+                $candidateName = auth()->user()->name ?? 'A candidate';
+                $messageText = "Hi, I have applied for the position of {$jobPost->title} at {$jobPost->company->name}. Looking forward to hearing from you!";
+
+                $message = Message::create([
+                    'conversation_id' => $conversation->id,
+                    'sender_id' => $candidateUserId,
+                    'message' => $messageText,
+                    'type' => 'text',
+                    'is_seen' => false,
+                ]);
+
+                // Update conversation's last message
+                $conversation->update([
+                    'last_message_id' => $message->id,
+                    'last_message_at' => now(),
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Application submitted successfully!');
+
+        } catch (\Exception $e) {
+            Log::error('Job application error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to submit application: ' . $e->getMessage());
+        }
+    }
+
+    public function toggleSaveJob($id)
+    {
+        try {
+            $candidate = auth()->user()->candidate;
+            
+            if (!$candidate) {
+                return redirect()->back()->with('error', 'Candidate profile not found');
+            }
+
+            $savedJob = SavedJob::where('candidate_id', $candidate->id)
+                ->where('job_post_id', $id)
+                ->first();
+
+            if ($savedJob) {
+                $savedJob->delete();
+                return redirect()->back()->with('success', 'Job removed from saved jobs');
+            } else {
+                SavedJob::create([
+                    'candidate_id' => $candidate->id,
+                    'job_post_id' => $id,
+                ]);
+                return redirect()->back()->with('success', 'Job saved successfully!');
+            }
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to save job: ' . $e->getMessage());
+        }
+    }
+
+    public function appliedJobs()
+    {
+        $candidate = auth()->user()->candidate;
+        
+        $applications = JobApplication::with([
+            'jobPost.company',
+            'jobPost.city',
+            'jobPost.employmentType',
+            'applicationStatus'
+        ])
+        ->where('candidate_id', $candidate->id)
+        ->orderByDesc('created_at')
+        ->paginate(10);
+
+        return view('candidate.applied-jobs', compact('applications'));
+    }
+
+    public function messages(Request $request)
+    {
+        $candidate = auth()->user()->candidate;
+        $userId = auth()->user()->id;
+        
+        // Get all conversations for this user
+        $conversations = Conversation::where('user_one_id', $userId)
+            ->orWhere('user_two_id', $userId)
+            ->with(['userOne', 'userTwo', 'lastMessage', 'jobApplication.jobPost.company'])
+            ->orderBy('last_message_at', 'desc')
+            ->get();
+        
+        // Get selected conversation ID from query parameter
+        $selectedConversationId = $request->query('conversation_id');
+        
+        // Get selected conversation with messages
+        $selectedConversation = null;
+        $messages = collect();
+        
+        if ($selectedConversationId) {
+            $selectedConversation = Conversation::with([
+                'userOne', 
+                'userTwo', 
+                'jobApplication.jobPost.company',
+                'messages.sender'
+            ])
+            ->where('id', $selectedConversationId)
+            ->where(function($query) use ($userId) {
+                $query->where('user_one_id', $userId)
+                      ->orWhere('user_two_id', $userId);
+            })
+            ->first();
+            
+            if ($selectedConversation) {
+                $messages = $selectedConversation->messages;
+                
+                // Mark messages as seen
+                $selectedConversation->messages()
+                    ->where('sender_id', '!=', $userId)
+                    ->where('is_seen', false)
+                    ->update(['is_seen' => true]);
+            }
+        } elseif ($conversations->isNotEmpty()) {
+            // Auto-select first conversation if none selected
+            $selectedConversation = Conversation::with([
+                'userOne', 
+                'userTwo', 
+                'jobApplication.jobPost.company',
+                'messages.sender'
+            ])
+            ->where('id', $conversations->first()->id)
+            ->first();
+            
+            if ($selectedConversation) {
+                $messages = $selectedConversation->messages;
+                $selectedConversationId = $selectedConversation->id;
+                
+                // Mark messages as seen
+                $selectedConversation->messages()
+                    ->where('sender_id', '!=', $userId)
+                    ->where('is_seen', false)
+                    ->update(['is_seen' => true]);
+            }
+        }
+        
+        return view('candidate.messages', compact('conversations', 'selectedConversation', 'messages', 'selectedConversationId'));
+    }
+
+    public function startOrGetConversation($applicationId)
+    {
+        try {
+            $candidate = auth()->user()->candidate;
+            
+            if (!$candidate) {
+                return redirect()->back()->with('error', 'Candidate profile not found');
+            }
+
+            // Get the application with job post and recruiter
+            $application = JobApplication::with(['jobPost.recruiter', 'jobPost.company'])
+                ->where('id', $applicationId)
+                ->where('candidate_id', $candidate->id)
+                ->firstOrFail();
+
+            // Check if recruiter exists
+            if (!$application->jobPost->recruiter || !$application->jobPost->recruiter->user_id) {
+                return redirect()->back()->with('error', 'Unable to start conversation with this recruiter');
+            }
+
+            $candidateUserId = auth()->user()->id;
+            $recruiterUserId = $application->jobPost->recruiter->user_id;
+
+            // Ensure user_one_id is always the smaller ID for uniqueness
+            $userOneId = min($candidateUserId, $recruiterUserId);
+            $userTwoId = max($candidateUserId, $recruiterUserId);
+
+            // Check if conversation already exists
+            $conversation = Conversation::where('user_one_id', $userOneId)
+                ->where('user_two_id', $userTwoId)
+                ->first();
+
+            if (!$conversation) {
+                // Create new conversation
+                $conversation = Conversation::create([
+                    'user_one_id' => $userOneId,
+                    'user_two_id' => $userTwoId,
+                    'job_application_id' => $application->id,
+                ]);
+
+                // Send automatic greeting message
+                $messageText = "Hi, I have applied for the position of {$application->jobPost->title} at {$application->jobPost->company->name}. Looking forward to hearing from you!";
+
+                $message = Message::create([
+                    'conversation_id' => $conversation->id,
+                    'sender_id' => $candidateUserId,
+                    'message' => $messageText,
+                    'type' => 'text',
+                    'is_seen' => false,
+                ]);
+
+                // Update conversation's last message
+                $conversation->update([
+                    'last_message_id' => $message->id,
+                    'last_message_at' => now(),
+                ]);
+            }
+
+            // Redirect to messages page with conversation ID
+            return redirect()->route('candidate.messages', ['conversation_id' => $conversation->id])
+                ->with('success', 'Conversation opened');
+
+        } catch (\Exception $e) {
+            Log::error('Start conversation error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to start conversation');
+        }
+    }
+
+    public function sendMessage(Request $request, $conversationId)
+    {
+        try {
+            $userId = auth()->user()->id;
+            
+            // Verify user belongs to this conversation
+            $conversation = Conversation::where('id', $conversationId)
+                ->where(function($query) use ($userId) {
+                    $query->where('user_one_id', $userId)
+                          ->orWhere('user_two_id', $userId);
+                })
+                ->firstOrFail();
+            
+            // Validate message
+            $validated = $request->validate([
+                'message' => 'required|string|max:1000',
+            ]);
+            
+            // Create message
+            $message = Message::create([
+                'conversation_id' => $conversation->id,
+                'sender_id' => $userId,
+                'message' => $validated['message'],
+                'type' => 'text',
+                'is_seen' => false,
+            ]);
+            
+            // Update conversation's last message
+            $conversation->update([
+                'last_message_id' => $message->id,
+                'last_message_at' => now(),
+            ]);
+            
+            return redirect()->route('candidate.messages', ['conversation_id' => $conversationId])
+                ->with('success', 'Message sent successfully');
+                
+        } catch (\Exception $e) {
+            Log::error('Send message error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to send message');
+        }
+    }
+
+    /**
+     * Send a message via API (for real-time chat)
+     */
+    public function sendMessageApi(Request $request, $conversationId)
+    {
+        try {
+            $userId = auth()->user()->id;
+            
+            // Verify user belongs to this conversation
+            $conversation = Conversation::where('id', $conversationId)
+                ->where(function($query) use ($userId) {
+                    $query->where('user_one_id', $userId)
+                          ->orWhere('user_two_id', $userId);
+                })
+                ->firstOrFail();
+            
+            // Validate based on message type
+            $validated = $request->validate([
+                'message' => 'required_if:type,text|nullable|string|max:1000',
+                'type' => 'required|in:text,request_contact,request_email,request_location',
+            ]);
+            
+            $messageType = $validated['type'] ?? 'text';
+            $messageText = $validated['message'] ?? '';
+            
+            // Set default message for request types
+            if ($messageType === 'request_contact') {
+                $messageText = 'I would like to request your contact number.';
+            } elseif ($messageType === 'request_email') {
+                $messageText = 'I would like to request your email address.';
+            } elseif ($messageType === 'request_location') {
+                $messageText = 'I would like to request your company location/address.';
+            }
+            
+            // Create message
+            $message = Message::create([
+                'conversation_id' => $conversation->id,
+                'sender_id' => $userId,
+                'message' => $messageText,
+                'type' => $messageType,
+                'request_status' => ($messageType !== 'text') ? 'pending' : null,
+                'is_seen' => false,
+            ]);
+            
+            // Load sender relationship
+            $message->load('sender');
+            
+            // Update conversation's last message
+            $conversation->update([
+                'last_message_id' => $message->id,
+                'last_message_at' => now(),
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => $message
+            ]);
+                
+        } catch (\Exception $e) {
+            Log::error('Send message API error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to send message'
+            ], 500);
+        }
+    }
+
+    /**
+     * Respond to a request (contact, email, or resume)
+     */
+    public function respondToRequest(Request $request, $messageId)
+    {
+        try {
+            $userId = auth()->user()->id;
+            $candidate = auth()->user()->candidate;
+            
+            // Get the original request message
+            $requestMessage = Message::with('conversation')
+                ->where('id', $messageId)
+                ->whereHas('conversation', function($query) use ($userId) {
+                    $query->where(function($q) use ($userId) {
+                        $q->where('user_one_id', $userId)
+                          ->orWhere('user_two_id', $userId);
+                    });
+                })
+                ->firstOrFail();
+            
+            // Validate based on request type
+            $rules = [];
+            if ($requestMessage->type === 'request_contact') {
+                $rules['phone'] = 'required|string|max:20';
+            } elseif ($requestMessage->type === 'request_email') {
+                $rules['email'] = 'required|email|max:255';
+            } elseif ($requestMessage->type === 'request_resume') {
+                $rules['resume'] = 'required|file|mimes:pdf,doc,docx|max:5120'; // 5MB max
+            }
+            
+            $validated = $request->validate($rules);
+            
+            // Update the request message status
+            $requestMessage->update(['request_status' => 'approved']);
+            
+            // Create response message
+            $responseData = [
+                'conversation_id' => $requestMessage->conversation_id,
+                'sender_id' => $userId,
+                'type' => $requestMessage->type . '_response',
+                'is_seen' => false,
+            ];
+            
+            if ($requestMessage->type === 'request_contact') {
+                $responseData['phone'] = $validated['phone'];
+                $responseData['message'] = 'Here is my contact number: ' . $validated['phone'];
+            } elseif ($requestMessage->type === 'request_email') {
+                $responseData['email'] = $validated['email'];
+                $responseData['message'] = 'Here is my email: ' . $validated['email'];
+            } elseif ($requestMessage->type === 'request_resume') {
+                // Upload resume
+                $file = $request->file('resume');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('resumes', $fileName, 'public');
+                
+                $responseData['cv_file'] = $filePath;
+                $responseData['message'] = 'I have shared my resume with you.';
+            }
+            
+            $responseMessage = Message::create($responseData);
+            $responseMessage->load('sender');
+            
+            // Update conversation's last message
+            $requestMessage->conversation->update([
+                'last_message_id' => $responseMessage->id,
+                'last_message_at' => now(),
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => $responseMessage,
+                'requestMessage' => $requestMessage
+            ]);
+                
+        } catch (\Exception $e) {
+            Log::error('Respond to request error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to respond to request'
+            ], 500);
+        }
+    }
+
+    /**
+     * Decline a request
+     */
+    public function declineRequest(Request $request, $messageId)
+    {
+        try {
+            $userId = auth()->user()->id;
+            
+            // Get the original request message
+            $requestMessage = Message::with('conversation')
+                ->where('id', $messageId)
+                ->whereHas('conversation', function($query) use ($userId) {
+                    $query->where(function($q) use ($userId) {
+                        $q->where('user_one_id', $userId)
+                          ->orWhere('user_two_id', $userId);
+                    });
+                })
+                ->firstOrFail();
+            
+            // Update the request message status
+            $requestMessage->update(['request_status' => 'declined']);
+            
+            // Create decline message
+            $declineMessage = Message::create([
+                'conversation_id' => $requestMessage->conversation_id,
+                'sender_id' => $userId,
+                'message' => 'I prefer not to share this information at this time.',
+                'type' => 'text',
+                'is_seen' => false,
+            ]);
+            
+            $declineMessage->load('sender');
+            
+            // Update conversation's last message
+            $requestMessage->conversation->update([
+                'last_message_id' => $declineMessage->id,
+                'last_message_at' => now(),
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => $declineMessage,
+                'requestMessage' => $requestMessage
+            ]);
+                
+        } catch (\Exception $e) {
+            Log::error('Decline request error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to decline request'
+            ], 500);
+        }
+    }
+
+    public function savedJobs()
+    {
+        $candidate = auth()->user()->candidate;
+        
+        $savedJobs = SavedJob::with([
+            'jobPost.company',
+            'jobPost.city',
+            'jobPost.employmentType',
+            'jobPost.experienceRange'
+        ])
+        ->where('candidate_id', $candidate->id)
+        ->orderByDesc('created_at')
+        ->paginate(10);
+
+        return view('candidate.saved-jobs', compact('savedJobs'));
+    }
+
+    public function settings()
+    {
+        $candidate = auth()->user()->candidate;
+        return view('candidate.settings', compact('candidate'));
     }
 }

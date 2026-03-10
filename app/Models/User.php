@@ -38,4 +38,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(Candidate::class, 'user_id');
     }
+    public function isRecruiter()
+    {
+        return $this->recruiter()->exists();
+    }
+    public function isCandidate()
+    {
+        return $this->candidate()->exists();
+    }
+    
 }

@@ -76,4 +76,14 @@ class Candidate extends Model
     {
         return $this->hasMany(CandidateCertification::class);
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(CandidateCertificate::class);
+    }
+
+    public function socialLinks()
+    {
+        return $this->hasMany(CandidateSocialLink::class);
+    }
 }

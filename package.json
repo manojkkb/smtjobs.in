@@ -4,7 +4,9 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "socket": "node socket-server.js",
+        "dev:all": "concurrently \"npm run dev\" \"npm run socket\""
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.1.18",
@@ -15,6 +17,10 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "alpinejs": "^3.15.8"
+        "alpinejs": "^3.15.8",
+        "ioredis": "^5.10.0",
+        "laravel-echo": "^2.3.0",
+        "socket.io": "^4.8.3",
+        "socket.io-client": "^4.8.3"
     }
 }

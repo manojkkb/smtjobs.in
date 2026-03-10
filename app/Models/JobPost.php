@@ -55,6 +55,12 @@ class JobPost extends Model
         'max_salary' => 'integer',
     ];
 
+    protected $appends = [
+        'slug',
+        'city_slug',
+        'url',
+    ];
+
     public function recruiter(): BelongsTo
     {
         return $this->belongsTo(Recruiter::class);
@@ -247,5 +253,69 @@ class JobPost extends Model
         return $this->belongsToMany(Certificate::class, 'job_post_certifications')
                     ->withTimestamps()
                     ->withPivot('is_mandatory');
+    }
+
+    /**
+     * Generate URL slug for the job post
+     */
+    public function getSlugAttribute()
+    {
+        $title = $this->title ?: 'job';
+        return \Illuminate\Support\Str::slug($title) . '-' . $this->id;
+    }
+
+    /**
+     * Get the city slug for URL
+     */
+    public function getCitySlugAttribute()
+    {
+        return $this->city ? \Illuminate\Support\Str::slug($this->city->name) : 'remote';
+    }
+
+    /**
+     * Get the full URL for the job post
+     */
+    public function getUrlAttribute()
+    {
+        return route('job.show', [
+            'city' => $this->city_slug,
+            'slug' => $this->slug
+        ]);
+    }
+    public function isExpired()
+    {
+        return $this->expires_at && $this->expires_at->isPast();
+    }
+    public function isPublished()
+    {
+        return $this->published_at && $this->published_at->isPast();
+    }
+    public function isActive()
+    {
+        return $this->is_active && $this->isPublished() && !$this->isExpired();
+    }
+    public function isRemote()
+    {
+        return $this->is_remote;
+    }
+    public function isFeatured()
+    {
+        return $this->is_featured;
+    }
+    public function isVisible()
+    {
+        return $this->isActive();
+    }
+    public function isSavedByCandidate($candidateId)
+    {
+        return $this->savedByCandidates()->where('candidate_id', $candidateId)->exists();
+    }
+    public function savedByCandidates()
+    {
+        return $this->belongsToMany(Candidate::class, 'saved_jobs', 'job_post_id', 'candidate_id')->withTimestamps();
+    }
+    public function isAppliedByCandidate($candidateId)
+    {
+        return $this->applications()->where('candidate_id', $candidateId)->exists();
     }
 }

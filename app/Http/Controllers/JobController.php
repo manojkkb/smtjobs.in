@@ -13,6 +13,7 @@ use App\Models\JobPostDetail;
 use App\Models\Skill;
 use App\Models\JobRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
@@ -124,19 +125,57 @@ class JobController extends Controller
         ));
     }
 
-    public function show($id)
+    public function show($city, $slug)
     {
+        // Extract ID from slug (format: title-slug-123)
+        $id = null;
+        if (preg_match('/-([0-9]+)$/', $slug, $matches)) {
+            $id = $matches[1];
+        }
+
+        if (!$id) {
+            abort(404);
+        }
+
         $jobPost = JobPost::with([
             'company',
-            'profile',
+            'detail',
             'city',
             'category',
             'industry',
             'employmentType',
             'experienceRange',
+            'status',
         ])->findOrFail($id);
 
-        return view('website.job-details', ['jobPost' => $jobPost]);
+        // Verify city matches
+        $jobCitySlug = $jobPost->city ? \Illuminate\Support\Str::slug($jobPost->city->name) : 'remote';
+        if ($city !== $jobCitySlug) {
+            // Redirect to correct URL
+            return redirect()->route('job.show', [
+                'city' => $jobCitySlug,
+                'slug' => $slug
+            ], 301);
+        }
+
+        $hasApplied = false;
+        $isSaved = false;
+
+        if (Auth::check() && Auth::user()->isCandidate()) {
+            $candidateId = Auth::user()->candidate->id ?? null;
+            
+            if ($candidateId) {
+                $hasApplied = $jobPost->applications()
+                    ->where('candidate_id', $candidateId)
+                    ->exists();
+                
+                $isSaved = $jobPost->savedByCandidates()
+                    ->where('candidate_id', $candidateId)
+                    ->exists();
+            }
+        }
+
+        return view('website.job-details', compact('jobPost', 'hasApplied', 'isSaved'));
     }
 
     public function suggestions(Request $request)

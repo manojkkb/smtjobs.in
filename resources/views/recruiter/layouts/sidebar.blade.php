@@ -46,8 +46,8 @@
             ],
             [
                 'label' => 'Messages',
-                'route' => '#',
-                'active' => [],
+                'route' => 'recruiter.messages',
+                'active' => ['recruiter.messages'],
                 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16v12H6l-2 2V4z" />',
             ],
             [

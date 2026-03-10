@@ -1,30 +1,37 @@
-@extends('website.layouts.app')
+@extends('candidate.layouts.app')
 
 @section('title', 'Candidate profile · SMTJobs')
 
 @section('content')
-    <div class="mx-auto w-full max-w-5xl space-y-2 px-4 sm:px-0">
-        <section class="relative rounded-[28px] border border-slate-200 bg-white">
-            <div class="grid  px-2 py-2 lg:grid-cols-[0.7fr_3.3fr]">
-                <div class="flex items-center justify-start">
-                    <div class="relative h-36 w-36 overflow-hidden rounded-[26px] border border-slate-200 bg-slate-100 p-1 group">
+    <div class="mx-auto w-full max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8 pt-4 md:pt-20 lg:pt-24 pb-20 md:pb-8">
+        {{-- Page Heading --}}
+        <div class="mb-4 sm:mb-6">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900">My Profile</h1>
+        </div>
+
+        {{-- Profile Header Card --}}
+        <div class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-4 sm:p-6 md:p-8 shadow-sm">
+            <div class="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-start lg:gap-8">
+                {{-- Profile Photo --}}
+                <div class="flex flex-col items-center gap-3 lg:items-start">
+                    <div class="relative h-32 w-32 sm:h-40 sm:w-40 overflow-hidden rounded-2xl sm:rounded-3xl border-2 border-slate-200 bg-white p-2 shadow-lg group">
                         @if(optional($candidate->profile)->profile_photo)
-                            <img src="{{ $candidate->profile->profile_photo_url }}" alt="Profile photo" class="h-full w-full rounded-[22px] object-cover" id="profilePhotoPreview" />
+                            <img src="{{ $candidate->profile->profile_photo_url }}" alt="Profile photo" class="h-full w-full rounded-2xl object-cover" id="profilePhotoPreview" />
                         @else
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($candidate->user->name ?? 'User') }}&size=400&background=e7e7e7&color=475569" alt="Profile photo" class="h-full w-full rounded-[22px] object-cover" id="profilePhotoPreview" />
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($candidate->user->name ?? 'User') }}&size=400&background=1e293b&color=ffffff&bold=true" alt="Profile photo" class="h-full w-full rounded-2xl object-cover" id="profilePhotoPreview" />
                         @endif
-                        <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-[22px]">
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-2xl">
                             <label for="profilePhotoInput" class="cursor-pointer">
-                                <div class="flex flex-col items-center gap-1 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <div class="flex flex-col items-center gap-2 text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
-                                    <span class="text-xs font-semibold">
+                                    <span class="text-sm font-bold">
                                         @if(optional($candidate->profile)->profile_photo)
-                                            Change
+                                            Change Photo
                                         @else
-                                            Upload
+                                            Upload Photo
                                         @endif
                                     </span>
                                 </div>
@@ -32,272 +39,349 @@
                             <input type="file" id="profilePhotoInput" accept="image/*" class="hidden">
                         </div>
                     </div>
+                    <button
+                        type="button"
+                        id="editBasicProfileBtn"
+                        class="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border-2 border-slate-900 bg-slate-900 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white transition hover:bg-black hover:border-black shadow-sm w-full sm:w-auto justify-center"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 17.25V21h3.75L17.81 10.94l-3.75-3.75L4 17.25z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.71 7.04a1.004 1.004 0 0 0 0-1.42l-2.34-2.34a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+                        </svg>
+                        Edit Profile
+                    </button>
                 </div>
-                <div class="space-y-1">
+
+                {{-- Profile Info --}}
+                <div class="flex-1 space-y-3 sm:space-y-4">
                     <div>
-                        <h1 class="text-xl font-semibold text-slate-900">
+                        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900">
                             {{ optional($candidate->profile)->first_name ?? $candidate->user->name ?? 'Candidate' }}
                             {{ optional($candidate->profile)->last_name }}
                         </h1>
-                        <p class="text-xs uppercase tracking-[0.5em] text-slate-400">{{ optional($candidate->profile)->headline ?? 'Professional' }}</p>
+                        @if(optional($candidate->profile)->headline)
+                            <p class="mt-1.5 sm:mt-2 text-base sm:text-lg font-bold text-slate-700">{{ $candidate->profile->headline }}</p>
+                        @else
+                            <p class="mt-1.5 sm:mt-2 text-sm sm:text-base font-medium text-slate-500 italic">Add your professional headline</p>
+                        @endif
                     </div>
-                    <div class="flex flex-wrap gap-5 text-sm text-slate-600">
-                        <div>
-                            <p class="text-[0.6rem] uppercase tracking-[0.4em] text-slate-400">Email</p>
-                            <p class="font-semibold text-slate-900">{{ $candidate->user->email ?? 'Not provided' }}</p>
+
+                    <div class="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                        <div class="rounded-xl sm:rounded-2xl border border-slate-200 bg-white px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm">
+                            <div class="flex items-center gap-1.5 sm:gap-2 mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <p class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">Email</p>
+                            </div>
+                            <p class="text-xs sm:text-sm font-semibold text-slate-900 truncate">{{ $candidate->user->email ?? 'Not provided' }}</p>
                         </div>
-                        <div>
-                            <p class="text-[0.6rem] uppercase tracking-[0.4em] text-slate-400">Phone</p>
-                            <p class="font-semibold text-slate-900">{{ optional($candidate->profile)->phone ?? $candidate->user->phone ?? 'Not provided' }}</p>
+                        <div class="rounded-xl sm:rounded-2xl border border-slate-200 bg-white px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm">
+                            <div class="flex items-center gap-1.5 sm:gap-2 mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                                <p class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">Phone</p>
+                            </div>
+                            <p class="text-xs sm:text-sm font-semibold text-slate-900">{{ optional($candidate->profile)->phone ?? $candidate->user->phone ?? 'Not provided' }}</p>
                         </div>
-                    </div>
-                    <div class="grid gap-4 text-sm text-slate-700 sm:grid-cols-3">
-                        <div class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
-                            <p class="text-[0.6rem] uppercase tracking-[0.4em] text-slate-400">Date of birth</p>
-                            <p class="font-semibold text-slate-900">
+                        <div class="rounded-xl sm:rounded-2xl border border-slate-200 bg-white px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm">
+                            <div class="flex items-center gap-1.5 sm:gap-2 mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <p class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">Location</p>
+                            </div>
+                            <p class="text-xs sm:text-sm font-semibold text-slate-900">{{ optional($candidate->city)->name ?? 'Not provided' }}</p>
+                        </div>
+                        <div class="rounded-xl sm:rounded-2xl border border-slate-200 bg-white px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm">
+                            <div class="flex items-center gap-1.5 sm:gap-2 mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <p class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">Born</p>
+                            </div>
+                            <p class="text-xs sm:text-sm font-semibold text-slate-900">
                                 {{ optional($candidate->profile)->date_of_birth ? $candidate->profile->date_of_birth->format('d M Y') : 'Not provided' }}
                             </p>
                         </div>
-                        <div class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
-                            <p class="text-[0.6rem] uppercase tracking-[0.4em] text-slate-400">Gender</p>
-                            <p class="font-semibold text-slate-900">{{ ucfirst(optional($candidate->profile)->gender ?? $candidate->user->gender ?? 'Not specified') }}</p>
-                        </div>
-                        <div class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
-                            <p class="text-[0.6rem] uppercase tracking-[0.4em] text-slate-400">Location</p>
-                            <p class="font-semibold text-slate-900">
-                                {{ optional($candidate->city)->name ?? 'Not provided' }}
-                            </p>
-                        </div>
                     </div>
                 </div>
             </div>
-            <button
-                type="button"
-                id="editBasicProfileBtn"
-                class="absolute right-6 top-4 inline-flex items-center gap-2 rounded-full border border-slate-900 bg-slate-900 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:bg-slate-800"
-                aria-label="Edit profile"
-            >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 17.25V21h3.75L17.81 10.94l-3.75-3.75L4 17.25z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.71 7.04a1.004 1.004 0 0 0 0-1.42l-2.34-2.34a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
-                </svg>
-                Edit
-            </button>
-        </section>
-        <section class="rounded-[28px] border border-slate-200 bg-white px-5 py-5 sm:px-6">
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <p class="text-[0.6rem] uppercase tracking-[0.4em] text-slate-400">Profile completion</p>
-                    <h2 class="text-xl font-semibold text-slate-900">Keep your profile sharp</h2>
-                </div>
-                <span class="inline-flex items-center justify-center rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">{{ $profileCompletion['percentage'] }}%</span>
-            </div>
-            <div class="mt-4 space-y-3">
-                <div class="h-2 w-full rounded-full bg-slate-100">
-                    <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-slate-800" style="width: {{ $profileCompletion['percentage'] }}%;"></div>
-                </div>
-                <div class="grid gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-slate-400 sm:grid-cols-3">
-                    <span class="flex items-center gap-1">
-                        <span class="h-2 w-2 rounded-full {{ $candidate->education && $candidate->education->count() > 0 ? 'bg-emerald-500' : 'bg-slate-300' }}"></span>
-                        Education
-                    </span>
-                    <span class="flex items-center gap-1">
-                        <span class="h-2 w-2 rounded-full {{ $candidate->experiences && $candidate->experiences->count() > 0 ? 'bg-amber-500' : 'bg-slate-300' }}"></span>
-                        Experience
-                    </span>
-                    <span class="flex items-center gap-1">
-                        <span class="h-2 w-2 rounded-full {{ $candidate->skills && $candidate->skills->count() > 0 ? 'bg-emerald-500' : 'bg-slate-300' }}"></span>
-                        Skills
-                    </span>
-                </div>
-            </div>
-            <div class="mt-4 grid gap-3 text-sm text-slate-600 sm:grid-cols-3">
-                <div class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
-                    <p class="text-[0.6rem] uppercase tracking-[0.3em] text-slate-400">Completed</p>
-                    <p class="text-base font-semibold text-slate-900">{{ $profileCompletion['completed'] }} / {{ $profileCompletion['total'] }}</p>
-                </div>
-                <div class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
-                    <p class="text-[0.6rem] uppercase tracking-[0.3em] text-slate-400">Next step</p>
-                    <p class="text-base font-semibold text-slate-900">
-                        @if($profileCompletion['percentage'] == 100)
-                            Complete!
-                        @elseif(!$candidate->profile || !$candidate->profile->first_name)
-                            Complete profile
-                        @elseif(!$candidate->education || $candidate->education->count() == 0)
-                            Add education
-                        @elseif(!$candidate->experiences || $candidate->experiences->count() == 0)
-                            Add experience
-                        @elseif(!$candidate->skills || $candidate->skills->count() == 0)
-                            Add skills
-                        @else
-                            Add more details
-                        @endif
-                    </p>
-                </div>
-                <div class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
-                    <p class="text-[0.6rem] uppercase tracking-[0.3em] text-slate-400">Last updated</p>
-                    <p class="text-base font-semibold text-slate-900">
-                        {{ optional($candidate->profile)->updated_at ? $candidate->profile->updated_at->diffForHumans() : 'Never' }}
-                    </p>
-                </div>
-            </div>
-                
-        </section>
-        <section class="mt-2">
+        </div>
 
-            <div class="mt-2 flex flex-col gap-3 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+        {{-- Profile Completion & Resume --}}
+        <div class="mt-4 sm:mt-6 grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
+            {{-- Profile Completion --}}
+            <div class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-3 sm:mb-4">
                     <div>
-                        <p class="text-sm font-semibold text-slate-900">
-                            @if(optional($candidate->profile)->resume_path)
-                                Resume uploaded
-                            @else
-                                Upload your resume
-                            @endif
-                        </p>
-                        <p class="text-sm text-slate-600">
-                            @if(optional($candidate->profile)->resume_path)
-                                {{ basename($candidate->profile->resume_path) }}
-                            @else
-                                Share a PDF so recruiters get a quick snapshot of everything in one place.
-                            @endif
-                        </p>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Profile Strength</h2>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Complete your profile to get noticed</p>
                     </div>
-                    <button type="button" class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-700 transition hover:border-slate-400 hover:text-slate-900">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-3-3m3 3l3-3" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z" />
-                        </svg>
-                        {{ optional($candidate->profile)->resume_path ? 'Re-upload' : 'Upload' }}
-                    </button>
+                    <div class="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full border-4 {{ $profileCompletion['percentage'] >= 80 ? 'border-slate-900' : 'border-slate-300' }} bg-slate-50">
+                        <span class="text-lg sm:text-xl font-bold text-slate-900">{{ $profileCompletion['percentage'] }}%</span>
+                    </div>
                 </div>
-        </section>
-     
-        <section class="mt-2 rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm">
-            <div class="space-y-4">
-                <div class="flex items-center justify-between gap-2">
-                    <div>
-                        <h3 class="text-lg font-semibold text-slate-900">Education</h3>
+                
+                <div class="mb-4">
+                    <div class="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-500 {{ $profileCompletion['percentage'] >= 80 ? 'bg-slate-900' : 'bg-slate-400' }}" 
+                             style="width: {{ $profileCompletion['percentage'] }}%;"></div>
                     </div>
-                    <div class="flex flex-1 items-center justify-end gap-2">
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="flex items-center gap-2">
+                            <span class="h-2 w-2 rounded-full {{ $candidate->education && $candidate->education->count() > 0 ? 'bg-slate-900' : 'bg-slate-300' }}"></span>
+                            <span class="font-semibold text-slate-700">Education</span>
+                        </span>
+                        <span class="text-slate-500">{{ $candidate->education && $candidate->education->count() > 0 ? '✓' : '○' }}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="flex items-center gap-2">
+                            <span class="h-2 w-2 rounded-full {{ $candidate->experiences && $candidate->experiences->count() > 0 ? 'bg-slate-900' : 'bg-slate-300' }}"></span>
+                            <span class="font-semibold text-slate-700">Experience</span>
+                        </span>
+                        <span class="text-slate-500">{{ $candidate->experiences && $candidate->experiences->count() > 0 ? '✓' : '○' }}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="flex items-center gap-2">
+                            <span class="h-2 w-2 rounded-full {{ $candidate->skills && $candidate->skills->count() > 0 ? 'bg-slate-900' : 'bg-slate-300' }}"></span>
+                            <span class="font-semibold text-slate-700">Skills</span>
+                        </span>
+                        <span class="text-slate-500">{{ $candidate->skills && $candidate->skills->count() > 0 ? '✓' : '○' }}</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-slate-100">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="font-semibold text-slate-700">Completed Sections</span>
+                        <span class="text-slate-900 font-bold">{{ $profileCompletion['completed'] }} / {{ $profileCompletion['total'] }}</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">
+                        Last updated {{ optional($candidate->profile)->updated_at ? $candidate->profile->updated_at->diffForHumans() : 'never' }}
+                    </p>
+                </div>
+            </div>
+
+            {{-- Resume Upload --}}
+            <div class="rounded-2xl sm:rounded-3xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 sm:p-6 hover:border-slate-400 transition">
+                <div class="flex flex-col items-center justify-center text-center h-full min-h-[200px] sm:min-h-[280px]">
+                    @if(optional($candidate->profile)->resume_path)
+                        <div class="rounded-xl sm:rounded-2xl bg-white border border-slate-200 p-3 sm:p-4 mb-3 sm:mb-4 shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1">Resume Uploaded</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4 px-2">{{ basename($candidate->profile->resume_path) }}</p>
+                        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                            <a href="{{ $candidate->profile->resume_url }}" target="_blank" class="inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border-2 border-slate-900 bg-white px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-slate-900 transition hover:bg-slate-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                View
+                            </a>
+                            <button type="button" class="inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border-2 border-slate-900 bg-slate-900 px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-white transition hover:bg-black">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                </svg>
+                                Re-upload
+                            </button>
+                        </div>
+                    @else
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 sm:h-16 sm:w-16 text-slate-300 mb-3 sm:mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-2">Upload Your Resume</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4 max-w-xs px-2">Share a PDF so recruiters get a complete view of your experience</p>
+                        <button type="button" class="inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border-2 border-slate-900 bg-slate-900 px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition hover:bg-black shadow-sm w-full sm:w-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                            </svg>
+                            Choose File
+                        </button>
+                        <p class="text-[10px] sm:text-xs text-slate-500 mt-2 sm:mt-3">PDF format recommended • Max 5MB</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        {{-- About / Professional Summary --}}
+        @if(optional($candidate->profile)->about)
+        <div class="mt-4 sm:mt-6 rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-3 sm:mb-4">
+                <h2 class="text-lg sm:text-xl font-bold text-slate-900">About Me</h2>
+                <button type="button" class="edit-about-btn inline-flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border-2 border-slate-200 bg-white px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-900 transition hover:bg-slate-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-3.5 sm:w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 17.25V21h3.75L17.81 10.94l-3.75-3.75L4 17.25z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.71 7.04a1.004 1.004 0 0 0 0-1.42l-2.34-2.34a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
+                    </svg>
+                    Edit
+                </button>
+            </div>
+            <p class="text-sm sm:text-base text-slate-700 leading-relaxed">{{ $candidate->profile->about }}</p>
+        </div>
+        @endif
+
+        {{-- Main Content Grid --}}
+        <div class="mt-4 sm:mt-6 grid gap-4 sm:gap-6 lg:grid-cols-3">
+            {{-- Left Column (2/3 width) --}}
+            <div class="lg:col-span-2 space-y-4 sm:space-y-6">
+        {{-- Main Content Grid --}}
+        <div class="mt-6 grid gap-6 lg:grid-cols-3">
+            {{-- Left Column (2/3 width) --}}
+            <div class="lg:col-span-2 space-y-6">
+                {{-- Education Section --}}
+                <div class="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+                    <div class="flex items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3">
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Education</h2>
+                            <p class="text-xs sm:text-sm text-slate-600 mt-1">Your academic background</p>
+                        </div>
                         <button
                             type="button"
                             id="addEducationBtn"
-                            class="inline-flex items-center gap-2 rounded-full border border-slate-900 bg-slate-900 px-3 py-1 text-[0.65rem] font-semibold tracking-[0.3em] text-white transition hover:bg-slate-800"
+                            class="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl border-2 border-slate-900 bg-slate-900 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white transition hover:bg-black shadow-sm flex-shrink-0"
                         >
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14" />
                             </svg>
                             Add
                         </button>
-                       
                     </div>
-                </div>
-                <div class="space-y-3" id="educationList">
-                    @forelse($candidate->education ?? [] as $education)
-                        <article class="rounded-2xl border border-slate-100 bg-slate-50 p-4" data-education-id="{{ $education->id }}">
-                            <div class="flex items-start justify-between gap-3">
-                                <div>
-                                    <p class="text-xs uppercase tracking-[0.4em] text-slate-400">
-                                        {{ $education->passing_year ? $education->passing_year : 'Year not specified' }}
-                                        @if($education->is_current)
-                                            <span class="ml-2 text-emerald-600">• Current</span>
-                                        @endif
-                                    </p>
-                                    <p class="text-base font-semibold text-slate-900">
-                                        {{ $education->degree?->label ?? 'Degree not specified' }}
-                                        @if($education->specialization)
-                                            <span class="text-slate-600">- {{ $education->specialization->label }}</span>
-                                        @endif
-                                    </p>
-                                    <p class="text-sm text-slate-600">{{ $education->institute_name }}</p>
-                                    @if($education->board_university)
-                                        <p class="text-xs text-slate-500">{{ $education->board_university }}</p>
-                                    @endif
-                                    <div class="flex gap-3 text-xs text-slate-500 mt-1">
-                                        @if($education->percentage)
-                                            <span>{{ $education->percentage }}%</span>
-                                        @endif
-                                        @if($education->cgpa)
-                                            <span>CGPA: {{ $education->cgpa }}{{ $education->cgpa_scale ? '/' . $education->cgpa_scale : '' }}</span>
-                                        @endif
+                    <div class="space-y-3 sm:space-y-4" id="educationList">
+                        @forelse($candidate->education ?? [] as $education)
+                            <article class="group rounded-xl sm:rounded-2xl border-2 border-slate-200 bg-slate-50 p-4 sm:p-5 transition hover:border-slate-300 hover:shadow-md" data-education-id="{{ $education->id }}">
+                                <div class="flex items-start justify-between gap-3 sm:gap-4">
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-start gap-2 sm:gap-3">
+                                            <div class="flex-shrink-0 rounded-lg sm:rounded-xl bg-slate-900 p-2 sm:p-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                                                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                                                </svg>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-base sm:text-lg font-bold text-slate-900">
+                                                    {{ $education->degree?->label ?? 'Degree not specified' }}
+                                                </p>
+                                                @if($education->specialization)
+                                                    <p class="text-xs sm:text-sm font-semibold text-slate-600">{{ $education->specialization->label }}</p>
+                                                @endif
+                                                <p class="text-xs sm:text-sm text-slate-600 mt-1">{{ $education->institute_name }}</p>
+                                                @if($education->board_university)
+                                                    <p class="text-[10px] sm:text-xs text-slate-500 mt-1">{{ $education->board_university }}</p>
+                                                @endif
+                                                <div class="flex flex-wrap gap-2 sm:gap-3 items-center mt-2 sm:mt-3 text-[10px] sm:text-xs">
+                                                    <span class="inline-flex items-center gap-1 rounded-lg bg-white border border-slate-200 px-2 sm:px-3 py-1 font-semibold text-slate-700">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                        {{ $education->passing_year ?? 'Year not specified' }}
+                                                    </span>
+                                                    @if($education->is_current)
+                                                        <span class="inline-flex items-center rounded-lg bg-slate-900 px-2 sm:px-3 py-1 font-bold text-white">
+                                                            Currently Pursuing
+                                                        </span>
+                                                    @endif
+                                                    @if($education->percentage)
+                                                        <span class="inline-flex items-center gap-1 rounded-lg bg-white border border-slate-200 px-2 sm:px-3 py-1 font-semibold text-slate-700">
+                                                            {{ $education->percentage }}%
+                                                        </span>
+                                                    @endif
+                                                    @if($education->cgpa)
+                                                        <span class="inline-flex items-center gap-1 rounded-lg bg-white border border-slate-200 px-2 sm:px-3 py-1 font-semibold text-slate-700">
+                                                            CGPA: {{ $education->cgpa }}{{ $education->cgpa_scale ? '/' . $education->cgpa_scale : '' }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                                        <button class="edit-education-btn inline-flex items-center justify-center rounded-lg sm:rounded-xl border-2 border-slate-200 bg-white p-1.5 sm:p-2 text-slate-600 transition hover:bg-slate-100 hover:border-slate-300"
+                                            data-id="{{ $education->id }}"
+                                            data-level-id="{{ $education->education_level_id }}"
+                                            data-degree-id="{{ $education->education_degree_id }}"
+                                            data-specialization-id="{{ $education->education_specialization_id }}"
+                                            data-institute="{{ $education->institute_name }}"
+                                            data-board="{{ $education->board_university }}"
+                                            data-year="{{ $education->passing_year }}"
+                                            data-percentage="{{ $education->percentage }}"
+                                            data-cgpa="{{ $education->cgpa }}"
+                                            data-cgpa-scale="{{ $education->cgpa_scale }}"
+                                            data-is-current="{{ $education->is_current ? '1' : '0' }}"
+                                            aria-label="Edit education">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 17.25V21h3.75L17.81 10.94l-3.75-3.75L4 17.25z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M20.71 7.04a1.004 1.004 0 0 0 0-1.42l-2.34-2.34a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
+                                            </svg>
+                                        </button>
+                                        <button class="delete-education-btn inline-flex items-center justify-center rounded-lg sm:rounded-xl border-2 border-red-200 bg-red-50 p-1.5 sm:p-2 text-red-600 transition hover:bg-red-100 hover:border-red-300"
+                                            data-id="{{ $education->id }}"
+                                            aria-label="Delete education">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <button class="edit-education-btn inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-100 p-2 text-slate-600 hover:bg-slate-200"
-                                        data-id="{{ $education->id }}"
-                                        data-level-id="{{ $education->education_level_id }}"
-                                        data-degree-id="{{ $education->education_degree_id }}"
-                                        data-specialization-id="{{ $education->education_specialization_id }}"
-                                        data-institute="{{ $education->institute_name }}"
-                                        data-board="{{ $education->board_university }}"
-                                        data-year="{{ $education->passing_year }}"
-                                        data-percentage="{{ $education->percentage }}"
-                                        data-cgpa="{{ $education->cgpa }}"
-                                        data-cgpa-scale="{{ $education->cgpa_scale }}"
-                                        data-is-current="{{ $education->is_current ? '1' : '0' }}"
-                                        aria-label="Edit education">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 17.25V21h3.75L17.81 10.94l-3.75-3.75L4 17.25z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.71 7.04a1.004 1.004 0 0 0 0-1.42l-2.34-2.34a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
-                                        </svg>
-                                    </button>
-                                    <button class="delete-education-btn inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-100 p-2 text-rose-600 hover:bg-rose-50"
-                                        data-id="{{ $education->id }}"
-                                        aria-label="Delete education">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 6V4h8v2" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 11v6" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 11v6" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 6l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12" />
-                                        </svg>
-                                    </button>
-                                </div>
+                            </article>
+                        @empty
+                            <div class="rounded-xl sm:rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-6 sm:p-8 text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-slate-300 mb-2 sm:mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                                </svg>
+                                <p class="text-xs sm:text-sm font-semibold text-slate-600 mb-1">No education added yet</p>
+                                <p class="text-[10px] sm:text-xs text-slate-500">Click the Add button to add your educational qualifications</p>
                             </div>
-                        </article>
-                    @empty
-                        <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
-                            <p class="text-sm text-slate-500">No education added yet. Click the Add button to add your education details.</p>
-                        </div>
                     @endforelse
                 </div>
             </div>
         </section>
-        <section class="mt-2 rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm">
-            <div class="space-y-4">
+        <section class="mt-2 rounded-[20px] sm:rounded-[28px] border border-slate-200 bg-white p-3 sm:p-4 shadow-sm">
+            <div class="space-y-3 sm:space-y-4">
                 <div class="flex items-center justify-between gap-2">
                     <div>
-                        <h3 class="text-lg font-semibold text-slate-900">Experience</h3>
+                        <h3 class="text-base sm:text-lg font-semibold text-slate-900">Experience</h3>
                     </div>
                     <div class="flex flex-1 items-center justify-end gap-2">
                         <button
                             type="button"
                             id="addExperienceBtn"
-                            class="inline-flex items-center gap-2 rounded-full border border-slate-900 bg-slate-900 px-3 py-1 text-[0.65rem] font-semibold tracking-[0.3em] text-white transition hover:bg-slate-800"
+                            class="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-900 bg-slate-900 px-2.5 sm:px-3 py-1 text-[0.6rem] sm:text-[0.65rem] font-semibold tracking-[0.25em] sm:tracking-[0.3em] text-white transition hover:bg-slate-800"
                         >
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14" />
                             </svg>
                             Add
                         </button>
                     </div>
                 </div>
-                <div class="space-y-3" id="experienceList">
+                <div class="space-y-2.5 sm:space-y-3" id="experienceList">
                     @forelse($candidate->experiences ?? [] as $experience)
-                        <article class="rounded-2xl border border-slate-100 bg-slate-50 p-4" data-experience-id="{{ $experience->id }}">
-                            <div class="flex items-start justify-between gap-3">
-                                <div>
-                                    <p class="text-xs uppercase tracking-[0.4em] text-slate-400">
+                        <article class="rounded-xl sm:rounded-2xl border border-slate-100 bg-slate-50 p-3 sm:p-4" data-experience-id="{{ $experience->id }}">
+                            <div class="flex items-start justify-between gap-2 sm:gap-3">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-[10px] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.4em] text-slate-400">
                                         {{ $experience->start_date->format('Y') }} – {{ $experience->is_current ? 'Present' : ($experience->end_date ? $experience->end_date->format('Y') : 'N/A') }}
                                     </p>
-                                    <p class="text-base font-semibold text-slate-900">{{ $experience->designation }}</p>
-                                    <p class="text-sm text-slate-600">{{ $experience->company_name }}</p>
+                                    <p class="text-sm sm:text-base font-semibold text-slate-900">{{ $experience->designation }}</p>
+                                    <p class="text-xs sm:text-sm text-slate-600">{{ $experience->company_name }}</p>
                                     @if($experience->is_current)
-                                        <span class="mt-1 inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">Currently working</span>
+                                        <span class="mt-1 inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-emerald-700">Currently working</span>
                                     @endif
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <button class="edit-experience-btn inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-100 p-2 text-slate-600 hover:bg-slate-200"
+                                <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                                    <button class="edit-experience-btn inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-100 p-1.5 sm:p-2 text-slate-600 hover:bg-slate-200"
                                         data-id="{{ $experience->id }}"
                                         data-company="{{ $experience->company_name }}"
                                         data-designation="{{ $experience->designation }}"
@@ -305,15 +389,15 @@
                                         data-end="{{ $experience->end_date ? $experience->end_date->format('Y-m-d') : '' }}"
                                         data-current="{{ $experience->is_current ? '1' : '0' }}"
                                         aria-label="Edit experience">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 17.25V21h3.75L17.81 10.94l-3.75-3.75L4 17.25z"/>
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M20.71 7.04a1.004 1.004 0 0 0 0-1.42l-2.34-2.34a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
                                         </svg>
                                     </button>
-                                    <button class="delete-experience-btn inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-100 p-2 text-rose-600 hover:bg-rose-50"
+                                    <button class="delete-experience-btn inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-100 p-1.5 sm:p-2 text-rose-600 hover:bg-rose-50"
                                         data-id="{{ $experience->id }}"
                                         aria-label="Delete experience">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18" />
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 6V4h8v2" />
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 11v6" />
@@ -334,55 +418,55 @@
         </section>
 
         <!-- Skills Section -->
-        <section class="mt-2 rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm">
-            <div class="space-y-4">
+        <section class="mt-2 rounded-[20px] sm:rounded-[28px] border border-slate-200 bg-white p-3 sm:p-4 shadow-sm">
+            <div class="space-y-3 sm:space-y-4">
                 <div class="flex items-center justify-between gap-2">
                     <div>
-                        <h3 class="text-lg font-semibold text-slate-900">Skills</h3>
+                        <h3 class="text-base sm:text-lg font-semibold text-slate-900">Skills</h3>
                     </div>
                     <div class="flex flex-1 items-center justify-end gap-2">
                         <button
                             type="button"
                             id="addSkillBtn"
-                            class="inline-flex items-center gap-2 rounded-full border border-slate-900 bg-slate-900 px-3 py-1 text-[0.65rem] font-semibold tracking-[0.3em] text-white transition hover:bg-slate-800"
+                            class="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-900 bg-slate-900 px-2.5 sm:px-3 py-1 text-[0.6rem] sm:text-[0.65rem] font-semibold tracking-[0.25em] sm:tracking-[0.3em] text-white transition hover:bg-slate-800"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14" />
                             </svg>
                             Add
                         </button>
                     </div>
                 </div>
-                <div class="flex flex-wrap gap-2" id="skillsList">
+                <div class="flex flex-wrap gap-1.5 sm:gap-2" id="skillsList">
                     @forelse($candidate->skills ?? [] as $candidateSkill)
-                        <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2" data-skill-id="{{ $candidateSkill->id }}">
-                            <span class="text-sm font-medium text-slate-900">{{ $candidateSkill->skill->label }}</span>
+                        <div class="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 sm:px-4 py-1.5 sm:py-2" data-skill-id="{{ $candidateSkill->id }}">
+                            <span class="text-xs sm:text-sm font-medium text-slate-900">{{ $candidateSkill->skill->label }}</span>
                             @if($candidateSkill->experience_years > 0)
-                                <span class="text-xs text-slate-500">• {{ $candidateSkill->experience_years }} {{ $candidateSkill->experience_years == 1 ? 'yr' : 'yrs' }}</span>
+                                <span class="text-[10px] sm:text-xs text-slate-500">• {{ $candidateSkill->experience_years }} {{ $candidateSkill->experience_years == 1 ? 'yr' : 'yrs' }}</span>
                             @endif
-                            <div class="flex items-center gap-1 ml-2">
-                                <button class="edit-skill-btn inline-flex items-center justify-center rounded-full bg-slate-200 p-1 text-slate-600 hover:bg-slate-300"
+                            <div class="flex items-center gap-1 ml-1 sm:ml-2">
+                                <button class="edit-skill-btn inline-flex items-center justify-center rounded-full bg-slate-200 p-0.5 sm:p-1 text-slate-600 hover:bg-slate-300"
                                     data-id="{{ $candidateSkill->id }}"
                                     data-skill-id="{{ $candidateSkill->skill_id }}"
                                     data-experience-years="{{ $candidateSkill->experience_years }}"
                                     aria-label="Edit skill">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 17.25V21h3.75L17.81 10.94l-3.75-3.75L4 17.25z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M20.71 7.04a1.004 1.004 0 0 0 0-1.42l-2.34-2.34a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
                                     </svg>
                                 </button>
-                                <button class="delete-skill-btn inline-flex items-center justify-center rounded-full bg-rose-100 p-1 text-rose-600 hover:bg-rose-200"
+                                <button class="delete-skill-btn inline-flex items-center justify-center rounded-full bg-rose-100 p-0.5 sm:p-1 text-rose-600 hover:bg-rose-200"
                                     data-id="{{ $candidateSkill->id }}"
                                     aria-label="Delete skill">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
                             </div>
                         </div>
                     @empty
-                        <div class="w-full rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
-                            <p class="text-sm text-slate-500">No skills added yet.</p>
+                        <div class="w-full rounded-xl sm:rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 sm:p-6 text-center">
+                            <p class="text-xs sm:text-sm text-slate-500">No skills added yet.</p>
                         </div>
                     @endforelse
                 </div>
@@ -390,55 +474,55 @@
         </section>
 
         <!-- Languages Section -->
-        <section class="mt-2 rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm">
-            <div class="space-y-4">
+        <section class="mt-2 rounded-[20px] sm:rounded-[28px] border border-slate-200 bg-white p-3 sm:p-4 shadow-sm">
+            <div class="space-y-3 sm:space-y-4">
                 <div class="flex items-center justify-between gap-2">
                     <div>
-                        <h3 class="text-lg font-semibold text-slate-900">Languages</h3>
+                        <h3 class="text-base sm:text-lg font-semibold text-slate-900">Languages</h3>
                     </div>
                     <div class="flex flex-1 items-center justify-end gap-2">
                         <button
                             type="button"
                             id="addLanguageBtn"
-                            class="inline-flex items-center gap-2 rounded-full border border-slate-900 bg-slate-900 px-3 py-1 text-[0.65rem] font-semibold tracking-[0.3em] text-white transition hover:bg-slate-800"
+                            class="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-900 bg-slate-900 px-2.5 sm:px-3 py-1 text-[0.6rem] sm:text-[0.65rem] font-semibold tracking-[0.25em] sm:tracking-[0.3em] text-white transition hover:bg-slate-800"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14" />
                             </svg>
                             Add
                         </button>
                     </div>
                 </div>
-                <div class="flex flex-wrap gap-2" id="languagesList">
+                <div class="flex flex-wrap gap-1.5 sm:gap-2" id="languagesList">
                     @forelse($candidate->languages ?? [] as $candidateLanguage)
-                        <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2" data-language-id="{{ $candidateLanguage->id }}">
-                            <span class="text-sm font-medium text-slate-900">{{ $candidateLanguage->language->name }}</span>
+                        <div class="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 sm:px-4 py-1.5 sm:py-2" data-language-id="{{ $candidateLanguage->id }}">
+                            <span class="text-xs sm:text-sm font-medium text-slate-900">{{ $candidateLanguage->language->name }}</span>
                             @if($candidateLanguage->proficiency)
-                                <span class="text-xs text-slate-500">• {{ $candidateLanguage->proficiency }}</span>
+                                <span class="text-[10px] sm:text-xs text-slate-500">• {{ $candidateLanguage->proficiency }}</span>
                             @endif
-                            <div class="flex items-center gap-1 ml-2">
-                                <button class="edit-language-btn inline-flex items-center justify-center rounded-full bg-slate-200 p-1 text-slate-600 hover:bg-slate-300"
+                            <div class="flex items-center gap-1 ml-1 sm:ml-2">
+                                <button class="edit-language-btn inline-flex items-center justify-center rounded-full bg-slate-200 p-0.5 sm:p-1 text-slate-600 hover:bg-slate-300"
                                     data-id="{{ $candidateLanguage->id }}"
                                     data-language-id="{{ $candidateLanguage->language_id }}"
                                     data-proficiency="{{ $candidateLanguage->proficiency }}"
                                     aria-label="Edit language">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 17.25V21h3.75L17.81 10.94l-3.75-3.75L4 17.25z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M20.71 7.04a1.004 1.004 0 0 0 0-1.42l-2.34-2.34a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
                                     </svg>
                                 </button>
-                                <button class="delete-language-btn inline-flex items-center justify-center rounded-full bg-rose-100 p-1 text-rose-600 hover:bg-rose-200"
+                                <button class="delete-language-btn inline-flex items-center justify-center rounded-full bg-rose-100 p-0.5 sm:p-1 text-rose-600 hover:bg-rose-200"
                                     data-id="{{ $candidateLanguage->id }}"
                                     aria-label="Delete language">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
                             </div>
                         </div>
                     @empty
-                        <div class="w-full rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
-                            <p class="text-sm text-slate-500">No languages added yet.</p>
+                        <div class="w-full rounded-xl sm:rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 sm:p-6 text-center">
+                            <p class="text-xs sm:text-sm text-slate-500">No languages added yet.</p>
                         </div>
                     @endforelse
                 </div>
@@ -446,31 +530,31 @@
         </section>
 
         {{-- Certifications Section --}}
-        <section class="rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm">
-            <div class="space-y-4">
+        <section class="rounded-[20px] sm:rounded-[28px] border border-slate-200 bg-white p-3 sm:p-4 shadow-sm">
+            <div class="space-y-3 sm:space-y-4">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-lg font-semibold text-slate-900">Certifications</h3>
+                        <h3 class="text-base sm:text-lg font-semibold text-slate-900">Certifications</h3>
                     </div>
                     <div class="flex flex-1 items-center justify-end gap-2">
                         <button
                             type="button"
                             id="addCertificationBtn"
-                            class="inline-flex items-center gap-2 rounded-full border border-slate-900 bg-slate-900 px-3 py-1 text-[0.65rem] font-semibold tracking-[0.3em] text-white transition hover:bg-slate-800"
+                            class="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-900 bg-slate-900 px-2.5 sm:px-3 py-1 text-[0.6rem] sm:text-[0.65rem] font-semibold tracking-[0.25em] sm:tracking-[0.3em] text-white transition hover:bg-slate-800"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14" />
                             </svg>
                             Add
                         </button>
                     </div>
                 </div>
-                <div class="flex flex-wrap gap-2" id="certificationsList">
+                <div class="flex flex-wrap gap-1.5 sm:gap-2" id="certificationsList">
                     @forelse($candidate->certifications ?? [] as $candidateCertification)
-                        <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2" data-certification-id="{{ $candidateCertification->id }}">
-                            <span class="text-sm font-medium text-slate-900">{{ $candidateCertification->certificate->label }}</span>
+                        <div class="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 sm:px-4 py-1.5 sm:py-2" data-certification-id="{{ $candidateCertification->id }}">
+                            <span class="text-xs sm:text-sm font-medium text-slate-900">{{ $candidateCertification->certificate->label }}</span>
                             @if($candidateCertification->issued_at || $candidateCertification->expires_at)
-                                <span class="text-xs text-slate-500">
+                                <span class="text-[10px] sm:text-xs text-slate-500">
                                     @if($candidateCertification->issued_at)
                                         • {{ \Carbon\Carbon::parse($candidateCertification->issued_at)->format('M Y') }}
                                     @endif
@@ -479,30 +563,30 @@
                                     @endif
                                 </span>
                             @endif
-                            <div class="flex items-center gap-1 ml-2">
-                                <button class="edit-certification-btn inline-flex items-center justify-center rounded-full bg-slate-200 p-1 text-slate-600 hover:bg-slate-300"
+                            <div class="flex items-center gap-1 ml-1 sm:ml-2">
+                                <button class="edit-certification-btn inline-flex items-center justify-center rounded-full bg-slate-200 p-0.5 sm:p-1 text-slate-600 hover:bg-slate-300"
                                     data-id="{{ $candidateCertification->id }}"
                                     data-certificate-id="{{ $candidateCertification->certificate_id }}"
                                     data-issued-at="{{ $candidateCertification->issued_at }}"
                                     data-expires-at="{{ $candidateCertification->expires_at }}"
                                     aria-label="Edit certification">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 17.25V21h3.75L17.81 10.94l-3.75-3.75L4 17.25z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M20.71 7.04a1.004 1.004 0 0 0 0-1.42l-2.34-2.34a1.004 1.004 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
                                     </svg>
                                 </button>
-                                <button class="delete-certification-btn inline-flex items-center justify-center rounded-full bg-rose-100 p-1 text-rose-600 hover:bg-rose-200"
+                                <button class="delete-certification-btn inline-flex items-center justify-center rounded-full bg-rose-100 p-0.5 sm:p-1 text-rose-600 hover:bg-rose-200"
                                     data-id="{{ $candidateCertification->id }}"
                                     aria-label="Delete certification">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 sm:h-3 sm:w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
                             </div>
                         </div>
                     @empty
-                        <div class="w-full rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
-                            <p class="text-sm text-slate-500">No certifications added yet.</p>
+                        <div class="w-full rounded-xl sm:rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 sm:p-6 text-center">
+                            <p class="text-xs sm:text-sm text-slate-500">No certifications added yet.</p>
                         </div>
                     @endforelse
                 </div>

@@ -377,15 +377,39 @@
                                         <button type="button" class="remove-education text-xs text-rose-600 hover:text-rose-700">Remove</button>
                                     @endif
                                 </div>
-                                <div class="grid gap-4 sm:grid-cols-2">
+                                <div class="grid gap-4 sm:grid-cols-3">
                                     <div>
-                                        <label class="mb-1 block text-sm font-semibold text-slate-700">Degree/Qualification <span class="text-rose-500">*</span></label>
-                                        <input type="text" name="education[{{ $index }}][degree]" value="{{ $edu->degree }}" required
-                                            class="w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200">
+                                        <label class="mb-1 block text-sm font-semibold text-slate-700">Education Level <span class="text-rose-500">*</span></label>
+                                        <select name="education[{{ $index }}][level]" required class="education-level w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="{{ $index }}">
+                                            <option value="">Select Level</option>
+                                            @foreach($educationLevels as $level)
+                                                <option value="{{ $level->id }}" {{ isset($edu->education_level_id) && $edu->education_level_id == $level->id ? 'selected' : '' }}>{{ $level->label }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div>
+                                        <label class="mb-1 block text-sm font-semibold text-slate-700">Degree/Qualification <span class="text-rose-500">*</span></label>
+                                        <select name="education[{{ $index }}][degree]" required class="education-degree w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="{{ $index }}">
+                                            <option value="">Select Degree</option>
+                                            @foreach($educationDegrees as $degree)
+                                                <option value="{{ $degree->id }}" data-level="{{ $degree->education_level_id }}" {{ isset($edu->education_degree_id) && $edu->education_degree_id == $degree->id ? 'selected' : '' }}>{{ $degree->label }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="mb-1 block text-sm font-semibold text-slate-700">Specialization</label>
+                                        <select name="education[{{ $index }}][specialization]" class="education-specialization w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="{{ $index }}">
+                                            <option value="">Select Specialization</option>
+                                            @foreach($educationSpecializations as $spec)
+                                                <option value="{{ $spec->id }}" data-degree="{{ $spec->education_degree_id }}" {{ isset($edu->education_specialization_id) && $edu->education_specialization_id == $spec->id ? 'selected' : '' }}>{{ $spec->label }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid gap-4 sm:grid-cols-2">
+                                    <div>
                                         <label class="mb-1 block text-sm font-semibold text-slate-700">Institution <span class="text-rose-500">*</span></label>
-                                        <input type="text" name="education[{{ $index }}][institution]" value="{{ $edu->institution }}" required
+                                        <input type="text" name="education[{{ $index }}][institution]" value="{{ $edu->institute_name ?? '' }}" required
                                             class="w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200">
                                     </div>
                                 </div>
@@ -407,12 +431,36 @@
                                 <div class="flex items-center justify-between">
                                     <h3 class="text-sm font-semibold text-slate-700">Education 1</h3>
                                 </div>
-                                <div class="grid gap-4 sm:grid-cols-2">
+                                <div class="grid gap-4 sm:grid-cols-3">
+                                    <div>
+                                        <label class="mb-1 block text-sm font-semibold text-slate-700">Education Level <span class="text-rose-500">*</span></label>
+                                        <select name="education[0][level]" required class="education-level w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="0">
+                                            <option value="">Select Level</option>
+                                            @foreach($educationLevels as $level)
+                                                <option value="{{ $level->id }}">{{ $level->label }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <div>
                                         <label class="mb-1 block text-sm font-semibold text-slate-700">Degree/Qualification <span class="text-rose-500">*</span></label>
-                                        <input type="text" name="education[0][degree]" required
-                                            class="w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200">
+                                        <select name="education[0][degree]" required class="education-degree w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="0">
+                                            <option value="">Select Degree</option>
+                                            @foreach($educationDegrees as $degree)
+                                                <option value="{{ $degree->id }}" data-level="{{ $degree->education_level_id }}">{{ $degree->label }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
+                                    <div>
+                                        <label class="mb-1 block text-sm font-semibold text-slate-700">Specialization</label>
+                                        <select name="education[0][specialization]" class="education-specialization w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="0">
+                                            <option value="">Select Specialization</option>
+                                            @foreach($educationSpecializations as $spec)
+                                                <option value="{{ $spec->id }}" data-degree="{{ $spec->education_degree_id }}">{{ $spec->label }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid gap-4 sm:grid-cols-2">
                                     <div>
                                         <label class="mb-1 block text-sm font-semibold text-slate-700">Institution <span class="text-rose-500">*</span></label>
                                         <input type="text" name="education[0][institution]" required
@@ -447,7 +495,7 @@
             <!-- Step 5: Resume -->
             <div class="form-step hidden" data-step="5">
                 <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-xl font-semibold text-slate-900">Upload Resume</h2>
+                    <h2 class="text-xl font-semibold text-slate-900">Upload Resume <span class="text-sm font-normal text-slate-500">(Optional)</span></h2>
                     <div class="text-right">
                         <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Overall Progress</div>
                         <div class="text-2xl font-bold text-slate-900 header-progress">0%</div>
@@ -483,7 +531,7 @@
                             </div>
                         @endif
                     </div>
-                    <p class="text-xs text-slate-500">Your resume helps recruiters understand your skills and experience better.</p>
+                    <p class="text-xs text-slate-500">Your resume helps recruiters understand your skills and experience better. You can skip this step and upload it later.</p>
                 </form>
             </div>
 
@@ -519,6 +567,28 @@
     <script>
         let currentStep = 1;
         const totalSteps = 5;
+
+        // Education data for dynamic forms
+        const educationLevelOptions = `
+            <option value="">Select Level</option>
+            @foreach($educationLevels as $level)
+                <option value="{{ $level->id }}">{{ $level->label }}</option>
+            @endforeach
+        `;
+
+        const educationDegreeOptions = `
+            <option value="">Select Degree</option>
+            @foreach($educationDegrees as $degree)
+                <option value="{{ $degree->id }}" data-level="{{ $degree->education_level_id }}">{{ $degree->label }}</option>
+            @endforeach
+        `;
+
+        const educationSpecializationOptions = `
+            <option value="">Select Specialization</option>
+            @foreach($educationSpecializations as $spec)
+                <option value="{{ $spec->id }}" data-degree="{{ $spec->education_degree_id }}">{{ $spec->label }}</option>
+            @endforeach
+        `;
 
         // Update progress indicator
         function updateProgress() {
@@ -1080,24 +1150,39 @@
                         <h3 class="text-sm font-semibold text-slate-700">Education ${count + 1}</h3>
                         <button type="button" class="remove-education text-xs text-rose-600 hover:text-rose-700">Remove</button>
                     </div>
-                    <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="grid gap-4 sm:grid-cols-3">
+                        <div>
+                            <label class="mb-1 block text-sm font-semibold text-slate-700">Education Level <span class="text-rose-500">*</span></label>
+                            <select name="education[${count}][level]" required class="education-level w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="${count}">
+                                ${educationLevelOptions}
+                            </select>
+                        </div>
                         <div>
                             <label class="mb-1 block text-sm font-semibold text-slate-700">Degree/Qualification <span class="text-rose-500">*</span></label>
-                            <input type="text" name="education[${count}][degree]" required
-                                class="w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200">
+                            <select name="education[${count}][degree]" required class="education-degree w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="${count}">
+                                ${educationDegreeOptions}
+                            </select>
                         </div>
+                        <div>
+                            <label class="mb-1 block text-sm font-semibold text-slate-700">Specialization</label>
+                            <select name="education[${count}][specialization]" class="education-specialization w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="${count}">
+                                ${educationSpecializationOptions}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid gap-4 sm:grid-cols-2">
                         <div>
                             <label class="mb-1 block text-sm font-semibold text-slate-700">Institution <span class="text-rose-500">*</span></label>
                             <input type="text" name="education[${count}][institution]" required
                                 class="w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200">
                         </div>
-                    </div>
-                    <div class="grid gap-4 sm:grid-cols-2">
                         <div>
                             <label class="mb-1 block text-sm font-semibold text-slate-700">Passing Year <span class="text-rose-500">*</span></label>
                             <input type="number" name="education[${count}][passing_year]" min="1950" max="{{ date('Y') + 10 }}" required
                                 class="w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200">
                         </div>
+                    </div>
+                    <div class="grid gap-4 sm:grid-cols-2">
                         <div>
                             <label class="mb-1 block text-sm font-semibold text-slate-700">Percentage/CGPA</label>
                             <input type="number" name="education[${count}][percentage]" min="0" max="100" step="0.01"
@@ -1115,6 +1200,76 @@
             if (e.target.classList.contains('remove-education')) {
                 e.target.closest('.education-item').remove();
             }
+        });
+
+        // Cascading dropdown logic for education
+        document.addEventListener('change', function(e) {
+            // When education level changes, filter degrees
+            if (e.target.classList.contains('education-level')) {
+                const levelId = e.target.value;
+                const index = e.target.dataset.index;
+                const degreeSelect = document.querySelector(`.education-degree[data-index="${index}"]`);
+                const specializationSelect = document.querySelector(`.education-specialization[data-index="${index}"]`);
+                
+                if (degreeSelect) {
+                    // Reset and filter degree options
+                    const allDegreeOptions = degreeSelect.querySelectorAll('option');
+                    allDegreeOptions.forEach(option => {
+                        if (option.value === '') {
+                            option.style.display = 'block';
+                        } else if (!levelId || option.dataset.level === levelId) {
+                            option.style.display = 'block';
+                        } else {
+                            option.style.display = 'none';
+                        }
+                    });
+                    degreeSelect.value = '';
+                }
+                
+                if (specializationSelect) {
+                    specializationSelect.value = '';
+                    const allSpecOptions = specializationSelect.querySelectorAll('option');
+                    allSpecOptions.forEach(option => {
+                        option.style.display = option.value === '' ? 'block' : 'none';
+                    });
+                }
+            }
+            
+            // When degree changes, filter specializations
+            if (e.target.classList.contains('education-degree')) {
+                const degreeId = e.target.value;
+                const index = e.target.dataset.index;
+                const specializationSelect = document.querySelector(`.education-specialization[data-index="${index}"]`);
+                
+                if (specializationSelect) {
+                    // Reset and filter specialization options
+                    const allSpecOptions = specializationSelect.querySelectorAll('option');
+                    allSpecOptions.forEach(option => {
+                        if (option.value === '') {
+                            option.style.display = 'block';
+                        } else if (!degreeId || option.dataset.degree === degreeId) {
+                            option.style.display = 'block';
+                        } else {
+                            option.style.display = 'none';
+                        }
+                    });
+                    specializationSelect.value = '';
+                }
+            }
+        });
+
+        // Initialize filters on page load for existing education items
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.education-level').forEach(function(levelSelect) {
+                if (levelSelect.value) {
+                    levelSelect.dispatchEvent(new Event('change'));
+                }
+            });
+            document.querySelectorAll('.education-degree').forEach(function(degreeSelect) {
+                if (degreeSelect.value) {
+                    degreeSelect.dispatchEvent(new Event('change'));
+                }
+            });
         });
 
         // File upload

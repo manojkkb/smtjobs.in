@@ -64,11 +64,11 @@ new class extends Component
                         type="text"
                         wire:model.live.debounce.300ms="search"
                         placeholder="Search jobs..."
-                        class="rounded-xl border border-slate-200 px-4 py-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                        class="rounded-xl border border-slate-200 px-4 py-2 text-sm focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-100"
                     />
                     <select 
                         wire:model.live="statusFilter"
-                        class="rounded-xl border border-slate-200 px-4 py-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                        class="rounded-xl border border-slate-200 px-4 py-2 text-sm focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-100"
                     >
                         <option value="">All Status</option>
                         <option value="active">Active</option>
@@ -234,11 +234,11 @@ new class extends Component
                             {{-- Job Details --}}
                             <td class="px-6 py-5">
                                 <div class="flex items-start gap-3">
-                                    <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center text-white font-bold text-sm">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-slate-800 to-black flex items-center justify-center text-white font-bold text-sm shadow-sm">
                                         {{ strtoupper(substr($jobPost->title ?? 'J', 0, 1)) }}
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <h3 class="text-sm font-semibold text-slate-900 truncate group-hover:text-cyan-600 transition-colors">
+                                        <h3 class="text-sm font-semibold text-slate-900 truncate group-hover:text-black transition-colors">
                                             {{ $jobPost->title ?? 'Untitled role' }}
                                         </h3>
                                         <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
@@ -265,10 +265,10 @@ new class extends Component
                                         <p class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                                             @if($jobPost->is_remote)
                                                 <span class="inline-flex items-center gap-1">
-                                                    <svg class="w-3 h-3 text-cyan-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <svg class="w-3 h-3 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
                                                         <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
                                                     </svg>
-                                                    <span class="text-cyan-600 font-medium">Remote</span>
+                                                    <span class="text-slate-900 font-medium">Remote</span>
                                                 </span>
                                             @else
                                                 On-site
@@ -282,8 +282,8 @@ new class extends Component
                             <td class="px-6 py-5">
                                 @if ($jobPost->min_salary || $jobPost->max_salary)
                                     <div class="flex items-center gap-2">
-                                        <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
-                                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
                                         </div>
@@ -328,10 +328,10 @@ new class extends Component
                             <td class="px-6 py-5">
                                 <button
                                     wire:click="toggleStatus({{ $jobPost->id }})"
-                                    class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 {{ $jobPost->is_active ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 ring-1 ring-emerald-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 ring-1 ring-slate-200' }}"
+                                    class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 {{ $jobPost->is_active ? 'bg-slate-100 text-slate-900 hover:bg-slate-200 ring-1 ring-slate-300' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 ring-1 ring-slate-200' }}"
                                     wire:loading.class="opacity-50 pointer-events-none"
                                 >
-                                    <span class="w-1.5 h-1.5 rounded-full {{ $jobPost->is_active ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400' }}"></span>
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $jobPost->is_active ? 'bg-slate-900 animate-pulse' : 'bg-slate-400' }}"></span>
                                     {{ $jobPost->is_active ? 'Active' : 'Inactive' }}
                                 </button>
                                 <p class="text-xs text-slate-400 mt-2 flex items-center gap-1">
@@ -347,7 +347,7 @@ new class extends Component
                                 <div class="flex items-center justify-end gap-1">
                                     <a
                                         href="{{ route('recruiter.job-posts.show', $jobPost) }}"
-                                        class="p-2 rounded-lg text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 transition-all duration-200"
+                                        class="p-2 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all duration-200"
                                         title="View Details"
                                     >
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -357,7 +357,7 @@ new class extends Component
                                     </a>
                                     <a
                                         href="{{ route('recruiter.job-posts.edit', $jobPost) }}"
-                                        class="p-2 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                                        class="p-2 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all duration-200"
                                         title="Edit Job"
                                     >
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -394,7 +394,7 @@ new class extends Component
                                 @if($search || $statusFilter)
                                     <button 
                                         wire:click="clearFilters"
-                                        class="mt-4 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 transition"
+                                        class="mt-4 inline-flex items-center text-sm font-medium text-slate-900 hover:text-black transition"
                                     >
                                         Clear filters
                                     </button>

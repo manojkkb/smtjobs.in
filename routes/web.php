@@ -36,6 +36,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\Recruiter\DashboardController as RecruiterDashboardController;
 use App\Http\Controllers\Recruiter\JobApplicationController;
 use App\Http\Controllers\Recruiter\JobPostController;
+use App\Http\Controllers\Recruiter\MessageController as RecruiterMessageController;
 use App\Http\Controllers\Recruiter\ProfileController;
 use App\Http\Controllers\UserAuth;
 use App\Http\Middleware\RecruiterMiddleware;
@@ -46,7 +47,27 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs');
 Route::get('/jobs/suggestions', [JobController::class, 'suggestions'])->name('jobs.suggestions');
-Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
+Route::get('/browse-jobs', function () {
+    return view('website.browse-jobs');
+})->name('browse-jobs');
+Route::get('/view-all', function () {
+    return view('website.viewall');
+})->name('view-all');
+Route::get('/job-by-company', function () {
+    return view('website.job-by-company');
+})->name('job-by-company');
+Route::get('/job-by-role', function () {
+    return view('website.job-by-role');
+})->name('job-by-role');
+Route::get('/jobs-by-location', function () {
+    return view('website.jobs-by-location');
+})->name('jobs-by-location');
+Route::get('/job-by-industry', function () {
+    return view('website.job-by-industry');
+})->name('job-by-industry');
+Route::get('/job-by-category', function () {
+    return view('website.job-by-category');
+})->name('job-by-category');
 
 
 Route::get('/login',[UserAuth::class,'showLoginForm'])->name('login');
@@ -194,6 +215,16 @@ Route::prefix('recruiter')->name('recruiter.')->middleware(['auth'])->group(func
         Route::get('/dashboard',[RecruiterDashboardController::class,'index'])->name('dashboard');
         Route::resource('job-posts', JobPostController::class);
         Route::get('/job-applications', [JobApplicationController::class, 'index'])->name('job-applications');
+        
+        // Messages
+        Route::get('/messages', [RecruiterMessageController::class, 'index'])->name('messages');
+        Route::post('/message/{conversationId}', [RecruiterMessageController::class, 'sendMessage'])->name('message.send');
+        Route::post('/api/message/{conversationId}', [RecruiterMessageController::class, 'sendMessageApi'])->name('message.send.api');
+        Route::get('/conversation/start/{applicationId}', [RecruiterMessageController::class, 'startOrGetConversation'])->name('conversation.start');
+        
+        // Request responses
+        Route::post('/api/request/{messageId}/respond', [RecruiterMessageController::class, 'respondToRequest'])->name('request.respond');
+        Route::post('/api/request/{messageId}/decline', [RecruiterMessageController::class, 'declineRequest'])->name('request.decline');
 
     });
 
@@ -214,6 +245,21 @@ Route::prefix('candidate')->name('candidate.')->middleware(['auth'])->group(func
       Route::middleware([CandidateMiddleware::class])->group(function () {
             
             Route::get('/profile', [CandidateProfileController::class, 'show'])->name('profile');
+            Route::get('/applied-jobs', [CandidateProfileController::class, 'appliedJobs'])->name('applied-jobs');
+            Route::get('/messages', [CandidateProfileController::class, 'messages'])->name('messages');
+            Route::get('/saved-jobs', [CandidateProfileController::class, 'savedJobs'])->name('saved-jobs');
+            Route::get('/settings', [CandidateProfileController::class, 'settings'])->name('settings');
+            
+            // Start or get conversation
+            Route::get('/conversation/{applicationId}', [CandidateProfileController::class, 'startOrGetConversation'])->name('conversation.start');
+            
+            // Send message
+            Route::post('/message/{conversationId}', [CandidateProfileController::class, 'sendMessage'])->name('message.send');
+            Route::post('/api/message/{conversationId}', [CandidateProfileController::class, 'sendMessageApi'])->name('message.send.api');
+            
+            // Request responses
+            Route::post('/api/request/{messageId}/respond', [CandidateProfileController::class, 'respondToRequest'])->name('request.respond');
+            Route::post('/api/request/{messageId}/decline', [CandidateProfileController::class, 'declineRequest'])->name('request.decline');
             
             // Education CRUD
             Route::post('/education', [CandidateProfileController::class, 'storeEducationItem'])->name('education.store');
@@ -248,8 +294,13 @@ Route::prefix('candidate')->name('candidate.')->middleware(['auth'])->group(func
             Route::post('/profile/update', [CandidateProfileController::class, 'updateBasicProfile'])->name('profile.update');
             Route::post('/profile/upload-photo', [CandidateProfileController::class, 'uploadProfilePhoto'])->name('profile.upload-photo');
             
+            // Job Actions
+            Route::post('/job/{id}/apply', [CandidateProfileController::class, 'applyToJob'])->name('job.apply');
+            Route::post('/job/{id}/toggle-save', [CandidateProfileController::class, 'toggleSaveJob'])->name('job.toggle-save');
+            
       });
     
 });
 
-
+// Job detail route (must be last to avoid conflicts with other routes)
+Route::get('/{city}/{slug}', [JobController::class, 'show'])->name('job.show')->where(['city' => '[a-z0-9\-]+', 'slug' => '[a-z0-9\-]+']);

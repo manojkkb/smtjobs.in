@@ -1,4 +1,4 @@
-<div x-data="{ searchModalOpen: false }" class="mt-6">
+<div x-data="{ searchModalOpen: false }" class="mt-4">
     <!-- Mobile Search Trigger (visible only on mobile) -->
     <button 
         type="button"
@@ -13,62 +13,83 @@
 
     <!-- Desktop Search Form (visible only on desktop) -->
     <form action="{{ route('jobs') }}" method="GET" class="hidden md:block">
-        <div class="flex items-center gap-0 rounded-2xl bg-white border-2 border-slate-200 shadow-lg">
+        <div class="flex items-center gap-0 rounded-xl bg-white shadow-md hover:shadow-lg transition-shadow">
         <!-- Keyword Field -->
         <div class="flex-1 relative" data-suggestion-wrapper>
-            <input
-                type="text"
-                name="keyword"
-                id="keywordInput"
-                class="w-full border-0 bg-white px-6 py-4 text-base font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none rounded-l-2xl"
-                placeholder="Job Title, Keyword"
-                value="{{ request('keyword') }}"
-                autocomplete="off"
-                data-suggestion-input="keyword"
-            />
-            <div class="hidden absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" data-suggestion-menu="keyword">
-                <div class="max-h-60 overflow-y-auto"></div>
+            <div class="relative">
+                <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <input
+                    type="text"
+                    name="keyword"
+                    id="keywordInput"
+                    class="w-full border-0 bg-transparent pl-9 pr-10 py-2.5 text-sm font-medium text-slate-900 placeholder:text-slate-500 focus:outline-none rounded-l-xl"
+                    placeholder="Job title or keyword"
+                    value="{{ request('keyword') }}"
+                    autocomplete="off"
+                    data-suggestion-input="keyword"
+                />
+                <button type="button" class="hidden absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded-full transition" data-clear-keyword>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="hidden absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl" data-suggestion-menu="keyword">
+                <div class="max-h-80 overflow-y-auto"></div>
             </div>
         </div>
         
         <!-- Separator -->
-        <div class="h-12 w-px bg-slate-200"></div>
+        <div class="h-8 w-px bg-slate-200"></div>
         
         <!-- Location Field -->
         <div class="flex-1 relative" data-suggestion-wrapper>
-            <input
-                type="text"
-                name="location"
-                class="w-full border-0 bg-white px-6 py-4 text-base font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none"
-                placeholder="City, State"
-                value="{{ request('location') }}"
-                autocomplete="off"
-                data-suggestion-input="location"
-            />
-            <div class="hidden absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" data-suggestion-menu="location">
-                <div class="max-h-60 overflow-y-auto"></div>
+            <div class="relative">
+                <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <input
+                    type="text"
+                    name="location"
+                    class="w-full border-0 bg-transparent pl-9 pr-10 py-2.5 text-sm font-medium text-slate-900 placeholder:text-slate-500 focus:outline-none"
+                    placeholder="City or location"
+                    value="{{ request('location') }}"
+                    autocomplete="off"
+                    data-suggestion-input="location"
+                />
+                <button type="button" class="hidden absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded-full transition" data-clear-location>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="hidden absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl" data-suggestion-menu="location">
+                <div class="max-h-80 overflow-y-auto"></div>
             </div>
         </div>
         
         <!-- Separator -->
-        <div class="h-12 w-px bg-slate-200"></div>
+        <div class="h-8 w-px bg-slate-200"></div>
         
         <!-- Experience Field -->
         <div class="flex-1 relative">
             <select
                 name="experience_range_id[]"
-                class="w-full border-0 bg-white px-6 py-4 text-base font-semibold focus:outline-none cursor-pointer appearance-none"
-                style="color: {{ request('experience_range_id.0') ? '#0f172a' : '#94a3b8' }}"
-                onchange="this.style.color = this.value ? '#0f172a' : '#94a3b8'"
+                class="w-full border-0 bg-transparent px-4 py-2.5 text-sm font-medium focus:outline-none cursor-pointer appearance-none"
+                style="color: {{ request('experience_range_id.0') ? '#0f172a' : '#64748b' }}"
+                onchange="this.style.color = this.value ? '#0f172a' : '#64748b'"
             >
-                <option value="" style="color: #94a3b8;">Experience</option>
+                <option value="" style="color: #64748b;">Experience</option>
                 @foreach($experienceRanges as $range)
                     <option value="{{ $range->id }}" style="color: #0f172a;" {{ request('experience_range_id.0') == $range->id ? 'selected' : '' }}>
                         {{ $range->label }}
                     </option>
                 @endforeach
             </select>
-            <svg xmlns="http://www.w3.org/2000/svg" class="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
         </div>
@@ -76,9 +97,9 @@
         <!-- Search Button -->
         <button
             type="submit"
-            class="px-8 py-4 bg-slate-900 text-white text-base font-bold transition hover:bg-slate-800 flex items-center gap-2 rounded-r-2xl"
+            class="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-bold transition-all hover:from-indigo-700 hover:to-purple-700 hover:shadow-lg flex items-center gap-2 rounded-r-xl"
         >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             Search
@@ -137,36 +158,57 @@
                 <!-- Keyword Field -->
                 <div class="relative" data-suggestion-wrapper>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Job Title or Keyword</label>
-                    <input
-                        type="text"
-                        name="keyword"
-                        class="w-full border-2 border-slate-200 bg-white px-4 py-3 rounded-xl text-base font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition"
-                        placeholder="e.g. Software Engineer"
-                        value="{{ request('keyword') }}"
-                        autocomplete="off"
-                        data-suggestion-input="keyword"
-                        data-modal-input
-                    />
-                    <div class="hidden absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" data-suggestion-menu="keyword" data-modal-menu>
-                        <div class="max-h-60 overflow-y-auto"></div>
+                    <div class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <input
+                            type="text"
+                            name="keyword"
+                            class="w-full border-2 border-slate-200 bg-white pl-10 pr-12 py-3 rounded-xl text-base font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition"
+                            placeholder="e.g. Software Engineer"
+                            value="{{ request('keyword') }}"
+                            autocomplete="off"
+                            data-suggestion-input="keyword"
+                            data-modal-input
+                        />
+                        <button type="button" class="hidden absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded-full transition" data-clear-keyword>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="hidden absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl" data-suggestion-menu="keyword" data-modal-menu>
+                        <div class="max-h-80 overflow-y-auto"></div>
                     </div>
                 </div>
 
                 <!-- Location Field -->
                 <div class="relative" data-suggestion-wrapper>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Location</label>
-                    <input
-                        type="text"
-                        name="location"
-                        class="w-full border-2 border-slate-200 bg-white px-4 py-3 rounded-xl text-base font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition"
-                        placeholder="e.g. Mumbai"
-                        value="{{ request('location') }}"
-                        autocomplete="off"
-                        data-suggestion-input="location"
-                        data-modal-input
-                    />
-                    <div class="hidden absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" data-suggestion-menu="location" data-modal-menu>
-                        <div class="max-h-60 overflow-y-auto"></div>
+                    <div class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <input
+                            type="text"
+                            name="location"
+                            class="w-full border-2 border-slate-200 bg-white pl-10 pr-12 py-3 rounded-xl text-base font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition"
+                            placeholder="e.g. Mumbai"
+                            value="{{ request('location') }}"
+                            autocomplete="off"
+                            data-suggestion-input="location"
+                            data-modal-input
+                        />
+                        <button type="button" class="hidden absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded-full transition" data-clear-location>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="hidden absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl" data-suggestion-menu="location" data-modal-menu>
+                        <div class="max-h-80 overflow-y-auto"></div>
                     </div>
                 </div>
 
@@ -293,7 +335,15 @@
                 console.log(`Got ${matches.length} matches:`, matches);
 
                 if (!matches || matches.length === 0) {
-                    list.innerHTML = '<p class="px-4 py-2 text-xs text-slate-400">No matches found</p>';
+                    list.innerHTML = `<div class="px-5 py-8 text-center">
+                        <div class="inline-flex items-center justify-center w-12 h-12 bg-slate-100 rounded-full mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <p class="text-sm font-semibold text-slate-700 mb-1">No matches found</p>
+                        <p class="text-xs text-slate-500">Try a different search term</p>
+                    </div>`;
                     openMenu(menu);
                     return;
                 }
@@ -306,13 +356,43 @@
                             if (match) {
                                 const cityName = match[1];
                                 const jobCount = match[2];
-                                return `<button type="button" class="w-full text-left px-4 py-2 text-sm hover:bg-slate-100 transition-colors flex justify-between items-center" data-suggestion-item="${type}" data-value="${item}">
-                                    <span class="font-medium">${cityName}</span>
-                                    <span class="text-xs text-slate-400">${jobCount} jobs</span>
+                                return `<button type="button" class="w-full text-left px-5 py-3.5 hover:bg-slate-50 transition-all duration-150 border-b border-slate-100 last:border-0 group" data-suggestion-item="${type}" data-value="${item}">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex-shrink-0 w-9 h-9 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-slate-900 transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <span class="font-semibold text-slate-900 text-sm block group-hover:text-slate-900">${cityName}</span>
+                                                <span class="text-xs text-slate-500">${jobCount} available jobs</span>
+                                            </div>
+                                        </div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-300 group-hover:text-slate-900 transition-all group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </div>
                                 </button>`;
                             }
                         }
-                        return `<button type="button" class="w-full text-left px-4 py-2 text-sm hover:bg-slate-100 transition-colors" data-suggestion-item="${type}" data-value="${item}">${item}</button>`;
+                        // For keyword suggestions (job roles)
+                        return `<button type="button" class="w-full text-left px-5 py-3.5 hover:bg-slate-50 transition-all duration-150 border-b border-slate-100 last:border-0 group" data-suggestion-item="${type}" data-value="${item}">
+                            <div class="flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-shrink-0 w-9 h-9 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-slate-900 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <span class="font-semibold text-slate-900 text-sm group-hover:text-slate-900">${item}</span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-300 group-hover:text-slate-900 transition-all group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
+                        </button>`;
                     })
                     .join('');
 
@@ -364,6 +444,49 @@
             });
         });
         }); // End searchForms forEach
+
+        // Clear button functionality
+        const setupClearButtons = () => {
+            document.querySelectorAll('[data-clear-keyword], [data-clear-location]').forEach(clearBtn => {
+                const input = clearBtn.previousElementSibling || clearBtn.parentElement.querySelector('input');
+                const type = clearBtn.dataset.clearKeyword !== undefined ? 'keyword' : 'location';
+                
+                // Show/hide clear button based on input value
+                const toggleClearButton = () => {
+                    if (input.value.trim().length > 0) {
+                        clearBtn.classList.remove('hidden');
+                    } else {
+                        clearBtn.classList.add('hidden');
+                    }
+                };
+                
+                // Initial check
+                toggleClearButton();
+                
+                // Monitor input changes
+                input.addEventListener('input', toggleClearButton);
+                
+                // Clear input when button is clicked
+                clearBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    input.value = '';
+                    clearBtn.classList.add('hidden');
+                    input.focus();
+                    
+                    // Close suggestion menu
+                    const wrapper = input.closest('[data-suggestion-wrapper]');
+                    if (wrapper) {
+                        const menu = wrapper.querySelector('[data-suggestion-menu]');
+                        if (menu) {
+                            closeMenu(menu);
+                        }
+                    }
+                });
+            });
+        };
+        
+        setupClearButtons();
     });
 </script>
 @endpush
