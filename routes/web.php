@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\CompanyController as WebsiteCompanyController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\CompanySizeController;
 use App\Http\Controllers\Admin\CompanyTypeController;
@@ -48,7 +49,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs');
 Route::get('/jobs/suggestions', [JobController::class, 'suggestions'])->name('jobs.suggestions');
 Route::get('/browse-jobs', function () {
-    return view('website.browse-jobs');
+    $industries = \App\Models\Industry::where('is_active', true)
+        ->withCount('jobPosts')
+        ->orderBy('job_posts_count', 'desc')
+        ->take(8)
+        ->get();
+    
+    return view('website.browse-jobs', compact('industries'));
 })->name('browse-jobs');
 Route::get('/view-all', function () {
     return view('website.viewall');
@@ -63,11 +70,49 @@ Route::get('/jobs-by-location', function () {
     return view('website.jobs-by-location');
 })->name('jobs-by-location');
 Route::get('/job-by-industry', function () {
-    return view('website.job-by-industry');
+    $industries = \App\Models\Industry::where('is_active', true)
+        ->withCount(['jobPosts', 'companies'])
+        ->orderBy('job_posts_count', 'desc')
+        ->get();
+    
+    return view('website.job-by-industry', compact('industries'));
 })->name('job-by-industry');
 Route::get('/job-by-category', function () {
     return view('website.job-by-category');
 })->name('job-by-category');
+
+Route::get('/company/{companySlug}', [WebsiteCompanyController::class, 'show'])->name('company.show');
+Route::get('/company/{companySlug}/jobs', [WebsiteCompanyController::class, 'jobs'])->name('company.jobs');
+Route::get('/company/{companySlug}/reviews', [WebsiteCompanyController::class, 'reviews'])->name('company.reviews');
+Route::post('/company/{companySlug}/follow', [WebsiteCompanyController::class, 'follow'])->name('company.follow');
+Route::post('/company/{companySlug}/unfollow', [WebsiteCompanyController::class, 'unfollow'])->name('company.unfollow');
+Route::post('/company/{companySlug}/review', [WebsiteCompanyController::class, 'submitReview'])->name('company.submitReview');
+
+// Static Pages
+Route::get('/about', function () {
+    return view('website.about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('website.contact');
+})->name('contact');
+
+Route::get('/help', function () {
+    return view('website.help');
+})->name('help');
+
+Route::get('/privacy', function () {
+    return view('website.privacy');
+})->name('privacy');
+
+Route::get('/terms', function () {
+    return view('website.terms');
+})->name('terms');
+
+Route::get('/sitemap', function () {
+    return view('website.sitemap');
+})->name('sitemap');
+
 
 
 Route::get('/login',[UserAuth::class,'showLoginForm'])->name('login');

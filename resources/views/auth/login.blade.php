@@ -12,7 +12,9 @@
     <div class="w-full max-w-md">
         <!-- Logo or Brand -->
         <div class="text-center mb-4 sm:mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">SMT Jobs</h1>
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('logos/logo.png') }}" alt="SMT Jobs" class="h-10 sm:h-12 mx-auto">
+            </a>
             <p class="text-xs sm:text-sm text-slate-600 mt-1 sm:mt-2">Welcome back! Login to continue</p>
         </div>
 

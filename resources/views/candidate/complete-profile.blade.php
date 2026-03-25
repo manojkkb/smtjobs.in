@@ -152,12 +152,7 @@
                             <p class="mt-1 text-xs text-rose-600 hidden" id="gender_error">Please select your gender</p>
                         </div>
                     </div>
-                    <div>
-                        <label for="email" class="mb-1 block text-sm font-semibold text-slate-700">Email <span class="text-rose-500">*</span></label>
-                        <input type="email" id="email" name="email" value="{{ $candidate->email }}" required
-                            class="w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200">
-                        <p class="mt-1 text-xs text-rose-600 hidden" id="email_error">Please enter a valid email address</p>
-                    </div>
+
                 </form>
             </div>
 
@@ -396,7 +391,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div>
+                                    <div class="specialization-wrapper {{ isset($edu->education_degree_id) && $edu->education_degree_id ? '' : 'hidden' }}">
                                         <label class="mb-1 block text-sm font-semibold text-slate-700">Specialization</label>
                                         <select name="education[{{ $index }}][specialization]" class="education-specialization w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="{{ $index }}">
                                             <option value="">Select Specialization</option>
@@ -450,7 +445,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div>
+                                    <div class="specialization-wrapper hidden">
                                         <label class="mb-1 block text-sm font-semibold text-slate-700">Specialization</label>
                                         <select name="education[0][specialization]" class="education-specialization w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="0">
                                             <option value="">Select Specialization</option>
@@ -790,19 +785,7 @@
                 genderError.classList.add('hidden');
             }
             
-            // Validate Email
-            const email = document.getElementById('email');
-            const emailError = document.getElementById('email_error');
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email.value.trim() || !emailPattern.test(email.value)) {
-                email.classList.add('border-rose-500');
-                emailError.classList.remove('hidden');
-                isValid = false;
-            } else {
-                email.classList.remove('border-rose-500');
-                emailError.classList.add('hidden');
-            }
-            
+
             return isValid;
         }
         
@@ -810,7 +793,6 @@
         document.getElementById('full_name').addEventListener('blur', validateBasicDetails);
         document.getElementById('date_of_birth').addEventListener('blur', validateBasicDetails);
         document.getElementById('gender').addEventListener('change', validateBasicDetails);
-        document.getElementById('email').addEventListener('blur', validateBasicDetails);
 
         // Location Step: City Search Functionality
         const citySearch = document.getElementById('city_search');
@@ -1163,7 +1145,7 @@
                                 ${educationDegreeOptions}
                             </select>
                         </div>
-                        <div>
+                        <div class="specialization-wrapper hidden">
                             <label class="mb-1 block text-sm font-semibold text-slate-700">Specialization</label>
                             <select name="education[${count}][specialization]" class="education-specialization w-full rounded-2xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200" data-index="${count}">
                                 ${educationSpecializationOptions}
@@ -1228,6 +1210,8 @@
                 
                 if (specializationSelect) {
                     specializationSelect.value = '';
+                    const specWrapper = specializationSelect.closest('.specialization-wrapper');
+                    if (specWrapper) specWrapper.classList.add('hidden');
                     const allSpecOptions = specializationSelect.querySelectorAll('option');
                     allSpecOptions.forEach(option => {
                         option.style.display = option.value === '' ? 'block' : 'none';
@@ -1235,25 +1219,36 @@
                 }
             }
             
-            // When degree changes, filter specializations
+            // When degree changes, filter specializations and show/hide wrapper
             if (e.target.classList.contains('education-degree')) {
                 const degreeId = e.target.value;
                 const index = e.target.dataset.index;
                 const specializationSelect = document.querySelector(`.education-specialization[data-index="${index}"]`);
                 
                 if (specializationSelect) {
+                    const specWrapper = specializationSelect.closest('.specialization-wrapper');
                     // Reset and filter specialization options
                     const allSpecOptions = specializationSelect.querySelectorAll('option');
+                    let hasVisibleOptions = false;
                     allSpecOptions.forEach(option => {
                         if (option.value === '') {
                             option.style.display = 'block';
-                        } else if (!degreeId || option.dataset.degree === degreeId) {
+                        } else if (degreeId && option.dataset.degree === degreeId) {
                             option.style.display = 'block';
+                            hasVisibleOptions = true;
                         } else {
                             option.style.display = 'none';
                         }
                     });
                     specializationSelect.value = '';
+                    // Show wrapper only if degree is selected and has specializations
+                    if (specWrapper) {
+                        if (degreeId && hasVisibleOptions) {
+                            specWrapper.classList.remove('hidden');
+                        } else {
+                            specWrapper.classList.add('hidden');
+                        }
+                    }
                 }
             }
         });
@@ -1267,7 +1262,27 @@
             });
             document.querySelectorAll('.education-degree').forEach(function(degreeSelect) {
                 if (degreeSelect.value) {
-                    degreeSelect.dispatchEvent(new Event('change'));
+                    // Filter specialization options for pre-selected degree
+                    const index = degreeSelect.dataset.index;
+                    const degreeId = degreeSelect.value;
+                    const specializationSelect = document.querySelector(`.education-specialization[data-index="${index}"]`);
+                    if (specializationSelect) {
+                        const specWrapper = specializationSelect.closest('.specialization-wrapper');
+                        let hasVisibleOptions = false;
+                        specializationSelect.querySelectorAll('option').forEach(option => {
+                            if (option.value === '') {
+                                option.style.display = 'block';
+                            } else if (option.dataset.degree === degreeId) {
+                                option.style.display = 'block';
+                                hasVisibleOptions = true;
+                            } else {
+                                option.style.display = 'none';
+                            }
+                        });
+                        if (specWrapper && hasVisibleOptions) {
+                            specWrapper.classList.remove('hidden');
+                        }
+                    }
                 }
             });
         });

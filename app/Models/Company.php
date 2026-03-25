@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Company extends Model
 {
@@ -54,5 +55,26 @@ class Company extends Model
     public function jobPosts(): HasMany
     {
         return $this->hasMany(JobPost::class);
+    }
+    
+    public function profile(): HasOne
+    {
+        return $this->hasOne(CompanyProfile::class);
+    }
+    
+    public function followers(): HasMany
+    {
+        return $this->hasMany(CompanyFollower::class);
+    }
+    
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(CompanyReview::class);
+    }
+    
+    public function isFollowedBy($userId)
+    {
+        if (!$userId) return false;
+        return $this->followers()->where('user_id', $userId)->exists();
     }
 }

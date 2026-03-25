@@ -222,30 +222,25 @@
             
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 @php
-                    $industries = [
-                        ['name' => 'Information Technology', 'jobs' => 5432, 'color' => 'bg-black'],
-                        ['name' => 'Banking & Finance', 'jobs' => 2876, 'color' => 'bg-slate-800'],
-                        ['name' => 'Healthcare', 'jobs' => 1987, 'color' => 'bg-slate-700'],
-                        ['name' => 'E-commerce', 'jobs' => 1654, 'color' => 'bg-slate-600'],
-                        ['name' => 'Manufacturing', 'jobs' => 1432, 'color' => 'bg-slate-500'],
-                        ['name' => 'Education', 'jobs' => 1234, 'color' => 'bg-slate-400'],
-                        ['name' => 'Real Estate', 'jobs' => 876, 'color' => 'bg-slate-300'],
-                        ['name' => 'Hospitality', 'jobs' => 654, 'color' => 'bg-slate-200'],
-                    ];
+                    $colors = ['bg-black', 'bg-slate-800', 'bg-slate-700', 'bg-slate-600', 'bg-slate-500', 'bg-slate-400', 'bg-slate-300', 'bg-slate-200'];
                 @endphp
                 
-                @foreach($industries as $industry)
-                    <a href="{{ route('jobs') }}?industry={{ Str::slug($industry['name']) }}" 
+                @foreach($industries as $index => $industry)
+                    <a href="{{ route('jobs') }}?industry_id={{ $industry->id }}" 
                        class="group relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 shadow-lg transition-all hover:border-black hover:-translate-y-2 hover:shadow-2xl">
                         <div class="space-y-4">
-                            <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl {{ $industry['color'] }} shadow-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
+                            <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl {{ $colors[$index % count($colors)] }} shadow-lg">
+                                @if($industry->icon)
+                                    {!! $industry->icon !!}
+                                @else
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                @endif
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-black group-hover:text-slate-700 transition mb-1">{{ $industry['name'] }}</h3>
-                                <p class="text-sm font-semibold text-slate-600">{{ number_format($industry['jobs']) }} Openings</p>
+                                <h3 class="text-lg font-bold text-black group-hover:text-slate-700 transition mb-1">{{ $industry->label }}</h3>
+                                <p class="text-sm font-semibold text-slate-600">{{ number_format($industry->job_posts_count) }} Openings</p>
                             </div>
                         </div>
                         <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">

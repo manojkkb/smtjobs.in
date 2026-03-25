@@ -75,7 +75,7 @@
                 >
                     <option value="">Select an industry</option>
                     @foreach ($industries as $industry)
-                        <option value="{{ $industry->id }}" {{ old('industry_id', $jobPost->industry_id) == $industry->id ? 'selected' : '' }}>{{ $industry->name }}</option>
+                        <option value="{{ $industry->id }}" {{ old('industry_id', $jobPost->industry_id) == $industry->id ? 'selected' : '' }}>{{ $industry->label }}</option>
                     @endforeach
                 </select>
             </div>

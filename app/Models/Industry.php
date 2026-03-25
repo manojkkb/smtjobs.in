@@ -22,4 +22,14 @@ class Industry extends Model
         'is_active' => 'boolean',
     ];
 
+    public function jobPosts()
+    {
+        return $this->hasMany(\App\Models\JobPost::class);
+    }
+
+    public function companies()
+    {
+        return $this->hasMany(\App\Models\Company::class);
+    }
+
 }

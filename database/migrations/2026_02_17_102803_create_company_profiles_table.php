@@ -24,6 +24,12 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->integer('founded_year')->nullable();
+            $table->string('headquarters')->nullable();
+            $table->integer('employee_count')->nullable();
+            $table->decimal('average_rating', 3, 2)->nullable();
+            $table->integer('review_count')->default(0);
+            $table->integer('followers_count')->default(0);
+            $table->integer('job_post_count')->default(0);
             $table->timestamps();
 
             $table->unique('company_id');

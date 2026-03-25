@@ -66,25 +66,25 @@
 						</svg>
 						View All Jobs
 					</a></li>
-					<li><a href="#resume" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('login')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 						Resume Builder
 					</a></li>
-					<li><a href="#jobs" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('job-by-role')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 						Trending Roles
 					</a></li>
-					<li><a href="#" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('job-by-category')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 						Career Guide
 					</a></li>
-					<li><a href="#" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('jobs')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
@@ -109,19 +109,19 @@
 						</svg>
 						Employer Dashboard
 					</a></li>
-					<li><a href="#" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('contact')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 						Pricing Plans
 					</a></li>
-					<li><a href="#" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('jobs')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 						Candidate Search
 					</a></li>
-					<li><a href="#" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('job-by-company')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
@@ -134,37 +134,41 @@
 			<div class="space-y-4">
 				<p class="text-xs uppercase tracking-wider text-slate-400 font-bold">Company</p>
 				<ul class="space-y-3 text-slate-300">
-					<li><a href="#" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('about')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 						About Us
 					</a></li>
-					<li><a href="#" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('contact')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 						Contact Us
 					</a></li>
-					<li><a href="#" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('help')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 						Help Center
 					</a></li>
-					<li><a href="#" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('privacy')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 						Privacy Policy
 					</a></li>
-					<li><a href="#" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<li><a href="<?php echo e(route('terms')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 						Terms of Service
-					</a></li>
-				</ul>
+					</a></li>				<li><a href="<?php echo e(route('sitemap')); ?>" class="inline-flex items-center gap-2 transition-all hover:text-white hover:translate-x-1">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+					</svg>
+					Sitemap
+				</a></li>				</ul>
 			</div>
 		</div>
 		
@@ -201,13 +205,13 @@
 					&copy; <?php echo e(now()->year); ?> SMTJobs. All rights reserved. Made with ❤️ in India
 				</p>
 				<div class="flex flex-wrap items-center gap-6 text-sm text-slate-400">
-					<a href="#" class="transition hover:text-white">Privacy</a>
+					<a href="<?php echo e(route('privacy')); ?>" class="transition hover:text-white">Privacy</a>
 					<span class="text-slate-600">•</span>
-					<a href="#" class="transition hover:text-white">Terms</a>
+					<a href="<?php echo e(route('terms')); ?>" class="transition hover:text-white">Terms</a>
 					<span class="text-slate-600">•</span>
-					<a href="#" class="transition hover:text-white">Cookies</a>
+					<a href="<?php echo e(route('privacy')); ?>" class="transition hover:text-white">Cookies</a>
 					<span class="text-slate-600">•</span>
-					<a href="#" class="transition hover:text-white">Sitemap</a>
+				<a href="<?php echo e(route('sitemap')); ?>" class="transition hover:text-white">Sitemap</a>
 				</div>
 			</div>
 		</div>

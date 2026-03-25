@@ -149,7 +149,6 @@ class CandidateProfileController extends Controller
             'full_name' => 'required|string|max:255',
             'date_of_birth' => 'required|date|before:today',
             'gender' => 'required|in:male,female,other',
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
         ]);
 
         
@@ -169,11 +168,6 @@ class CandidateProfileController extends Controller
             ['candidate_id' => $candidate->id],
             $profileData
         );
-
-        // Update email if changed
-        if ($user->email !== $validated['email']) {
-            $user->update(['email' => $validated['email']]);
-        }
 
         return response()->json(['success' => true, 'message' => 'Basic details saved successfully']);
     }
@@ -317,9 +311,10 @@ class CandidateProfileController extends Controller
 
         $validated['is_current'] = $request->has('is_current');
 
-        $candidate->education()->create($validated);
+        $edu = $candidate->education()->create($validated);
+        $edu->load('degree', 'specialization');
 
-        return response()->json(['success' => true, 'message' => 'Education added successfully']);
+        return response()->json(['success' => true, 'message' => 'Education added successfully', 'data' => $edu]);
     }
 
     public function updateEducationItem(Request $request, $id)
@@ -345,8 +340,9 @@ class CandidateProfileController extends Controller
         $validated['is_current'] = $request->has('is_current');
         
         $education->update($validated);
+        $education->load('degree', 'specialization');
 
-        return response()->json(['success' => true, 'message' => 'Education updated successfully']);
+        return response()->json(['success' => true, 'message' => 'Education updated successfully', 'data' => $education]);
     }
 
     public function deleteEducationItem($id)
@@ -376,9 +372,9 @@ class CandidateProfileController extends Controller
 
         $validated['is_current'] = $request->has('is_current');
         
-        $candidate->experiences()->create($validated);
+        $exp = $candidate->experiences()->create($validated);
 
-        return response()->json(['success' => true, 'message' => 'Experience added successfully']);
+        return response()->json(['success' => true, 'message' => 'Experience added successfully', 'data' => $exp]);
     }
 
     public function updateExperienceItem(Request $request, $id)
@@ -400,7 +396,7 @@ class CandidateProfileController extends Controller
         
         $experience->update($validated);
 
-        return response()->json(['success' => true, 'message' => 'Experience updated successfully']);
+        return response()->json(['success' => true, 'message' => 'Experience updated successfully', 'data' => $experience]);
     }
 
     public function deleteExperienceItem($id)
@@ -449,9 +445,10 @@ class CandidateProfileController extends Controller
             return response()->json(['success' => false, 'message' => 'This skill has already been added'], 422);
         }
 
-        $candidate->skills()->create($validated);
+        $skill = $candidate->skills()->create($validated);
+        $skill->load('skill');
 
-        return response()->json(['success' => true, 'message' => 'Skill added successfully']);
+        return response()->json(['success' => true, 'message' => 'Skill added successfully', 'data' => $skill]);
     }
 
     public function updateSkillItem(Request $request, $id)
@@ -475,8 +472,9 @@ class CandidateProfileController extends Controller
         }
         
         $candidateSkill->update($validated);
+        $candidateSkill->load('skill');
 
-        return response()->json(['success' => true, 'message' => 'Skill updated successfully']);
+        return response()->json(['success' => true, 'message' => 'Skill updated successfully', 'data' => $candidateSkill]);
     }
 
     public function deleteSkillItem($id)
@@ -507,9 +505,10 @@ class CandidateProfileController extends Controller
             return response()->json(['success' => false, 'message' => 'This language has already been added'], 422);
         }
 
-        $candidate->languages()->create($validated);
+        $lang = $candidate->languages()->create($validated);
+        $lang->load('language');
 
-        return response()->json(['success' => true, 'message' => 'Language added successfully']);
+        return response()->json(['success' => true, 'message' => 'Language added successfully', 'data' => $lang]);
     }
 
     public function updateLanguageItem(Request $request, $id)
@@ -533,8 +532,9 @@ class CandidateProfileController extends Controller
         }
         
         $candidateLanguage->update($validated);
+        $candidateLanguage->load('language');
 
-        return response()->json(['success' => true, 'message' => 'Language updated successfully']);
+        return response()->json(['success' => true, 'message' => 'Language updated successfully', 'data' => $candidateLanguage]);
     }
 
     public function deleteLanguageItem($id)
@@ -566,9 +566,10 @@ class CandidateProfileController extends Controller
             return response()->json(['success' => false, 'message' => 'This certification has already been added'], 422);
         }
 
-        $candidate->certifications()->create($validated);
+        $cert = $candidate->certifications()->create($validated);
+        $cert->load('certificate');
 
-        return response()->json(['success' => true, 'message' => 'Certification added successfully']);
+        return response()->json(['success' => true, 'message' => 'Certification added successfully', 'data' => $cert]);
     }
 
     public function updateCertificationItem(Request $request, $id)
@@ -593,8 +594,9 @@ class CandidateProfileController extends Controller
         }
         
         $candidateCertification->update($validated);
+        $candidateCertification->load('certificate');
 
-        return response()->json(['success' => true, 'message' => 'Certification updated successfully']);
+        return response()->json(['success' => true, 'message' => 'Certification updated successfully', 'data' => $candidateCertification]);
     }
 
     public function deleteCertificationItem($id)
@@ -645,7 +647,21 @@ class CandidateProfileController extends Controller
             $candidate->update(['city_id' => $validated['city_id']]);
         }
 
-        return response()->json(['success' => true, 'message' => 'Profile updated successfully']);
+        $candidate->load('profile', 'city');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile updated successfully',
+            'data' => [
+                'first_name' => $candidate->profile->first_name,
+                'last_name' => $candidate->profile->last_name,
+                'headline' => $candidate->profile->headline,
+                'phone' => $candidate->profile->phone,
+                'date_of_birth' => $candidate->profile->date_of_birth?->format('d M Y'),
+                'gender' => $candidate->profile->gender,
+                'city' => $candidate->city?->name,
+            ]
+        ]);
     }
 
     public function uploadProfilePhoto(Request $request)

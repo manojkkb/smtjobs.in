@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\OtpToken;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OtpMail;
 use App\Services\SmsService;
 class OtpService
 {
@@ -33,7 +35,7 @@ class OtpService
         // 👉 Integrate SMS / Email here
         // SmsService::send($identifier, "Your OTP is $otp");
         if ($type === 'email') {
-            // Mail::to($identifier)->send(new OtpMail($otp));
+            Mail::to($identifier)->send(new OtpMail((string) $otp));
             Log::info('OTP queued for email delivery', ['identifier' => $identifier]);
         } else {
                 $name="SMTJobs";
