@@ -666,6 +666,7 @@ class CandidateProfileController extends Controller
 
     public function uploadProfilePhoto(Request $request)
     {
+        //dd($_FILES);
         try {
             $user = Auth::user();
             $candidate = Candidate::where('user_id', $user->id)->firstOrFail();
@@ -715,12 +716,15 @@ class CandidateProfileController extends Controller
 
             // Store new photo on S3
             try {
-                $path = $file->store('profile_photos', 's3');
+               
+            
+                $path = $file->store('profilephotos', 's3');
                 
                 if (!$path) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Failed to upload file to server'
+                        'message' => 'Failed to upload file to server',
+                        'data' => $file->getErrorMessage()
                     ], 500);
                 }
 

@@ -37,25 +37,26 @@
                 <div class="flex flex-col items-center sm:items-start sm:flex-row sm:items-end sm:gap-5 md:gap-6">
                     {{-- Profile Photo (overlapping banner) --}}
                     <div class="-mt-14 sm:-mt-16 md:-mt-20 flex-shrink-0">
-                        <div class="relative h-28 w-28 sm:h-32 sm:w-32 md:h-40 md:w-40 overflow-hidden rounded-full ring-4 ring-white bg-white shadow-lg group">
-                            @if(optional($candidate->profile)->profile_photo)
-                                <img src="{{ $candidate->profile->profile_photo_url }}" alt="Profile photo" class="h-full w-full object-cover" id="profilePhotoPreview" />
-                            @else
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($candidate->user->name ?? 'User') }}&size=400&background=1e293b&color=ffffff&bold=true" alt="Profile photo" class="h-full w-full object-cover" id="profilePhotoPreview" />
-                            @endif
-                            <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-full">
-                                <label for="profilePhotoInput" class="cursor-pointer flex flex-col items-center gap-1 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-7 sm:w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    <span class="text-[10px] sm:text-xs font-bold">
-                                        {{ optional($candidate->profile)->profile_photo ? 'Change' : 'Upload' }}
-                                    </span>
-                                </label>
-                                <input type="file" id="profilePhotoInput" accept="image/*" class="hidden">
+                        <label for="profilePhotoInput" class="cursor-pointer block">
+                            <div class="relative h-28 w-28 sm:h-32 sm:w-32 md:h-40 md:w-40 overflow-hidden rounded-full ring-4 ring-white bg-white shadow-lg group">
+                                @if(optional($candidate->profile)->profile_photo)
+                                    <img src="{{ $candidate->profile->profile_photo_url }}" alt="Profile photo" class="h-full w-full object-cover" id="profilePhotoPreview" />
+                                @else
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($candidate->user->name ?? 'User') }}&size=400&background=1e293b&color=ffffff&bold=true" alt="Profile photo" class="h-full w-full object-cover" id="profilePhotoPreview" />
+                                @endif
+                                <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-full">
+                                    <div class="flex flex-col items-center gap-1 text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-7 sm:w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <span class="text-[10px] sm:text-xs font-bold">
+                                            {{ optional($candidate->profile)->profile_photo ? 'Change' : 'Upload' }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </label>
                     </div>
 
                     {{-- Name & Headline --}}
@@ -102,6 +103,9 @@
                 </div>
             </div>
         </div>
+
+        {{-- Hidden file input for profile photo (outside all containers for max browser compatibility) --}}
+        <input type="file" id="profilePhotoInput" accept="image/*" class="sr-only" />
 
         {{-- Profile Completion & Resume --}}
         <div class="mt-4 sm:mt-6 grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
