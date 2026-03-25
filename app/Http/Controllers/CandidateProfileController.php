@@ -718,13 +718,13 @@ class CandidateProfileController extends Controller
             try {
                
             
-                $path = $file->store('profilephotos', 's3');
+                $path = $file->store('profilephotos/test.png', 's3');
                 
                 if (!$path) {
                     return response()->json([
                         'success' => false,
                         'message' => 'Failed to upload file to server',
-                        'data' => $file->getErrorMessage()
+                        'data' => $path ?? 'No path returned'
                     ], 500);
                 }
 
