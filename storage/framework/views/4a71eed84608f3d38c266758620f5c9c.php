@@ -317,6 +317,7 @@
 
             const menu = wrapper.querySelector(`[data-suggestion-menu="${type}"]`);
             const list = menu?.querySelector('div');
+            let justSelected = false;
 
             const render = async (query) => {
                 if (!menu || !list) {
@@ -404,6 +405,10 @@
 
             input.addEventListener('focus', () => {
                 console.log('Input focused:', type, 'value:', input.value);
+                if (justSelected) {
+                    justSelected = false;
+                    return;
+                }
                 if (input.value.trim().length > 0) {
                     render(input.value);
                 }
@@ -435,6 +440,7 @@
                 }
                 
                 input.value = value;
+                justSelected = true;
                 closeMenu(menu);
                 input.focus();
             });
