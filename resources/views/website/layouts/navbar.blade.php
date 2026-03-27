@@ -203,8 +203,6 @@
 					<a href="#cities" @click="mobileMenuOpen = false" class="block px-4 py-3 text-base font-semibold text-slate-800 hover:bg-blue-50 hover:text-blue-900 rounded-lg transition">Cities</a>
 				</nav>
 
-				</nav>
-
 				<!-- Auth Section -->
 				<div class="pt-4 border-t-2 border-slate-200 space-y-2">
 					@guest

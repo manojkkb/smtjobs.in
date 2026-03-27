@@ -50,7 +50,8 @@
     </div>
 </div>
 
-{{-- Mobile Bottom Navigation - Visible below md --}}
+{{-- Mobile Bottom Navigation - Visible below md (hidden when hideBottomNav section is defined) --}}
+@if(!View::hasSection('hideBottomNav'))
 <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 shadow-lg" x-data="{ menuOpen: false }">
     <nav class="flex items-center justify-around py-2 px-2">
         {{-- Home --}}
@@ -127,3 +128,4 @@
         </div>
     </nav>
 </div>
+@endif

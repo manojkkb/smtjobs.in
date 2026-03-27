@@ -1,17 +1,17 @@
-<footer class="mt-16 bg-gradient-to-br from-slate-900 via-slate-800 to-black px-4 py-16 text-sm shadow-2xl">
-	<div class="mx-auto max-w-7xl space-y-12">
+<footer class="mt-8 sm:mt-16 bg-gradient-to-br from-slate-900 via-slate-800 to-black px-4 py-8 sm:py-16 text-sm shadow-2xl">
+	<div class="mx-auto max-w-7xl space-y-8 sm:space-y-12">
 		<!-- Main Footer Content -->
-		<div class="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+		<div class="grid gap-8 sm:gap-10 grid-cols-2 md:grid-cols-2 lg:grid-cols-5">
 			<!-- Brand Section -->
-			<div class="lg:col-span-2 space-y-5">
-				<div class="space-y-4">
-					<div class="flex items-center gap-3">
-						<div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-black font-bold text-xl shadow-xl">
+			<div class="col-span-2 space-y-4 sm:space-y-5">
+				<div class="space-y-3 sm:space-y-4">
+					<div class="flex items-center gap-2 sm:gap-3">
+						<div class="inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl bg-white text-black font-bold text-lg sm:text-xl shadow-xl">
 							SM
 						</div>
-						<span class="text-2xl font-bold text-white">SMTJobs</span>
+						<span class="text-xl sm:text-2xl font-bold text-white">SMTJobs</span>
 					</div>
-					<p class="text-base leading-relaxed text-slate-300 max-w-md">
+					<p class="text-sm sm:text-base leading-relaxed text-slate-300 max-w-md">
 						Connecting India's top tech talent with employers who care about transparency, innovation, and career growth. Your next opportunity awaits.
 					</p>
 				</div>
@@ -173,21 +173,21 @@
 		</div>
 		
 		<!-- Newsletter Section -->
-		<div class="rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 p-8">
-			<div class="grid gap-6 lg:grid-cols-2 lg:items-center">
+		<div class="rounded-2xl sm:rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 p-5 sm:p-8">
+			<div class="grid gap-4 sm:gap-6 lg:grid-cols-2 lg:items-center">
 				<div>
-					<h3 class="text-2xl font-bold text-white mb-2">Stay Updated</h3>
-					<p class="text-slate-300">Get weekly job alerts and career tips delivered to your inbox.</p>
+					<h3 class="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">Stay Updated</h3>
+					<p class="text-sm sm:text-base text-slate-300">Get weekly job alerts and career tips delivered to your inbox.</p>
 				</div>
-				<form class="flex gap-3">
+				<form class="flex flex-col sm:flex-row gap-3">
 					<input 
 						type="email" 
 						placeholder="Enter your email" 
-						class="flex-1 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-3 text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-white/50 transition"
+						class="flex-1 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-3 text-sm sm:text-base text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-white/50 transition"
 					>
 					<button 
 						type="submit" 
-						class="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-bold text-black transition-all hover:bg-slate-100 hover:scale-105 shadow-xl"
+						class="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm sm:text-base font-bold text-black transition-all hover:bg-slate-100 hover:scale-105 shadow-xl"
 					>
 						Subscribe
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -199,9 +199,9 @@
 		</div>
 		
 		<!-- Bottom Bar -->
-		<div class="border-t border-white/10 pt-8">
-			<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-				<p class="text-slate-400 text-sm">
+		<div class="border-t border-white/10 pt-6 sm:pt-8">
+			<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4">
+				<p class="text-slate-400 text-xs sm:text-sm">
 					&copy; {{ now()->year }} SMTJobs. All rights reserved. Made with ❤️ in India
 				</p>
 				<div class="flex flex-wrap items-center gap-6 text-sm text-slate-400">

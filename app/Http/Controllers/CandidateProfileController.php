@@ -964,6 +964,7 @@ class CandidateProfileController extends Controller
         
         // Get selected conversation ID from query parameter
         $selectedConversationId = $request->query('conversation_id');
+        $hasExplicitSelection = !empty($selectedConversationId);
         
         // Get selected conversation with messages
         $selectedConversation = null;
@@ -1015,7 +1016,7 @@ class CandidateProfileController extends Controller
             }
         }
         
-        return view('candidate.messages', compact('conversations', 'selectedConversation', 'messages', 'selectedConversationId'));
+        return view('candidate.messages', compact('conversations', 'selectedConversation', 'messages', 'selectedConversationId', 'hasExplicitSelection'));
     }
 
     public function startOrGetConversation($applicationId)

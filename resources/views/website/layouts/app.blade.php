@@ -43,11 +43,12 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="font-['Space_Grotesk'] bg-[#e7e7e7] text-slate-900 antialiased">
-    <div class="min-h-screen bg-[#e7e7e7]">
+<body class="font-['Space_Grotesk'] bg-white text-slate-900 antialiased">
+    <div class="min-h-screen">
         @include('website.layouts.navbar')
-        <main class="relative px-4 pb-16 pt-4 sm:px-6 lg:px-8">
+        <main class="relative pb-16 pt-4">
             @yield('content')
+        </main>
         </main>
         @include('website.layouts.footer')
         @include('website.components.login-modal')
