@@ -17,7 +17,7 @@
         
         <p class="text-xs sm:text-sm text-slate-600 mb-4 sm:mb-5">Enter your mobile number or email and we'll send you a verification code</p>
         
-        <form class="space-y-4 sm:space-y-5" id="otpLoginForm">
+        <form class="space-y-4 sm:space-y-5" id="otpLoginForm" onsubmit="event.preventDefault(); document.querySelector('[data-send-otp]')?.click();">
             <div>
                 <label class="text-xs uppercase tracking-wider text-slate-400 mb-2 block">Phone or Email</label>
                 <input
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('f9cdeeeb-0e26-4dd1-b0f4-ad6d2a780c6f')): $__env->markAsRenderedOnce('f9cdeeeb-0e26-4dd1-b0f4-ad6d2a780c6f'); ?>
+<?php if (! $__env->hasRenderedOnce('d065c982-4d5a-44fd-a6f9-05296571a329')): $__env->markAsRenderedOnce('d065c982-4d5a-44fd-a6f9-05296571a329'); ?>
         <script>
             let modalSelectedTarget = 'candidate';
 

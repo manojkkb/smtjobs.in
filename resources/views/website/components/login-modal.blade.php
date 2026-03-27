@@ -17,7 +17,7 @@
         
         <p class="text-xs sm:text-sm text-slate-600 mb-4 sm:mb-5">Enter your mobile number or email and we'll send you a verification code</p>
         
-        <form class="space-y-4 sm:space-y-5" id="otpLoginForm">
+        <form class="space-y-4 sm:space-y-5" id="otpLoginForm" onsubmit="event.preventDefault(); document.querySelector('[data-send-otp]')?.click();">
             <div>
                 <label class="text-xs uppercase tracking-wider text-slate-400 mb-2 block">Phone or Email</label>
                 <input
